@@ -15,7 +15,7 @@ const Navbar = () => {
     const { logout } = useAuth();
 
     return (
-        <header className="shadow mb-2 w-full z-50">
+        <header className="shadow mb-2 w-full z-100 ">
             <div className="relative flex max-w-screen-xl flex-col overflow-hidden px-4 py-4 md:mx-auto md:flex-row md:items-center">
                 <div className={` mx-auto w-screen max-w-screen-md leading-6 hidden lg:block`}>
                     <form className="relative mx-auto flex w-[25em] items-center justify-between rounded-md border shadow-lg">

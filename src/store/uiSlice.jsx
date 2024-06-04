@@ -4,9 +4,12 @@ const initialState = {
     isSidebarOpen: true,
     selectedLink: 'dashboard',
     openSetting: false,
-    productModal: false,
     deleteModal: false,
     detailModal: false,
+
+    productUpdateModal: false,
+    productDetailModal: false,
+    productDeleteModal: false,
 };
 
 const uiSlice = createSlice({
@@ -31,18 +34,24 @@ const uiSlice = createSlice({
         setOpenSetting: (state, action) => {
             state.openSetting = action.payload;
         },
-        setProductModal: (state, action) => {
-            state.productModal = action.payload;
-        },
         setDeleteModal: (state, action) => {
             state.deleteModal = action.payload;
         },
         setDetailModal: (state, action) => {
             state.detailModal = action.payload;
         },
+        setUpdateProductModal: (state, action) => {
+            state.productUpdateModal = action.payload;
+        },
+        setProductDetailModal: (state, action) => {
+            state.productDetailModal = action.payload;
+        },
+        setProductDeleteModal: (state, action) => {
+            state.productDeleteModal = action.payload;
+        },
     },
 });
 
-export const { toggleSidebar, closeSidebar, openSidebar, selectLink, setIsSidebarOpen, setOpenSetting, setProductModal, setDeleteModal, setDetailModal } = uiSlice.actions;
+export const { selectLink, setIsSidebarOpen, setOpenSetting, setDeleteModal, setDetailModal, setUpdateProductModal, setProductDetailModal, setProductDeleteModal } = uiSlice.actions;
 
 export default uiSlice.reducer;

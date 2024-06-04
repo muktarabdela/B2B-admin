@@ -1,11 +1,14 @@
 import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { closeSidebar, selectLink, setIsSidebarOpen } from '../../store/uiSlice';
+import { selectLink, setIsSidebarOpen } from '../../store/uiSlice';
 import { FaTachometerAlt, FaCalendarAlt, FaUser, FaWpforms, FaChartLine, FaLayerGroup, FaUserShield } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import product from "../../assets/product.png"
+import all_product from "../../assets/all-product.png"
 const Sidebar = () => {
-    const [isOpen, setIsOpen] = useState(false);
+    const [isOpenProducts, setIsOpenProducts] = useState(false);
+    const [isOpenReports, setIsOpenReports] = useState(false);
+    const [isOpenBill, setIsOpenBill] = useState(false);
 
     const dispatch = useDispatch();
     const isSidebarOpen = useSelector((state) => state.ui.isSidebarOpen);
@@ -26,17 +29,76 @@ const Sidebar = () => {
     ];
 
     const products = [
-        { name: 'All Products', to: '/all-products', icon: <FaChartLine /> },
-        { name: 'Pending', to: '/pending', icon: <FaChartLine /> },
-        { name: 'Approve', to: '/approve', icon: <FaChartLine /> },
-        { name: 'Rejected', to: '/rejected', icon: <FaChartLine /> },
+        { name: 'All Products', to: '/all-products', icon: <img className='w-6 h-6' src={all_product} alt="" /> },
+        {
+            name: 'Pending', to: '/pending', icon: <div>
+                <svg width="30" height="25" fill="none" stroke="#363636" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 2a10 10 0 1 0 0 20 10 10 0 1 0 0-20z"></path>
+                    <path d="M12 6v6l4 2"></path>
+                </svg>
+            </div>
+        },
+        {
+            name: 'Approve', to: '/approve', icon: <svg width="30" height="25" fill="none" stroke="#363636" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="m9 11 3 3L22 4"></path>
+                <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
+            </svg>
+        },
+        {
+            name: 'Rejected', to: '/rejected', icon: <svg width="30" height="25" fill="none" stroke="#363636" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <rect width="18" height="18" x="3" y="3" rx="2" ry="2"></rect>
+                <path d="m9 9 6 6"></path>
+                <path d="m15 9-6 6"></path>
+            </svg>
+        },
         // { name: 'Failed', to: '/failed', icon: <FaChartLine /> },
         ,
 
     ];
-    console.log(products)
-    const handleClick = () => {
-        setIsOpen(!isOpen);
+    const reports = [
+        { name: 'Sales report', to: '/sales-report', icon: <img className='w-6 h-6' src={all_product} alt="" /> },
+        {
+            name: 'Users report', to: '/users-report', icon: <div>
+                <svg width="30" height="25" fill="none" stroke="#363636" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 2a10 10 0 1 0 0 20 10 10 0 1 0 0-20z"></path>
+                    <path d="M12 6v6l4 2"></path>
+                </svg>
+            </div>
+        },
+    ];
+    const Bills = [
+        { name: 'All Transactions', to: '/all-transactions', icon: <img className='w-6 h-6' src={all_product} alt="" /> },
+        {
+            name: 'pending', to: '/pending', icon: <div>
+                <svg width="30" height="25" fill="none" stroke="#363636" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 2a10 10 0 1 0 0 20 10 10 0 1 0 0-20z"></path>
+                    <path d="M12 6v6l4 2"></path>
+                </svg>
+            </div>
+        },
+        {
+            name: 'Approve', to: '/approve', icon: <div>
+                <svg width="30" height="25" fill="none" stroke="#363636" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 2a10 10 0 1 0 0 20 10 10 0 1 0 0-20z"></path>
+                    <path d="M12 6v6l4 2"></path>
+                </svg>
+            </div>
+        },
+    ];
+    const handleProductClick = () => {
+        setIsOpenProducts(!isOpenProducts);
+        setIsOpenReports(false)
+        setIsOpenBill(false)
+    };
+    const handleReportClick = () => {
+        setIsOpenReports(!isOpenReports);
+        setIsOpenProducts(false)
+        setIsOpenBill(false)
+    };
+    const handleBillClick = () => {
+        setIsOpenBill(!isOpenBill);
+        setIsOpenProducts(false)
+        setIsOpenReports(false)
     };
     return (
         <div className={`fixed inset-0 overflow-hidden z-50 ${isSidebarOpen ? 'block' : 'hidden '} 
@@ -98,15 +160,13 @@ const Sidebar = () => {
                         <li className={inactiveLink}>
                             <div
                                 onClick={() => {
-                                    handleClick()
-                                    dispatch(selectLink(link.name.toLowerCase()));
+                                    handleProductClick()
                                     if (window.innerWidth <= 768) {
-                                        dispatch(setIsSidebarOpen(false));
                                     }
                                 }} className="flex items-center gap-2 cursor-pointer">
                                 <img className='w-6 h-6' src={product} alt="" />
                                 Products
-                                {isOpen ? (<svg
+                                {isOpenProducts ? (<svg
                                     xmlns="http://www.w3.org/2000/svg"
                                     width={30}
                                     height={30}
@@ -127,7 +187,7 @@ const Sidebar = () => {
 
                             </div>
                         </li>
-                        {isOpen && (
+                        {isOpenProducts && (
                             <div className="flex flex-col gap-2 mt-2 mr-2 text-gray-500">
                                 {products?.map((link, index) => (
                                     <li key={link.name} className=
@@ -147,6 +207,106 @@ const Sidebar = () => {
                             </div>
                         )}
                     </ul>
+
+
+                    <ul>
+                        <li className={inactiveLink}>
+                            <div
+                                onClick={() => handleReportClick()}
+                                className="flex items-center gap-2 cursor-pointer">
+                                <img className='w-6 h-6' src={product} alt="" />
+                                Reports
+                                {isOpenReports ? (<svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width={30}
+                                    height={30}
+                                    viewBox="0 0 24 24"
+                                    style={{ fill: "rgba(65, 63, 63, 1)", transform: "", msfilter: "" }}
+                                >
+                                    <path d="m6.293 13.293 1.414 1.414L12 10.414l4.293 4.293 1.414-1.414L12 7.586z" />
+                                </svg>
+                                ) : (<svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width={30}
+                                    height={30}
+                                    viewBox="0 0 24 24"
+                                    style={{ fill: "rgba(65, 63, 63, 1)", transform: "", msfilter: "" }}
+                                >
+                                    <path d="M16.293 9.293 12 13.586 7.707 9.293l-1.414 1.414L12 16.414l5.707-5.707z" />
+                                </svg>)}
+
+                            </div>
+                        </li>
+                        {isOpenReports && (
+                            <div className="flex flex-col gap-2 mt-2 mr-2 text-gray-500">
+                                {reports?.map((link, index) => (
+                                    <li key={link.name} className=
+                                        {`${selectedLink === link.name.toLowerCase() ? activeLink : inactiveLink} my-0 m-3 whitespace-nowrap`}>
+                                        <Link to={link.to}
+                                            onClick={() => {
+                                                dispatch(selectLink(link.name.toLowerCase()));
+                                                if (window.innerWidth <= 768) {
+                                                    dispatch(setIsSidebarOpen(false));
+                                                }
+                                            }} className="flex items-center gap-2 ">
+                                            {link.icon}
+                                            {link.name}
+                                        </Link>
+                                    </li>
+                                ))}
+                            </div>
+                        )}
+                    </ul>
+                    <ul>
+                        <li className={inactiveLink}>
+                            <div
+                                onClick={() => handleBillClick()}
+                                className="flex items-center gap-2 cursor-pointer">
+                                <img className='w-6 h-6' src={product} alt="" />
+                                Billing Info
+                                {isOpenBill ? (<svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width={30}
+                                    height={30}
+                                    viewBox="0 0 24 24"
+                                    style={{ fill: "rgba(65, 63, 63, 1)", transform: "", msfilter: "" }}
+                                >
+                                    <path d="m6.293 13.293 1.414 1.414L12 10.414l4.293 4.293 1.414-1.414L12 7.586z" />
+                                </svg>
+                                ) : (<svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width={30}
+                                    height={30}
+                                    viewBox="0 0 24 24"
+                                    style={{ fill: "rgba(65, 63, 63, 1)", transform: "", msfilter: "" }}
+                                >
+                                    <path d="M16.293 9.293 12 13.586 7.707 9.293l-1.414 1.414L12 16.414l5.707-5.707z" />
+                                </svg>)}
+
+                            </div>
+                        </li>
+                        {isOpenBill && (
+                            <div className="flex flex-col gap-2 mt-2 mr-2 text-gray-500">
+                                {Bills?.map((link, index) => (
+                                    <li key={link.name} className=
+                                        {`${selectedLink === link.name.toLowerCase() ? activeLink : inactiveLink} my-0 m-3 whitespace-nowrap`}>
+                                        <Link to={link.to}
+                                            onClick={() => {
+                                                dispatch(selectLink(link.name.toLowerCase()));
+                                                if (window.innerWidth <= 768) {
+                                                    dispatch(setIsSidebarOpen(false));
+                                                }
+                                            }} className="flex items-center gap-2 ">
+                                            {link.icon}
+                                            {link.name}
+                                        </Link>
+                                    </li>
+                                ))}
+                            </div>
+                        )}
+                    </ul>
+
+
                 </nav>
 
 

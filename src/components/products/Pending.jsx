@@ -1,16 +1,62 @@
-import React from 'react'
+import React, { useState } from 'react'
 import product1 from "../../assets/product_02.png"
 import product2 from "../../assets/product_03.png"
 import product3 from "../../assets/product_04.png"
 import product4 from "../../assets/product_05.png"
+import UpdateProduct from '../dashboard/supplier/UpdateProduct'
+import { useDispatch, useSelector } from 'react-redux'
+import { setDeleteModal, setUpdateProductModal } from '../../store/uiSlice'
+function Check() {
+  const dispatch = useDispatch()
+  return (
+    <>
+      {/* component */}
+      <div className="bg-slate-800 bg-opacity-50 flex justify-center items-center absolute top-0 right-0 bottom-0 left-0">
+        <div className="bg-white px-16 py-14 rounded-md text-center">
+          <h1 className="text-xl mb-4 font-bold text-slate-500">
+            Do you Want Delete
+          </h1>
+          <button
+            onClick={() => dispatch(setDeleteModal(false))}
+            className="bg-red-500 px-4 py-2 rounded-md text-md text-white">
+            Cancel
+          </button>
+          <button className="bg-indigo-500 px-7 py-2 ml-2 rounded-md text-md text-white font-semibold">
+            Ok
+          </button>
+        </div>
+      </div>
+    </>
+
+  )
+}
+
 const Pending = () => {
+
+  const dispatch = useDispatch();
+  const [tooltipVisible, setTooltipVisible] = useState(false);
+  const [tooltipPosition, setTooltipPosition] = useState({ x: 0, y: 0 });
+
+  const productUpdateModal = useSelector((state) => state.ui.productUpdateModal);
+  const deleteModal = useSelector((state) => state.ui.deleteModal);
+
+  const handleMouseEnter = (event) => {
+    setTooltipPosition({
+      x: event.pageX,
+      y: event.pageY
+    });
+    setTooltipVisible(true);
+  };
+
+  const handleMouseLeave = () => {
+    setTooltipVisible(false);
+  };
   return (
     <section className="antialiased  px-4">
       <div className="flex flex-col justify-center h-full lg:ml-20">
-        {/* Table */}
-        {/* {productModal && <UpdateProduct />}
+        {productUpdateModal && <UpdateProduct />}
         {deleteModal && <Check />}
-        {detailModal && <SupplierDetail />} */}
+
         <div className="w-full max-w-5xl mx-auto bg-white shadow-lg rounded-sm border border-gray-200 mt-[8em]" >
           <header className="px-5 py-4 border-b border-gray-100">
             <h2 className="font-semibold text-gray-800">Suppliers user</h2>
@@ -54,9 +100,23 @@ const Pending = () => {
                 </thead>
                 <tbody className="text-sm divide-y divide-gray-100">
                   <tr>
-                    <td className="p-2 whitespace-nowrap">
-                      <div className="flex items-center">
-                        <div className="w-10 h-10 flex-shrink-0 mr-2 sm:mr-3">
+                    <td
+                      onMouseEnter={handleMouseEnter}
+                      onMouseLeave={handleMouseLeave}
+                      className="p-2 whitespace-nowrap ">
+                      {tooltipVisible && (
+                        <div
+                          className="absolute z-10 px-3 py-2 text-sm font-medium text-white bg-gray-900 rounded-lg shadow-sm"
+                          style={{
+                            top: `${tooltipPosition.y}px`,
+                            left: `${tooltipPosition.x}px`
+                          }}
+                        >
+                          Detail Info about product owner
+                        </div>
+                      )}
+                      <div className="flex items-center cursor-pointer hover:bg-gray-50 p-2 rounded-lg">
+                        <div className="w-10 h-10 flex-shrink-0 mr-2 sm:mr-3 cursor-pointer">
                           <img
                             className="rounded-full"
                             src="https://raw.githubusercontent.com/cruip/vuejs-admin-dashboard-template/main/src/images/user-36-05.jpg"
@@ -66,7 +126,7 @@ const Pending = () => {
                           />
                         </div>
                         <div className="font-medium text-gray-800">
-                          muhamed
+                          muhammed
                         </div>
                       </div>
                     </td>
@@ -96,7 +156,6 @@ const Pending = () => {
                     <td className='p-2'>
                       <div
                         // onClick={() => dispatch(setDetailModal(true))}
-
                         className="
                           cursor-pointer
                           text-[1.2em] font-medium text-center border-2 border-amber-300 bg-amber-100 rounded-lg p-2 h-8 flex items-center justify-center w-20 mx-auto">
@@ -110,7 +169,9 @@ const Pending = () => {
                       </div>
                     </td>
                     <td className='p-2'>
-                      <div className="
+                      <div
+                        onClick={() => dispatch(setUpdateProductModal(true))}
+                        className="
                           cursor-pointer
                           text-[1.2em] font-medium text-center border-2 border-lime-900 bg-lime-100 rounded-lg p-2 h-8 flex items-center justify-center w-20 mx-auto">
                         <svg width="40" height="20" fill="none" stroke="#1a1a1a" stroke-linecap="round" stroke-linejoin="round" stroke-width="1" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -121,7 +182,7 @@ const Pending = () => {
                     </td>
                     <td className='p-2'>
                       <div
-                        // onClick={() => dispatch(setDeleteModal(true))}
+                        onClick={() => dispatch(setDeleteModal(true))}
                         className="
                           cursor-pointer
                           text-[1.2em] font-medium text-center border-2 border-red-300 bg-red-100 text-red-600 rounded-lg p-2 h-8 flex items-center justify-center w-[5.5em] mx-auto">

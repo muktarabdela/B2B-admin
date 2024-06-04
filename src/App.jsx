@@ -17,6 +17,7 @@ import Failed from './components/products/Failed';
 import Pending from './components/products/Pending';
 import Rejected from './components/products/Rejected';
 import AllProducts from './components/products/AllProducts';
+import DetailProduct from './components/products/models/detailProduct/DetailProduct';
 function App() {
   const dispatch = useDispatch()
   const isSidebarOpen = useSelector((state) => state.ui.isSidebarOpen);
@@ -70,6 +71,9 @@ function App() {
                 <Route path="/supplier" element={<PrivateRoute Component={Supplier} />} />
                 <Route path="/business" element={<PrivateRoute Component={Business} />} />
                 <Route path="/personal" element={<PrivateRoute Component={Personal} />} />
+
+                {/* other */}
+                <Route path="/detail/products/:productId" element={<PrivateRoute Component={DetailProduct} />} />
               </Routes>
             </div>
           </div>

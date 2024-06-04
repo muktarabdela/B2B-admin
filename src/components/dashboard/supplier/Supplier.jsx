@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { allSuppliers } from '../../../api/AdminSupplier';
 import { useDispatch, useSelector } from 'react-redux';
-import UpdateProduct from './UpdateProduct';
 import { setDeleteModal, setDetailModal } from '../../../store/uiSlice';
 import SupplierDetail from './supplierDtail/SupplierDetail';
 
@@ -34,7 +33,6 @@ const Supplier = () => {
   const dispatch = useDispatch()
 
   const [supplierData, setSupplierData] = useState()
-  const productModal = useSelector((state) => state.ui.productModal);
   const deleteModal = useSelector((state) => state.ui.deleteModal);
   const detailModal = useSelector((state) => state.ui.detailModal);
   useEffect(() => {
@@ -56,7 +54,6 @@ const Supplier = () => {
         <section className="antialiased  px-4">
           <div className="flex flex-col justify-center h-full lg:ml-20">
             {/* Table */}
-            {productModal && <UpdateProduct />}
             {deleteModal && <Check />}
             {detailModal && <SupplierDetail />}
             <div className="w-full max-w-5xl mx-auto bg-white shadow-lg rounded-sm border border-gray-200 mt-[8em]" >

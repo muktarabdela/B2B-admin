@@ -1,9 +1,24 @@
-import React from 'react'
+import React, { useState } from 'react'
 import product1 from "../../assets/product_02.png"
 import product2 from "../../assets/product_03.png"
 import product3 from "../../assets/product_04.png"
 import product4 from "../../assets/product_05.png"
 const Approve = () => {
+
+  const [tooltipVisible, setTooltipVisible] = useState(false);
+  const [tooltipPosition, setTooltipPosition] = useState({ x: 0, y: 0 });
+
+  const handleMouseEnter = (event) => {
+    setTooltipPosition({
+      x: event.pageX,
+      y: event.pageY
+    });
+    setTooltipVisible(true);
+  };
+
+  const handleMouseLeave = () => {
+    setTooltipVisible(false);
+  };
   return (
     <section className="antialiased  px-4">
       <div className="flex flex-col justify-center h-full lg:ml-20">
@@ -55,9 +70,23 @@ const Approve = () => {
                 <tbody className="text-sm divide-y divide-gray-100">
 
                   <tr>
-                    <td className="p-2 whitespace-nowrap">
-                      <div className="flex items-center">
-                        <div className="w-10 h-10 flex-shrink-0 mr-2 sm:mr-3">
+                    <td
+                      onMouseEnter={handleMouseEnter}
+                      onMouseLeave={handleMouseLeave}
+                      className="p-2 whitespace-nowrap ">
+                      {tooltipVisible && (
+                        <div
+                          className="absolute z-10 px-3 py-2 text-sm font-medium text-white bg-gray-900 rounded-lg shadow-sm"
+                          style={{
+                            top: `${tooltipPosition.y}px`,
+                            left: `${tooltipPosition.x}px`
+                          }}
+                        >
+                          Detail Info about product owner
+                        </div>
+                      )}
+                      <div className="flex items-center cursor-pointer hover:bg-gray-50 p-2 rounded-lg">
+                        <div className="w-10 h-10 flex-shrink-0 mr-2 sm:mr-3 cursor-pointer">
                           <img
                             className="rounded-full"
                             src="https://raw.githubusercontent.com/cruip/vuejs-admin-dashboard-template/main/src/images/user-36-05.jpg"
@@ -67,7 +96,7 @@ const Approve = () => {
                           />
                         </div>
                         <div className="font-medium text-gray-800">
-                          muhamed
+                          muhammed
                         </div>
                       </div>
                     </td>
