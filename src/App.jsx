@@ -3,18 +3,20 @@ import './App.css';
 import Sidebar from './components/sidebar/Sidebar';
 import Dashboard from './components/dashboard/Dashboard';
 import { Route, Routes } from 'react-router-dom';
-import Calendar from './components/dashboard/pages/Calendar';
-import Profile from './components/dashboard/pages/Profile';
-import Forms from './components/dashboard/pages/Forms';
 import Personal from './components/personal/Personal';
 import Supplier from './components/dashboard/supplier/Supplier';
-import Business from './components/dashboard/business/Business';
+import Business from './components/business/Business';
 import { useDispatch, useSelector } from 'react-redux';
 import Navbar from './components/navbar/Navbar';
 import { setIsSidebarOpen } from './store/uiSlice';
 import Auth from './components/Auth';
 import PrivateRoute from './components/PrivateRoute';
 import { useAuth } from './context/AuthContext';
+import Approve from './components/products/Approve';
+import Failed from './components/products/Failed';
+import Pending from './components/products/Pending';
+import Rejected from './components/products/Rejected';
+import AllProducts from './components/products/AllProducts';
 function App() {
   const dispatch = useDispatch()
   const isSidebarOpen = useSelector((state) => state.ui.isSidebarOpen);
@@ -56,11 +58,13 @@ function App() {
                 <Route path="/" element={<PrivateRoute Component={Dashboard} />} />
                 <Route path="/dashboard" element={<PrivateRoute Component={Dashboard} />} />
 
-                {/* links */}
+                {/* Products */}
+                <Route path="/all-products" element={<PrivateRoute Component={AllProducts} />} />
+                <Route path="/pending" element={<PrivateRoute Component={Pending} />} />
+                <Route path="/approve" element={<PrivateRoute Component={Approve} />} />
+                <Route path="/rejected" element={<PrivateRoute Component={Rejected} />} />
+                {/* <Route path="/failed" element={<PrivateRoute Component={Failed} />} /> */}
 
-                <Route path="/calendar" element={<PrivateRoute Component={Calendar} />} />
-                <Route path="/profile" element={<PrivateRoute Component={Profile} />} />
-                <Route path="/forms" element={<PrivateRoute Component={Forms} />} />
 
                 {/* users */}
                 <Route path="/supplier" element={<PrivateRoute Component={Supplier} />} />
