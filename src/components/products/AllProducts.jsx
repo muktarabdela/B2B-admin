@@ -178,26 +178,18 @@ const AllProducts = () => {
                                             <td className="p-2 whitespace-nowrap">
                                                 <div className="text-center font-semibold text-lg">{product.stock}</div>
                                             </td>
+
                                             <td className="p-2 whitespace-nowrap">
-                                                <select
-                                                    value={product.status}
-                                                    onChange={(e) => handleStatusChange(product.product_id, e.target.value)}
-                                                    className={`outline-none text-[1.2em] font-medium text-center p- rounded-lg h-8 flex items-center justify-center w-[7em] mx-auto ${product.status === 'Pending' ? 'bg-green-50 text-black-700' :
-                                                        product.status === 'Rejected' ? 'bg-red-200 text-red-700' :
-                                                            'bg-green-200 text-green-700'
-                                                        }`}
-                                                >
-                                                    <option value="Pending" className="text-black">Pending</option>
-                                                    <option value="Rejected" className="text-red-700">Rejected</option>
-                                                    <option value="Approved" className="text-green-700">Approved</option>
-                                                </select>
+                                                <div className={`text-[1.2em] font-medium text-center p-2 rounded-lg h-8 flex items-center justify-center w-20 mx-auto ${product.status === 'Pending' ? 'bg-green-50 text-black-700' : product.status === 'Rejected' ? 'bg-red-200 text-red-700' : 'bg-green-200 text-green-700'}`}>
+                                                    Pending
+                                                </div>
                                             </td>
                                             <td className="p-2 whitespace-nowrap">
                                                 <div className="text-center text-lg">{product.country_of_origin}</div>
                                             </td>
                                             <td className='p-2'>
                                                 <div
-                                                    onClick={() => handleClick(product.product_id)}
+                                                    onClick={() => handleClick(product.product_hash)}
                                                     className="
                                                         cursor-pointer
                                                         text-[1.2em] font-medium text-center border-2 border-amber-300 bg-amber-100 rounded-lg p-2 h-8 flex items-center justify-center w-20 mx-auto">
