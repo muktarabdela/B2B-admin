@@ -29,6 +29,7 @@ const Sidebar = () => {
     ];
 
     const products = [
+        { name: 'Add Products', to: '/add-products', },
         { name: 'All Products', to: '/all-products', icon: <img className='w-6 h-6' src={all_product} alt="" /> },
         {
             name: 'Pending', to: '/pending', icon: <div>
@@ -198,7 +199,7 @@ const Sidebar = () => {
                                                 if (window.innerWidth <= 768) {
                                                     dispatch(setIsSidebarOpen(false));
                                                 }
-                                            }} className="flex items-center gap-2 ">
+                                            }} className={` ${link.name === "Add Products" ? "bg-blue-800 text-white p-2 rounded-lg  " : ""}flex items-center gap-2 `}>
                                             {link.icon}
                                             {link.name}
                                         </Link>

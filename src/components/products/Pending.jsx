@@ -91,7 +91,7 @@ const Pending = () => {
                       <div className="font-semibold text-center">Detail</div>
                     </th>
                     <th className="p-2 px-10 whitespace-nowrap">
-                      <div className="font-semibold text-center">Edit</div>
+                      <div className="font-semibold text-center">Update Product</div>
                     </th>
                     <th className="p-2  whitespace-nowrap">
                       <div className="font-semibold text-center">Delete</div>
@@ -173,11 +173,11 @@ const Pending = () => {
                         onClick={() => dispatch(setUpdateProductModal(true))}
                         className="
                           cursor-pointer
-                          text-[1.2em] font-medium text-center border-2 border-lime-900 bg-lime-100 rounded-lg p-2 h-8 flex items-center justify-center w-20 mx-auto">
+                          text-[1.2em] font-medium text-center border-2 border-lime-900 bg-lime-100 rounded-lg p-2 h-8 flex items-center justify-center w-[6em] mx-auto">
                         <svg width="40" height="20" fill="none" stroke="#1a1a1a" stroke-linecap="round" stroke-linejoin="round" stroke-width="1" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                           <path d="m15.232 5.232 3.536 3.536m-2.036-5.036a2.5 2.5 0 0 1 3.536 3.536L6.5 21.036H3v-3.572L16.732 3.732Z"></path>
                         </svg>
-                        Edit
+                        Update
                       </div>
                     </td>
                     <td className='p-2'>

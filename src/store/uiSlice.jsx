@@ -7,9 +7,15 @@ const initialState = {
     deleteModal: false,
     detailModal: false,
 
+    isOpenCategory: false,
+    category: "",
+
+
     productUpdateModal: false,
     productDetailModal: false,
     productDeleteModal: false,
+
+    supplierUpdateStatus: false,
 };
 
 const uiSlice = createSlice({
@@ -24,6 +30,12 @@ const uiSlice = createSlice({
         },
         openSidebar: (state) => {
             state.isSidebarOpen = true;
+        },
+        setIsOpenCategory: (state, action) => {
+            state.isOpenCategory = action.payload;
+        },
+        setCategory: (state, action) => {
+            state.category = action.payload;
         },
         selectLink: (state, action) => {
             state.selectedLink = action.payload;
@@ -49,9 +61,12 @@ const uiSlice = createSlice({
         setProductDeleteModal: (state, action) => {
             state.productDeleteModal = action.payload;
         },
+        setSupplierUpdateStatus: (state, action) => {
+            state.supplierUpdateStatus = action.payload;
+        },
     },
 });
 
-export const { selectLink, setIsSidebarOpen, setOpenSetting, setDeleteModal, setDetailModal, setUpdateProductModal, setProductDetailModal, setProductDeleteModal } = uiSlice.actions;
+export const { selectLink, setIsSidebarOpen, setOpenSetting, setDeleteModal, setIsOpenCategory, setCategory, setDetailModal, setUpdateProductModal, setProductDetailModal, setProductDeleteModal, setSupplierUpdateStatus } = uiSlice.actions;
 
 export default uiSlice.reducer;

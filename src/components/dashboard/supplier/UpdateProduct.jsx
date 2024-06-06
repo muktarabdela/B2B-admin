@@ -16,6 +16,7 @@ const UpdateProduct = () => {
                             <div className="relative py-8 px-5 md:px-10 bg-white shadow-md rounded border border-gray-400">
                                 <div className="w-full flex justify-start text-gray-600 mb-3">
                                     <svg
+
                                         xmlns="http://www.w3.org/2000/svg"
                                         className="icon icon-tabler icon-tabler-wallet"
                                         width={52}
@@ -32,125 +33,93 @@ const UpdateProduct = () => {
                                         <path d="M20 12v4h-4a2 2 0 0 1 0 -4h4" />
                                     </svg>
                                 </div>
-                                <h1 className="text-gray-800 font-lg font-bold tracking-normal leading-tight mb-4">
-                                    Enter Billing Details
+                                <h1 className="text-gray-800 font-lg font-bold tracking-normal leading-tight text-2xl mb-20">
+                                    Update Product Data
                                 </h1>
-                                <label
-                                    htmlFor="name"
-                                    className="text-gray-800 text-sm font-bold leading-tight tracking-normal"
-                                >
-                                    Owner Name
-                                </label>
-                                <input
-                                    id="name"
-                                    className="mb-5 mt-2 text-gray-600 focus:outline-none focus:border focus:border-indigo-700 font-normal w-full h-10 flex items-center pl-3 text-sm border-gray-300 rounded border"
-                                    placeholder="James"
-                                />
-                                <label
-                                    htmlFor="email2"
-                                    className="text-gray-800 text-sm font-bold leading-tight tracking-normal"
-                                >
-                                    Card Number
-                                </label>
-                                <div className="relative mb-5 mt-2">
-                                    <div className="absolute text-gray-600 flex items-center px-4 border-r h-full">
-                                        <svg
+                                <div className='flex justify-between items-center lg:lg:mx-10 py-2'>
+                                    <p
+                                        className="text-gray-800 text-md font-bold leading-tight tracking-normal"
+                                    >
+                                        product Owner
+                                    </p>
+                                    <p
+                                        className="text-gray-600 text-md font-bold leading-tight tracking-normal"
+                                    >
+                                        Owner Name
+                                    </p>
+                                </div>
+                                <div className='flex justify-between  lg:mx-10 py-3'>
+                                    <p
+                                        className="text-gray-800 text-md font-bold leading-tight tracking-normal"
+                                    >
+                                        Fill all information
+                                    </p>
+                                    <p
+                                        className="text-gray-600 text-md font-bold leading-tight tracking-normal"
+                                    >
+                                        Yes
+                                    </p>
+                                </div>
+                                <div className='flex justify-between lg:mx-10 py-3'>
+                                    <p
+                                        className="text-gray-800 text-md font-bold leading-tight tracking-normal"
+                                    >
+                                        Product Original Price                                    </p>
+                                    <p
+                                        className="text-gray-600 text-md font-bold leading-tight tracking-normal"
+                                    >
+                                        20$
+                                    </p>
+                                </div>
+                                <div className='flex justify-between items-center lg:mx-10 py-2'>
+                                    <p
+                                        className="text-gray-800 text-md font-bold leading-tight tracking-normal"
+                                    >
+                                        Product Status
+                                    </p>
+                                    <p
+                                        className='text-gray-800 text-md font-bold leading-tight tracking-normal bg-green-50 text-black-700 p-2 rounded-lg'
+                                    // className={`text-[1.2em] font-medium text-center p-2 rounded-lg h-8 flex items-center justify-center w-20 mx-auto ${product.status === 'Pending' ? 'bg-green-50 text-black-700' : product.status === 'Rejected' ? 'bg-red-200 text-red-700' : 'bg-green-200 text-green-700'}`}
+                                    >
+                                        Pending
+                                    </p>
+                                </div>
 
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            className="icon icon-tabler icon-tabler-credit-card"
-                                            width={20}
-                                            height={20}
-                                            viewBox="0 0 24 24"
-                                            strokeWidth="1.5"
-                                            stroke="currentColor"
-                                            fill="none"
-                                            strokeLinecap="round"
-                                            strokeLinejoin="round"
+                                <form className="max-w-sm mx-auto my-4 mb-6">
+                                    <div className="mb-6">
+                                        <label
+                                            htmlFor="large-input"
+                                            className="block mb-2 text-sm font-medium text-gray-900 "
                                         >
-                                            <path stroke="none" d="M0 0h24v24H0z" />
-                                            <rect x={3} y={5} width={18} height={14} rx={3} />
-                                            <line x1={3} y1={10} x2={21} y2={10} />
-                                            <line x1={7} y1={15} x2="7.01" y2={15} />
-                                            <line x1={11} y1={15} x2={13} y2={15} />
-                                        </svg>
+                                            New Product Price
+                                        </label>
+                                        <input
+                                            type="text"
+                                            id="large-input"
+                                            className="block w-full p-4 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-base focus:ring-blue-500 focus:border-blue-500
+                                        "
+                                            placeholder='enter product price'
+                                        />
                                     </div>
-                                    <input
-                                        id="email2"
-                                        className="text-gray-600 focus:outline-none focus:border focus:border-indigo-700 font-normal w-full h-10 flex items-center pl-16 text-sm border-gray-300 rounded border"
-                                        placeholder="XXXX - XXXX - XXXX - XXXX"
-                                    />
-                                </div>
-                                <label
-                                    htmlFor="expiry"
-                                    className="text-gray-800 text-sm font-bold leading-tight tracking-normal"
-                                >
-                                    Expiry Date
-                                </label>
-                                <div className="relative mb-5 mt-2">
-                                    <div className="absolute right-0 text-gray-600 flex items-center pr-3 h-full cursor-pointer">
-                                        <svg
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            className="icon icon-tabler icon-tabler-calendar-event"
-                                            width={20}
-                                            height={20}
-                                            viewBox="0 0 24 24"
-                                            strokeWidth="1.5"
-                                            stroke="currentColor"
-                                            fill="none"
-                                            strokeLinecap="round"
-                                            strokeLinejoin="round"
-                                        >
-                                            <path stroke="none" d="M0 0h24v24H0z" />
-                                            <rect x={4} y={5} width={16} height={16} rx={2} />
-                                            <line x1={16} y1={3} x2={16} y2={7} />
-                                            <line x1={8} y1={3} x2={8} y2={7} />
-                                            <line x1={4} y1={11} x2={20} y2={11} />
-                                            <rect x={8} y={15} width={2} height={2} />
-                                        </svg>
+
+                                    <div>
+                                        <label className="block text-sm font-medium text-gray-700 mb-2">Product Description</label>
+                                        <textarea
+                                            className="block w-full p-4 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-base focus:ring-blue-500 focus:border-blue-500"
+                                            placeholder='leave message for product owner'
+                                        // value={productDescription}
+                                        // onChange={(e) => setProductDescription(e.target.value)}
+                                        ></textarea>
                                     </div>
-                                    <input
-                                        id="expiry"
-                                        className="text-gray-600 focus:outline-none focus:border focus:border-indigo-700 font-normal w-full h-10 flex items-center pl-3 text-sm border-gray-300 rounded border"
-                                        placeholder="MM/YY"
-                                    />
-                                </div>
-                                <label
-                                    htmlFor="cvc"
-                                    className="text-gray-800 text-sm font-bold leading-tight tracking-normal"
-                                >
-                                    CVC
-                                </label>
-                                <div className="relative mb-5 mt-2">
-                                    <div className="absolute right-0 text-gray-600 flex items-center pr-3 h-full cursor-pointer">
-                                        <svg
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            className="icon icon-tabler icon-tabler-info-circle"
-                                            width={20}
-                                            height={20}
-                                            viewBox="0 0 24 24"
-                                            strokeWidth="1.5"
-                                            stroke="currentColor"
-                                            fill="none"
-                                            strokeLinecap="round"
-                                            strokeLinejoin="round"
-                                        >
-                                            <path stroke="none" d="M0 0h24v24H0z" />
-                                            <circle cx={12} cy={12} r={9} />
-                                            <line x1={12} y1={8} x2="12.01" y2={8} />
-                                            <polyline points="11 12 12 12 12 16 13 16" />
-                                        </svg>
-                                    </div>
-                                    <input
-                                        id="cvc"
-                                        className="mb-8 text-gray-600 focus:outline-none focus:border focus:border-indigo-700 font-normal w-full h-10 flex items-center pl-3 text-sm border-gray-300 rounded border"
-                                        placeholder="MM/YY"
-                                    />
-                                </div>
+
+                                </form>
+
                                 <div className="flex items-center justify-start w-full">
                                     <button className="focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-700 transition duration-150 ease-in-out hover:bg-indigo-600 bg-indigo-700 rounded text-white px-8 py-2 text-sm">
                                         Submit
                                     </button>
                                     <button
+                                        onClick={() => dispatch(setUpdateProductModal(false))}
                                         className="focus:outline-none focus:ring-2 focus:ring-offset-2  focus:ring-gray-400 ml-3 bg-gray-100 transition duration-150 text-gray-600 ease-in-out hover:border-gray-400 hover:bg-gray-300 border rounded px-8 py-2 text-sm"
                                         onclick="modalHandler()"
                                     >

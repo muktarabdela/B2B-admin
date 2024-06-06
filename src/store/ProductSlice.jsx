@@ -5,6 +5,18 @@ import { useEffect } from 'react';
 
 
 const initialState = {
+    productData: {
+        category: "",
+        brand_name: "",
+        description: "",
+        manufacturer: "",
+        country_of_origin: "",
+        application: "",
+        price: "",
+        stock: "",
+        images: [],
+        specification: []
+    },
     productsData: null,
 };
 
@@ -31,9 +43,12 @@ const ProductSlice = createSlice({
         setProductsData: (state, action) => {
             state.productsData = action.payload;
         },
+        setProductData: (state, action) => {
+            state.productData = action.payload;
+        }
     },
 });
 
-export const { setProductsData, } = ProductSlice.actions;
+export const { setProductsData, setProductData } = ProductSlice.actions;
 
 export default ProductSlice.reducer;

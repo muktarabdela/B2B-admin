@@ -1,6 +1,57 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux';
+import { setDeleteModal, setDetailModal, setSupplierUpdateStatus } from '../../store/uiSlice';
+import SupplierDetail from '../dashboard/supplier/supplierDtail/SupplierDetail';
+import SupplierUpdateStates from '../dashboard/supplier/SupplierUpdateStates';
 
+function Check() {
+  const dispatch = useDispatch()
+  return (
+    <>
+      {/* component */}
+      <div className="bg-slate-800 bg-opacity-50 flex justify-center items-center absolute top-0 right-0 bottom-0 left-0">
+        <div className="bg-white px-16 py-14 rounded-md text-center">
+          <h1 className="text-xl mb-4 font-bold text-slate-500">
+            Do you Want Delete
+          </h1>
+          <button
+            onClick={() => dispatch(setDeleteModal(false))}
+            className="bg-red-500 px-4 py-2 rounded-md text-md text-white">
+            Cancel
+          </button>
+          <button className="bg-indigo-500 px-7 py-2 ml-2 rounded-md text-md text-white font-semibold">
+            Ok
+          </button>
+        </div>
+      </div>
+    </>
+
+  )
+}
 const Business = () => {
+  const dispatch = useDispatch()
+
+  const [supplierData, setSupplierData] = useState()
+  const deleteModal = useSelector((state) => state.ui.deleteModal);
+  const detailModal = useSelector((state) => state.ui.detailModal);
+  const supplierUpdateStatus = useSelector((state) => state.ui.supplierUpdateStatus);
+
+  const [tooltipVisible, setTooltipVisible] = useState(false);
+  const [tooltipPosition, setTooltipPosition] = useState({ x: 10, y: 10 });
+
+
+
+  const handleMouseEnter = (event) => {
+    setTooltipPosition({
+      x: event.pageX,
+      y: event.pageY
+    });
+    setTooltipVisible(true);
+  };
+
+  const handleMouseLeave = () => {
+    setTooltipVisible(false);
+  };
   return (
     <div>
       <>
@@ -8,6 +59,9 @@ const Business = () => {
         <section className="antialiased  px-4">
           <div className="flex flex-col justify-center h-full lg:ml-20">
             {/* Table */}
+            {deleteModal && <Check />}
+            {detailModal && <SupplierDetail />}
+            {supplierUpdateStatus && <SupplierUpdateStates />}
             <div className="w-full max-w-5xl mx-auto bg-white shadow-lg rounded-sm border border-gray-200 mt-[8em]" >
               <header className="px-5 py-4 border-b border-gray-100">
                 <h2 className="font-semibold text-gray-800">Suppliers user</h2>
@@ -33,7 +87,7 @@ const Business = () => {
                           <div className="font-semibold text-center">Detail</div>
                         </th>
                         <th className="p-2 whitespace-nowrap">
-                          <div className="font-semibold text-center">Edit</div>
+                          <div className="font-semibold text-center">Update supplier status</div>
                         </th>
                         <th className="p-2 whitespace-nowrap">
                           <div className="font-semibold text-center">Delete</div>
@@ -66,20 +120,18 @@ const Business = () => {
                             0932664696
                           </div>
                         </td>
-                        <td className="p-2 whitespace-nowrap">
+                        <td
+
+                          className="p-2 whitespace-nowrap">
                           <div className="text-[1.2em] font-medium text-center bg-green-50 p-2 rounded-lg text-black-700 h-8 flex items-center justify-center w-20 mx-auto">
                             Pending
                           </div>
-                          {/* <div className="text-[1.2em] font-medium 
-                                                  text-center bg-green-200 p-2 rounded-lg text-green-700 h-8 flex items-center justify-center w-20 mx-auto">
-                                                      Verify
-                                                  </div> */}
-                          {/* <div className=text-[1.2em] font-medium  text-center bg-red-200 p-2 rounded-lg text-red-700 h-8 flex items-center justify-center w-20 mx-auto">
-                                                      Rejected
-                                                  </div> */}
                         </td>
                         <td className='p-2'>
-                          <div className="
+                          <div
+                            onClick={() => dispatch(setDetailModal(true))}
+
+                            className="
                         cursor-pointer
                         text-[1.2em] font-medium text-center border-2 border-amber-300 bg-amber-100 rounded-lg p-2 h-8 flex items-center justify-center w-20 mx-auto">
                             <svg width="76" height="30" fill="none"
@@ -91,18 +143,36 @@ const Business = () => {
                             Show
                           </div>
                         </td>
-                        <td className='p-2'>
-                          <div className="
+                        <td
+                          onClick={() => dispatch(setSupplierUpdateStatus(true))}
+                          className='p-2'>
+                          {tooltipVisible && (
+                            <div
+                              className="absolute z-10 px-3 py-2 text-sm font-medium text-white bg-gray-900 rounded-lg shadow-sm"
+                              style={{
+                                top: `${tooltipPosition.y}px`,
+                                left: `${tooltipPosition.x}px`
+                              }}
+                            >
+                              Update Supplier Status
+                            </div>
+                          )}
+                          <div
+                            onMouseEnter={handleMouseEnter}
+                            onMouseLeave={handleMouseLeave}
+                            className="
                         cursor-pointer
-                        text-[1.2em] font-medium text-center border-2 border-lime-900 bg-lime-100 rounded-lg p-2 h-8 flex items-center justify-center w-20 mx-auto">
+                        text-[1.2em] font-medium text-center border-2 border-lime-900 bg-lime-100 rounded-lg p-2 h-8 flex items-center justify-center w-[6em] mx-auto">
                             <svg width="40" height="20" fill="none" stroke="#1a1a1a" stroke-linecap="round" stroke-linejoin="round" stroke-width="1" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                               <path d="m15.232 5.232 3.536 3.536m-2.036-5.036a2.5 2.5 0 0 1 3.536 3.536L6.5 21.036H3v-3.572L16.732 3.732Z"></path>
                             </svg>
-                            Edit
+                            Update
                           </div>
                         </td>
                         <td className='p-2'>
-                          <div className="
+                          <div
+                            onClick={() => dispatch(setDeleteModal(true))}
+                            className="
                         cursor-pointer
                         text-[1.2em] font-medium text-center border-2 border-red-300 bg-red-100 text-red-600 rounded-lg p-2 h-8 flex items-center justify-center w-[5.5em] mx-auto">
                             <svg width="40" height="20" fill="none" stroke="#131111" stroke-linecap="round" stroke-linejoin="round" stroke-width="1" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -138,20 +208,20 @@ const Business = () => {
                             0932664696
                           </div>
                         </td>
-                        <td className="p-2 whitespace-nowrap">
-                          {/* <div className="text-[1.2em] font-medium text-center bg-green-50 p-2 rounded-lg text-black-700 h-8 flex items-center justify-center w-20 mx-auto">
-                          Pending
-                        </div> */}
+                        <td
+                          onClick={() => dispatch(setSupplierUpdateStatus(true))}
+
+                          className="p-2 whitespace-nowrap">
+
                           <div className="text-[1.2em] font-medium 
                         text-center bg-green-200 p-2 rounded-lg text-green-700 h-8 flex items-center justify-center w-20 mx-auto">
                             Verify
                           </div>
-                          {/* <div className=text-[1.2em] font-medium  text-center bg-red-200 p-2 rounded-lg text-red-700 h-8 flex items-center justify-center w-20 mx-auto">
-                        Rejected
-                    </div> */}
                         </td>
                         <td className='p-2'>
-                          <div className="
+                          <div
+                            onClick={() => dispatch(setDetailModal(true))}
+                            className="
                         cursor-pointer
                         text-[1.2em] font-medium text-center border-2 border-amber-300 bg-amber-100 rounded-lg p-2 h-8 flex items-center justify-center w-20 mx-auto">
                             <svg width="76" height="30" fill="none"
@@ -163,18 +233,36 @@ const Business = () => {
                             Show
                           </div>
                         </td>
-                        <td className='p-2'>
-                          <div className="
+                        <td
+                          onClick={() => dispatch(setSupplierUpdateStatus(true))}
+                          className='p-2'>
+                          {tooltipVisible && (
+                            <div
+                              className="absolute z-10 px-3 py-2 text-sm font-medium text-white bg-gray-900 rounded-lg shadow-sm"
+                              style={{
+                                top: `${tooltipPosition.y}px`,
+                                left: `${tooltipPosition.x}px`
+                              }}
+                            >
+                              Update Supplier Status
+                            </div>
+                          )}
+                          <div
+                            onMouseEnter={handleMouseEnter}
+                            onMouseLeave={handleMouseLeave}
+                            className="
                         cursor-pointer
-                        text-[1.2em] font-medium text-center border-2 border-lime-900 bg-lime-100 rounded-lg p-2 h-8 flex items-center justify-center w-20 mx-auto">
+                        text-[1.2em] font-medium text-center border-2 border-lime-900 bg-lime-100 rounded-lg p-2 h-8 flex items-center justify-center w-[6em] mx-auto">
                             <svg width="40" height="20" fill="none" stroke="#1a1a1a" stroke-linecap="round" stroke-linejoin="round" stroke-width="1" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                               <path d="m15.232 5.232 3.536 3.536m-2.036-5.036a2.5 2.5 0 0 1 3.536 3.536L6.5 21.036H3v-3.572L16.732 3.732Z"></path>
                             </svg>
-                            Edit
+                            Update
                           </div>
                         </td>
                         <td className='p-2'>
-                          <div className="
+                          <div
+                            onClick={() => dispatch(setDeleteModal(true))}
+                            className="
                         cursor-pointer
                         text-[1.2em] font-medium text-center border-2 border-red-300 bg-red-100 text-red-600 rounded-lg p-2 h-8 flex items-center justify-center w-[5.5em] mx-auto">
                             <svg width="40" height="20" fill="none" stroke="#131111" stroke-linecap="round" stroke-linejoin="round" stroke-width="1" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -209,20 +297,16 @@ const Business = () => {
                             0932664696
                           </div>
                         </td>
-                        <td className="p-2 whitespace-nowrap">
-                          {/* <div className="text-[1.2em] font-medium text-center bg-green-50 p-2 rounded-lg text-black-700 h-8 flex items-center justify-center w-20 mx-auto">
-                          Pending
-                        </div> */}
-                          {/* <div className="text-[1.2em] font-medium 
-                        text-center bg-green-200 p-2 rounded-lg text-green-700 h-8 flex items-center justify-center w-20 mx-auto">
-                          Verify
-                        </div> */}
+                        <td
+                          className="p-2 whitespace-nowrap">
                           <div className="text-[1.2em] font-medium  text-center bg-red-200 p-2 rounded-lg text-red-700 h-8 flex items-center justify-center w-20 mx-auto">
                             Rejected
                           </div>
                         </td>
                         <td className='p-2'>
-                          <div className="
+                          <div
+                            onClick={() => dispatch(setDetailModal(true))}
+                            className="
                         cursor-pointer
                         text-[1.2em] font-medium text-center border-2 border-amber-300 bg-amber-100 rounded-lg p-2 h-8 flex items-center justify-center w-20 mx-auto">
                             <svg width="76" height="30" fill="none"
@@ -234,18 +318,36 @@ const Business = () => {
                             Show
                           </div>
                         </td>
-                        <td className='p-2'>
-                          <div className="
+                        <td
+                          onClick={() => dispatch(setSupplierUpdateStatus(true))}
+                          className='p-2'>
+                          {tooltipVisible && (
+                            <div
+                              className="absolute z-10 px-3 py-2 text-sm font-medium text-white bg-gray-900 rounded-lg shadow-sm"
+                              style={{
+                                top: `${tooltipPosition.y}px`,
+                                left: `${tooltipPosition.x}px`
+                              }}
+                            >
+                              Update Supplier Status
+                            </div>
+                          )}
+                          <div
+                            onMouseEnter={handleMouseEnter}
+                            onMouseLeave={handleMouseLeave}
+                            className="
                         cursor-pointer
-                        text-[1.2em] font-medium text-center border-2 border-lime-900 bg-lime-100 rounded-lg p-2 h-8 flex items-center justify-center w-20 mx-auto">
+                        text-[1.2em] font-medium text-center border-2 border-lime-900 bg-lime-100 rounded-lg p-2 h-8 flex items-center justify-center w-[6em] mx-auto">
                             <svg width="40" height="20" fill="none" stroke="#1a1a1a" stroke-linecap="round" stroke-linejoin="round" stroke-width="1" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                               <path d="m15.232 5.232 3.536 3.536m-2.036-5.036a2.5 2.5 0 0 1 3.536 3.536L6.5 21.036H3v-3.572L16.732 3.732Z"></path>
                             </svg>
-                            Edit
+                            Update
                           </div>
                         </td>
                         <td className='p-2'>
-                          <div className="
+                          <div
+                            onClick={() => dispatch(setDeleteModal(true))}
+                            className="
                         cursor-pointer
                         text-[1.2em] font-medium text-center border-2 border-red-300 bg-red-100 text-red-600 rounded-lg p-2 h-8 flex items-center justify-center w-[5.5em] mx-auto">
                             <svg width="40" height="20" fill="none" stroke="#131111" stroke-linecap="round" stroke-linejoin="round" stroke-width="1" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
