@@ -1,6 +1,7 @@
 import React from 'react'
 
-const PersonalInfo = () => {
+const PersonalInfo = ({ supplierData }) => {
+
     return (
         <div className='max-w-4xl mx-auto'>
             <div className=" mx-auto lg:p-6 bg-white shadow-md rounded-lg">
@@ -11,19 +12,19 @@ const PersonalInfo = () => {
                         <div className="mt-2">
                             <div className="flex items-center justify-between">
                                 <span className="text-gray-600">First Name:</span>
-                                <span className="text-gray-800">gaga</span>
+                                <span className="text-gray-800">{supplierData?.first_name}</span>
                             </div>
                             <div className="flex items-center justify-between mt-2">
                                 <span className="text-gray-600">Last Name:</span>
-                                <span className="text-gray-800">jond</span>
+                                <span className="text-gray-800">{supplierData?.last_name}</span>
                             </div>
                             <div className="flex items-center justify-between mt-2">
                                 <span className="text-gray-600">Phone Number:</span>
-                                <span className="text-gray-800">098743464</span>
+                                <span className="text-gray-800">{supplierData?.phone_number} </span>
                             </div>
                             <div className="flex items-center justify-between mt-2">
                                 <span className="text-gray-600">Title/Position:</span>
-                                <span className="text-gray-800">title</span>
+                                <span className="text-gray-800">{supplierData?.title_or_position}</span>
                             </div>
                         </div>
                     </div>
@@ -32,11 +33,7 @@ const PersonalInfo = () => {
                         <div className="mt-2">
                             <div className="flex items-center justify-between">
                                 <span className="text-gray-600">Email:</span>
-                                <span className="text-gray-800">email@gmail.com</span>
-                            </div>
-                            <div className="flex items-center justify-between mt-2">
-                                <span className="text-gray-600">Username:</span>
-                                <span className="text-gray-800">?.username                                </span>
+                                <span className="text-gray-800">{supplierData?.email}</span>
                             </div>
                         </div>
                     </div>

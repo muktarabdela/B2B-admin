@@ -1,9 +1,12 @@
 import React, { useState } from 'react'
 import { setSupplierUpdateStatus } from '../../../store/uiSlice'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 
-const SupplierUpdateStates = () => {
+const SupplierUpdateStates = ({ supplier }) => {
+    console.log("from update", supplier)
     const dispatch = useDispatch()
+
+
     const [status, setStatus] = useState('Pending');
 
     const handleStatusChange = (event) => {
@@ -48,7 +51,7 @@ const SupplierUpdateStates = () => {
                                 <p
                                     className="text-gray-600 text-[1.2em] font-bold leading-tight tracking-normal"
                                 >
-                                    Owner Name
+                                    {supplier?.first_name + ' ' + supplier?.last_name}
                                 </p>
                             </div>
                             <div className='flex justify-between  lg:mx-10 py-6'>
@@ -58,9 +61,9 @@ const SupplierUpdateStates = () => {
                                     Fill all information
                                 </p>
                                 <p
-                                    className="text-gray-600 text-[1.2em] font-bold leading-tight tracking-normal"
+                                    className={`${supplier?.company_name || supplier?.business_registration_license_document ? ' bg-green-50 text-black-700' : "bg-red-200 text-red-700 rounded"} text-gray-600 text-[1.2em] font-bold leading-tight tracking-normal px-2`}
                                 >
-                                    Yes
+                                    {supplier?.company_name || supplier?.business_registration_license_document ? 'Yes' : 'No'}
                                 </p>
                             </div>
                             <div className='flex justify-between lg:mx-10 py-2'>
@@ -75,17 +78,16 @@ const SupplierUpdateStates = () => {
                                     3
                                 </p>
                             </div>
-                            <div className='flex justify-between items-center lg:mx-10 py-6'>
+                            <div className='flex justify-between lg:mx-10 py-6 lg:gap-10 whitespace-nowrap gap-2'>
                                 <p
                                     className="text-gray-800 text-[1.2em] font-bold leading-tight tracking-normal"
                                 >
                                     Current Supplier Status
                                 </p>
                                 <p
-                                    className='text-gray-800 text-[1.2em] font-bold leading-tight tracking-normal bg-green-50 text-black-700 p-2 rounded-lg'
-                                // className={`text-[1.2em] font-medium text-center p-2 rounded-lg h-8 flex items-center justify-center w-20 mx-auto ${product.status === 'Pending' ? 'bg-green-50 text-black-700' : product.status === 'Rejected' ? 'bg-red-200 text-red-700' : 'bg-green-200 text-green-700'}`}
+                                    className={`text-[1.2em] font-medium text-center p-2 rounded-lg h-8 flex items-center justify-center w-20 mx-auto ${supplier.status === 'Pending' ? 'bg-green-50 text-black-700' : supplier.status === 'Rejected' ? 'bg-red-200 text-red-700' : 'bg-green-200 text-green-700'}`}
                                 >
-                                    Pending
+                                    {supplier.status}
                                 </p>
                             </div>
 

@@ -1,7 +1,7 @@
 import React from 'react'
 import { useDispatch } from 'react-redux'
 import { setUpdateProductModal } from '../../../store/uiSlice'
-const UpdateProduct = () => {
+const UpdateProduct = ({ product }) => {
     const dispatch = useDispatch()
     return (
         <>
@@ -68,7 +68,7 @@ const UpdateProduct = () => {
                                     <p
                                         className="text-gray-600 text-md font-bold leading-tight tracking-normal"
                                     >
-                                        20$
+                                        ${product?.price}
                                     </p>
                                 </div>
                                 <div className='flex justify-between items-center lg:mx-10 py-2'>
@@ -78,10 +78,10 @@ const UpdateProduct = () => {
                                         Product Status
                                     </p>
                                     <p
-                                        className='text-gray-800 text-md font-bold leading-tight tracking-normal bg-green-50 text-black-700 p-2 rounded-lg'
-                                    // className={`text-[1.2em] font-medium text-center p-2 rounded-lg h-8 flex items-center justify-center w-20 mx-auto ${product.status === 'Pending' ? 'bg-green-50 text-black-700' : product.status === 'Rejected' ? 'bg-red-200 text-red-700' : 'bg-green-200 text-green-700'}`}
+                                        className={`text-gray-800 text-md font-bold leading-tight tracking-normal bg-green-50 text-black-700 p-2 rounded-lg ${product.status === 'Pending' ? 'bg-green-50 text-black-700' : product.status === 'Rejected' ? 'bg-red-200 text-red-700' : 'bg-green-200 text-green-700'}`}
+                                    // className={`text-[1.2em] font-medium text-center p-2 rounded-lg h-8 flex items-center justify-center w-20 mx-auto `}
                                     >
-                                        Pending
+                                        {product.status}
                                     </p>
                                 </div>
 

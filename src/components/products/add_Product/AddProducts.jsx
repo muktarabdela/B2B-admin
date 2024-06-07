@@ -59,7 +59,7 @@ function AddProducts() {
             dispatch(setProductData(formDataWithImageUrls));
             const response2 = await addProduct(formDataWithImageUrls);
             alert("Product added successfully");
-            navigate("/");
+            navigate("/all-products");
             console.log("Response from add product table", response2);
         } catch (error) {
             console.error('Error adding product:', error);

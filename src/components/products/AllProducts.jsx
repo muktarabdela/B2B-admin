@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import UpdateProduct from '../dashboard/supplier/UpdateProduct';
 import { setDeleteModal, setUpdateProductModal } from '../../store/uiSlice';
 import { useNavigate } from 'react-router-dom';
+import { fetchProducts } from '../../store/ProductSlice';
 
 function Check() {
     const dispatch = useDispatch()
@@ -39,22 +40,13 @@ const AllProducts = () => {
     const [productData, setProductData] = useState([]);
     const [tooltipVisible, setTooltipVisible] = useState(false);
     const [tooltipPosition, setTooltipPosition] = useState({ x: 0, y: 0 });
+    const [selectedProducts, setSelectedProducts] = useState(null);
 
     const productUpdateModal = useSelector((state) => state.ui.productUpdateModal);
     const deleteModal = useSelector((state) => state.ui.deleteModal);
 
-    useEffect(() => {
-        const fetchSupplierData = async () => {
-            try {
-                const response = await allProducts();
-                setProductData(response.data.data);
-                console.log(response.data);
-            } catch (error) {
-                console.error('Error fetching supplier data:', error);
-            }
-        };
-        fetchSupplierData();
-    }, []);
+    const { loading, error, products } = useSelector((state) => state.product)
+
 
     const handleMouseEnter = (event) => {
         setTooltipPosition({
@@ -63,7 +55,6 @@ const AllProducts = () => {
         });
         setTooltipVisible(true);
     };
-
     const handleMouseLeave = () => {
         setTooltipVisible(false);
     };
@@ -72,23 +63,18 @@ const AllProducts = () => {
         navigate(`/detail/products/${id}`);
     };
 
-    const handleStatusChange = async (productId, newStatus) => {
-        try {
-            await updateProductStatus(productId, newStatus);
-            setProductData((prevData) =>
-                prevData.map((product) =>
-                    product.product_id === productId ? { ...product, status: newStatus } : product
-                )
-            );
-        } catch (error) {
-            console.error('Error updating product status:', error);
-        }
+    useEffect(() => {
+        dispatch(fetchProducts());
+    }, [dispatch]);
+    const handleUpdateStatus = (product) => {
+        setSelectedProducts(product);
+        dispatch(setUpdateProductModal(true));
     };
     return (
         <section className="antialiased px-4">
 
             <div className="flex flex-col justify-center h-full lg:ml-20">
-                {productUpdateModal && <UpdateProduct />}
+                {productUpdateModal && <UpdateProduct product={selectedProducts} />}
                 {deleteModal && <Check />}
                 <div className="w-full max-w-5xl mx-auto bg-white shadow-lg rounded-sm border border-gray-200 mt-[8em]">
                     <header className="px-5 py-4 border-b border-gray-100">
@@ -132,7 +118,7 @@ const AllProducts = () => {
                                     </tr>
                                 </thead>
                                 <tbody className="text-sm divide-y divide-gray-100">
-                                    {productData.map((product, index) => (
+                                    {products.map((product, index) => (
                                         <tr key={index}>
                                             <td
                                                 onMouseEnter={handleMouseEnter}
@@ -204,15 +190,15 @@ const AllProducts = () => {
                                             </td>
                                             <td className='p-2'>
                                                 <div
-                                                    onClick={() => dispatch(setUpdateProductModal(true))}
+                                                    onClick={() => handleUpdateStatus(product)}
 
                                                     className="
                                                     cursor-pointer
-                                                    text-[1.2em] font-medium text-center border-2 border-lime-900 bg-lime-100 rounded-lg p-2 h-8 flex items-center justify-center w-20 mx-auto">
+                                                    text-[1.2em] font-medium text-center border-2 border-lime-900 bg-lime-100 rounded-lg p-2 h-8 flex items-center justify-center w-[7em] mx-auto">
                                                     <svg width="40" height="20" fill="none" stroke="#1a1a1a" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                                         <path d="m15.232 5.232 3.536 3.536m-2.036-5.036a2.5 2.5 0 0 1 3.536 3.536L6.5 21.036H3v-3.572L16.732 3.732Z"></path>
                                                     </svg>
-                                                    Edit
+                                                    Update
                                                 </div>
                                             </td>
                                             <td className='p-2'>

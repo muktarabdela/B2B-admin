@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import PersonalInfo from './PersonalInfo'
 import CompanyInfo from './CompanyInfo'
 import CompanyDoc from './CompanyDoc'
@@ -7,24 +7,25 @@ import Banks from './Banks'
 import { useDispatch } from 'react-redux'
 import { setDetailModal } from '../../../../store/uiSlice'
 
-const SupplierDetail = () => {
+const SupplierDetail = ({ supplier }) => {
+  console.log(supplier)
   const dispatch = useDispatch()
-  const [supplierData, setSupplierData] = useState()
   const [activeComponent, setActiveComponent] = useState('Personal_info')
+
   const renderActiveComponent = () => {
     switch (activeComponent) {
       case 'Personal_info':
-        return <PersonalInfo supplierData={supplierData} />
+        return <PersonalInfo supplierData={supplier} />
       case 'company_Info':
-        return <CompanyInfo supplierData={supplierData} />
+        return <CompanyInfo supplierData={supplier} />
       case 'company_documentation':
-        return <CompanyDoc supplierData={supplierData} />
+        return <CompanyDoc supplierData={supplier} />
       case 'shipping':
-        return <Shipping supplierData={supplierData} />
+        return <Shipping supplierData={supplier} />
       case 'bank_information':
-        return <Banks supplierData={supplierData} />
+        return <Banks supplierData={supplier} />
       default:
-        return <contactInformation supplierData={supplierData} />
+        return <contactInformation supplierData={supplier} />
     }
   }
   return (
