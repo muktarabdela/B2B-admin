@@ -21,12 +21,12 @@ const Approve = () => {
   };
   return (
     <section className="antialiased  px-4">
-      <div className="flex flex-col justify-center h-full lg:ml-20">
-        {/* Table */}
+      <div className="max-w-[75em] mx-auto mr-0">
+      {/* Table */}
         {/* {productModal && <UpdateProduct />}
           {deleteModal && <Check />}
           {detailModal && <SupplierDetail />} */}
-        <div className="w-full max-w-5xl mx-auto bg-white shadow-lg rounded-sm border border-gray-200 mt-[8em]" >
+        <div className="w-full mx-auto bg-white shadow-lg rounded-sm border border-gray-200 mt-[8em]" >
           <header className="px-5 py-4 border-b border-gray-100">
             <h2 className="font-semibold text-gray-800">Suppliers user</h2>
           </header>

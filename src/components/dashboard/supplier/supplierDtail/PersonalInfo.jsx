@@ -1,7 +1,7 @@
 import React from 'react'
 
-const PersonalInfo = ({ supplierData }) => {
-
+const PersonalInfo = ({ Data }) => {
+    const supplierData = Data && Data.length > 0 ? Data[0] : {};
     return (
         <div className='max-w-4xl mx-auto'>
             <div className=" mx-auto lg:p-6 bg-white shadow-md rounded-lg">

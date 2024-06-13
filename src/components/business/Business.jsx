@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setDeleteModal, setDetailModal, setSupplierUpdateStatus } from '../../store/uiSlice';
 import SupplierDetail from '../dashboard/supplier/supplierDtail/SupplierDetail';
 import SupplierUpdateStates from '../dashboard/supplier/SupplierUpdateStates';
+import { fetchBusiness } from '../../store/BusinessSlice';
 
 function Check() {
   const dispatch = useDispatch()
@@ -30,16 +31,22 @@ function Check() {
 }
 const Business = () => {
   const dispatch = useDispatch()
-
-  const [supplierData, setSupplierData] = useState()
   const deleteModal = useSelector((state) => state.ui.deleteModal);
   const detailModal = useSelector((state) => state.ui.detailModal);
   const supplierUpdateStatus = useSelector((state) => state.ui.supplierUpdateStatus);
 
+  const { Business, loading, error } = useSelector((state) => state.business);
+  const [selectedBusiness, setSelectedBusiness] = useState(null);
+
   const [tooltipVisible, setTooltipVisible] = useState(false);
   const [tooltipPosition, setTooltipPosition] = useState({ x: 10, y: 10 });
 
+  useEffect(() => {
+    dispatch(fetchBusiness());
+  }, []);
 
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error}</div>;
 
   const handleMouseEnter = (event) => {
     setTooltipPosition({
@@ -52,17 +59,27 @@ const Business = () => {
   const handleMouseLeave = () => {
     setTooltipVisible(false);
   };
+
+  const handleShowDetail = (supplier) => {
+    setSelectedBusiness(supplier);
+    dispatch(setDetailModal(true));
+  };
+
+  const handleUpdateStatus = (supplier) => {
+    setSelectedBusiness(supplier);
+    dispatch(setSupplierUpdateStatus(true));
+  };
   return (
     <div>
       <>
         {/* component */}
-        <section className="antialiased  px-4">
-          <div className="flex flex-col justify-center h-full lg:ml-20">
+        <section className="  px-4">
+          <div className="max-w-[79em] mx-auto mr-0 ">
             {/* Table */}
             {deleteModal && <Check />}
-            {detailModal && <SupplierDetail />}
-            {supplierUpdateStatus && <SupplierUpdateStates />}
-            <div className="w-full max-w-5xl mx-auto bg-white shadow-lg rounded-sm border border-gray-200 mt-[8em]" >
+            {detailModal && <SupplierDetail supplier={selectedBusiness} />}
+            {supplierUpdateStatus && <SupplierUpdateStates supplier={selectedBusiness} />}
+            <div className="max-w-[74em] mx-auto bg-white shadow-lg rounded-sm border border-gray-200 mt-[8em]">
               <header className="px-5 py-4 border-b border-gray-100">
                 <h2 className="font-semibold text-gray-800">Suppliers user</h2>
               </header>
@@ -72,7 +89,7 @@ const Business = () => {
                     <thead className="text-xs uppercase text-black font-semibold bg-gray-50">
                       <tr>
                         <th className="p-2 whitespace-nowrap">
-                          <div className="font-semibold text-left ">Name</div>
+                          <div className="font-semibold text-left">Name</div>
                         </th>
                         <th className="p-2 whitespace-nowrap">
                           <div className="font-semibold text-left">Email</div>
@@ -81,13 +98,16 @@ const Business = () => {
                           <div className="font-semibold text-left">Phone Number</div>
                         </th>
                         <th className="p-2 whitespace-nowrap">
-                          <div className="font-semibold text-center">status</div>
+                          <div className="font-semibold text-left"> Role</div>
+                        </th>
+                        <th className="p-2 whitespace-nowrap">
+                          <div className="font-semibold text-center">Status</div>
                         </th>
                         <th className="p-2 whitespace-nowrap">
                           <div className="font-semibold text-center">Detail</div>
                         </th>
                         <th className="p-2 whitespace-nowrap">
-                          <div className="font-semibold text-center">Update supplier status</div>
+                          <div className="font-semibold text-center">Update Supplier Status</div>
                         </th>
                         <th className="p-2 whitespace-nowrap">
                           <div className="font-semibold text-center">Delete</div>
@@ -95,268 +115,92 @@ const Business = () => {
                       </tr>
                     </thead>
                     <tbody className="text-sm divide-y divide-gray-100">
-                      <tr>
-                        <td className="p-2 whitespace-nowrap">
-                          <div className="flex items-center">
-                            <div className="w-10 h-10 flex-shrink-0 mr-2 sm:mr-3">
-                              <img
-                                className="rounded-full"
-                                src="https://raw.githubusercontent.com/cruip/vuejs-admin-dashboard-template/main/src/images/user-36-05.jpg"
-                                width={40}
-                                height={40}
-                                alt="Alex Shatov"
-                              />
+                      {Business.map((supplier, index) => (
+                        <tr key={index}>
+                          <td className="p-2 whitespace-nowrap">
+                            <div className="flex items-center">
+                              <div className="w-10 h-10 flex-shrink-0 mr-2 sm:mr-3">
+                                <img
+                                  className="rounded-full"
+                                  src="https://raw.githubusercontent.com/cruip/vuejs-admin-dashboard-template/main/src/images/user-36-05.jpg"
+                                  width={40}
+                                  height={40}
+                                  alt={supplier.first_name}
+                                />
+                              </div>
+                              <div className="font-medium text-gray-800">
+                                {supplier.first_name} {supplier.last_name}
+                              </div>
                             </div>
-                            <div className="font-medium text-gray-800">
-                              Alex Shatov
+                          </td>
+                          <td className="p-2 whitespace-nowrap">
+                            <div className="text-left">{supplier.email}</div>
+                          </td>
+                          <td className="p-2 whitespace-nowrap">
+                            <div className="text-left font-medium text-gray-500">
+                              {supplier.phone_number}
                             </div>
-                          </div>
-                        </td>
-                        <td className="p-2 whitespace-nowrap">
-                          <div className="text-left">alexshatov@gmail.com</div>
-                        </td>
-                        <td className="p-2 whitespace-nowrap">
-                          <div className="text-left font-medium text-gray-500">
-                            0932664696
-                          </div>
-                        </td>
-                        <td
+                          </td>
 
-                          className="p-2 whitespace-nowrap">
-                          <div className="text-[1.2em] font-medium text-center bg-green-50 p-2 rounded-lg text-black-700 h-8 flex items-center justify-center w-20 mx-auto">
-                            Pending
-                          </div>
-                        </td>
-                        <td className='p-2'>
-                          <div
-                            onClick={() => dispatch(setDetailModal(true))}
+                          <td className="p-2 whitespace-nowrap">
+                            <div className="text-left">{supplier.role_id === 3 && 'Business'}</div>
+                          </td>
 
-                            className="
-                        cursor-pointer
-                        text-[1.2em] font-medium text-center border-2 border-amber-300 bg-amber-100 rounded-lg p-2 h-8 flex items-center justify-center w-20 mx-auto">
-                            <svg width="76" height="30" fill="none"
-                              className='flex items-center justify-center'
-                              stroke="#050505" stroke-linecap="round" stroke-linejoin="round" stroke-width="1" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                              <path d="M14.121 14.121A3 3 0 1 0 9.88 9.88a3 3 0 0 0 4.242 4.242Z"></path>
-                              <path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7Z"></path>
-                            </svg>
-                            Show
-                          </div>
-                        </td>
-                        <td
-                          onClick={() => dispatch(setSupplierUpdateStatus(true))}
-                          className='p-2'>
-                          {tooltipVisible && (
+                          <td className="p-2 whitespace-nowrap">
+                            <div className={`text-[1.2em] font-medium text-center ${supplier.status === 'pending' ? 'bg-green-50' : ''} p-2 rounded-lg text-black-700 h-8 flex items-center justify-center w-20 mx-auto`}>
+                              {supplier.status}
+                            </div>
+                          </td>
+                          <td className='p-2'>
                             <div
-                              className="absolute z-10 px-3 py-2 text-sm font-medium text-white bg-gray-900 rounded-lg shadow-sm"
-                              style={{
-                                top: `${tooltipPosition.y}px`,
-                                left: `${tooltipPosition.x}px`
-                              }}
+                              onClick={() => handleShowDetail(supplier)}
+                              className="cursor-pointer text-[1.2em] font-medium text-center border-2 border-amber-300 bg-amber-100 rounded-lg p-2 h-8 flex items-center justify-center w-20 mx-auto"
                             >
-                              Update Supplier Status
+                              <svg width="76" height="30" fill="none" className='flex items-center justify-center' stroke="#050505" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M14.121 14.121A3 3 0 1 0 9.88 9.88a3 3 0 0 0 4.242 4.242Z"></path>
+                                <path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7Z"></path>
+                              </svg>
+                              Show
                             </div>
-                          )}
-                          <div
-                            onMouseEnter={handleMouseEnter}
-                            onMouseLeave={handleMouseLeave}
-                            className="
-                        cursor-pointer
-                        text-[1.2em] font-medium text-center border-2 border-lime-900 bg-lime-100 rounded-lg p-2 h-8 flex items-center justify-center w-[6em] mx-auto">
-                            <svg width="40" height="20" fill="none" stroke="#1a1a1a" stroke-linecap="round" stroke-linejoin="round" stroke-width="1" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                              <path d="m15.232 5.232 3.536 3.536m-2.036-5.036a2.5 2.5 0 0 1 3.536 3.536L6.5 21.036H3v-3.572L16.732 3.732Z"></path>
-                            </svg>
-                            Update
-                          </div>
-                        </td>
-                        <td className='p-2'>
-                          <div
-                            onClick={() => dispatch(setDeleteModal(true))}
-                            className="
-                        cursor-pointer
-                        text-[1.2em] font-medium text-center border-2 border-red-300 bg-red-100 text-red-600 rounded-lg p-2 h-8 flex items-center justify-center w-[5.5em] mx-auto">
-                            <svg width="40" height="20" fill="none" stroke="#131111" stroke-linecap="round" stroke-linejoin="round" stroke-width="1" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                              <path d="M10 11v6m4-6v6M4 7h16m-1 0-.867 12.142A2 2 0 0 1 16.138 21H7.862a2 2 0 0 1-1.995-1.858L5 7h14Zm-4 0V4a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v3h6Z"></path>
-                            </svg>
-                            Delete
-                          </div>
-                        </td>
-                      </tr>
+                          </td>
 
-                      <tr>
-                        <td className="p-2 whitespace-nowrap">
-                          <div className="flex items-center">
-                            <div className="w-10 h-10 flex-shrink-0 mr-2 sm:mr-3">
-                              <img
-                                className="rounded-full"
-                                src="https://raw.githubusercontent.com/cruip/vuejs-admin-dashboard-template/main/src/images/user-36-05.jpg"
-                                width={40}
-                                height={40}
-                                alt="Alex Shatov"
-                              />
-                            </div>
-                            <div className="font-medium text-gray-800">
-                              Alex Shatov
-                            </div>
-                          </div>
-                        </td>
-                        <td className="p-2 whitespace-nowrap">
-                          <div className="text-left">alexshatov@gmail.com</div>
-                        </td>
-                        <td className="p-2 whitespace-nowrap">
-                          <div className="text-left font-medium text-gray-500">
-                            0932664696
-                          </div>
-                        </td>
-                        <td
-                          onClick={() => dispatch(setSupplierUpdateStatus(true))}
-
-                          className="p-2 whitespace-nowrap">
-
-                          <div className="text-[1.2em] font-medium 
-                        text-center bg-green-200 p-2 rounded-lg text-green-700 h-8 flex items-center justify-center w-20 mx-auto">
-                            Verify
-                          </div>
-                        </td>
-                        <td className='p-2'>
-                          <div
-                            onClick={() => dispatch(setDetailModal(true))}
-                            className="
-                        cursor-pointer
-                        text-[1.2em] font-medium text-center border-2 border-amber-300 bg-amber-100 rounded-lg p-2 h-8 flex items-center justify-center w-20 mx-auto">
-                            <svg width="76" height="30" fill="none"
-                              className='flex items-center justify-center'
-                              stroke="#050505" stroke-linecap="round" stroke-linejoin="round" stroke-width="1" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                              <path d="M14.121 14.121A3 3 0 1 0 9.88 9.88a3 3 0 0 0 4.242 4.242Z"></path>
-                              <path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7Z"></path>
-                            </svg>
-                            Show
-                          </div>
-                        </td>
-                        <td
-                          onClick={() => dispatch(setSupplierUpdateStatus(true))}
-                          className='p-2'>
-                          {tooltipVisible && (
+                          <td onClick={() => handleUpdateStatus(supplier)} className='p-2'>
+                            {tooltipVisible && (
+                              <div
+                                className="absolute z-10 px-3 py-2 text-sm font-medium text-white bg-gray-900 rounded-lg shadow-sm"
+                                style={{
+                                  top: `${tooltipPosition.y}px`,
+                                  left: `${tooltipPosition.x}px`
+                                }}
+                              >
+                                Update Supplier Status
+                              </div>
+                            )}
                             <div
-                              className="absolute z-10 px-3 py-2 text-sm font-medium text-white bg-gray-900 rounded-lg shadow-sm"
-                              style={{
-                                top: `${tooltipPosition.y}px`,
-                                left: `${tooltipPosition.x}px`
-                              }}
+                              onMouseEnter={handleMouseEnter}
+                              onMouseLeave={handleMouseLeave}
+                              className="cursor-pointer text-[1.2em] font-medium text-center border-2 border-lime-900 bg-lime-100 rounded-lg p-2 h-8 flex items-center justify-center w-[6em] mx-auto"
                             >
-                              Update Supplier Status
+                              <svg width="40" height="20" fill="none" stroke="#1a1a1a" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path d="m15.232 5.232 3.536 3.536m-2.036-5.036a2.5 2.5 0 0 1 3.536 3.536L6.5 21.036H3v-3.572L16.732 3.732Z"></path>
+                              </svg>
+                              Update
                             </div>
-                          )}
-                          <div
-                            onMouseEnter={handleMouseEnter}
-                            onMouseLeave={handleMouseLeave}
-                            className="
-                        cursor-pointer
-                        text-[1.2em] font-medium text-center border-2 border-lime-900 bg-lime-100 rounded-lg p-2 h-8 flex items-center justify-center w-[6em] mx-auto">
-                            <svg width="40" height="20" fill="none" stroke="#1a1a1a" stroke-linecap="round" stroke-linejoin="round" stroke-width="1" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                              <path d="m15.232 5.232 3.536 3.536m-2.036-5.036a2.5 2.5 0 0 1 3.536 3.536L6.5 21.036H3v-3.572L16.732 3.732Z"></path>
-                            </svg>
-                            Update
-                          </div>
-                        </td>
-                        <td className='p-2'>
-                          <div
-                            onClick={() => dispatch(setDeleteModal(true))}
-                            className="
-                        cursor-pointer
-                        text-[1.2em] font-medium text-center border-2 border-red-300 bg-red-100 text-red-600 rounded-lg p-2 h-8 flex items-center justify-center w-[5.5em] mx-auto">
-                            <svg width="40" height="20" fill="none" stroke="#131111" stroke-linecap="round" stroke-linejoin="round" stroke-width="1" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                              <path d="M10 11v6m4-6v6M4 7h16m-1 0-.867 12.142A2 2 0 0 1 16.138 21H7.862a2 2 0 0 1-1.995-1.858L5 7h14Zm-4 0V4a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v3h6Z"></path>
-                            </svg>
-                            Delete
-                          </div>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td className="p-2 whitespace-nowrap">
-                          <div className="flex items-center">
-                            <div className="w-10 h-10 flex-shrink-0 mr-2 sm:mr-3">
-                              <img
-                                className="rounded-full"
-                                src="https://raw.githubusercontent.com/cruip/vuejs-admin-dashboard-template/main/src/images/user-36-05.jpg"
-                                width={40}
-                                height={40}
-                                alt="Alex Shatov"
-                              />
-                            </div>
-                            <div className="font-medium text-gray-800">
-                              Alex Shatov
-                            </div>
-                          </div>
-                        </td>
-                        <td className="p-2 whitespace-nowrap">
-                          <div className="text-left">alexshatov@gmail.com</div>
-                        </td>
-                        <td className="p-2 whitespace-nowrap">
-                          <div className="text-left font-medium text-gray-500">
-                            0932664696
-                          </div>
-                        </td>
-                        <td
-                          className="p-2 whitespace-nowrap">
-                          <div className="text-[1.2em] font-medium  text-center bg-red-200 p-2 rounded-lg text-red-700 h-8 flex items-center justify-center w-20 mx-auto">
-                            Rejected
-                          </div>
-                        </td>
-                        <td className='p-2'>
-                          <div
-                            onClick={() => dispatch(setDetailModal(true))}
-                            className="
-                        cursor-pointer
-                        text-[1.2em] font-medium text-center border-2 border-amber-300 bg-amber-100 rounded-lg p-2 h-8 flex items-center justify-center w-20 mx-auto">
-                            <svg width="76" height="30" fill="none"
-                              className='flex items-center justify-center'
-                              stroke="#050505" stroke-linecap="round" stroke-linejoin="round" stroke-width="1" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                              <path d="M14.121 14.121A3 3 0 1 0 9.88 9.88a3 3 0 0 0 4.242 4.242Z"></path>
-                              <path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7Z"></path>
-                            </svg>
-                            Show
-                          </div>
-                        </td>
-                        <td
-                          onClick={() => dispatch(setSupplierUpdateStatus(true))}
-                          className='p-2'>
-                          {tooltipVisible && (
+                          </td>
+
+                          <td className='p-2'>
                             <div
-                              className="absolute z-10 px-3 py-2 text-sm font-medium text-white bg-gray-900 rounded-lg shadow-sm"
-                              style={{
-                                top: `${tooltipPosition.y}px`,
-                                left: `${tooltipPosition.x}px`
-                              }}
+                              onClick={() => dispatch(setDeleteModal(true))}
+                              className="cursor-pointer text-[1.2em] font-medium text-center border-2 border-red-300 bg-red-100 text-red-600 rounded-lg p-2 h-8 flex items-center justify-center w-[5.5em] mx-auto"
                             >
-                              Update Supplier Status
+                              <svg width="40" height="20" fill="none" stroke="#131111" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M10 11v6m4-6v6M4 7h16m-1 0-.867 12.142A2 2 0 0 1 16.138 21H7.862a2 2 0 0 1-1.995-1.858L5 7h14Zm-4 0V4a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v3h6Z"></path>
+                              </svg>
+                              Delete
                             </div>
-                          )}
-                          <div
-                            onMouseEnter={handleMouseEnter}
-                            onMouseLeave={handleMouseLeave}
-                            className="
-                        cursor-pointer
-                        text-[1.2em] font-medium text-center border-2 border-lime-900 bg-lime-100 rounded-lg p-2 h-8 flex items-center justify-center w-[6em] mx-auto">
-                            <svg width="40" height="20" fill="none" stroke="#1a1a1a" stroke-linecap="round" stroke-linejoin="round" stroke-width="1" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                              <path d="m15.232 5.232 3.536 3.536m-2.036-5.036a2.5 2.5 0 0 1 3.536 3.536L6.5 21.036H3v-3.572L16.732 3.732Z"></path>
-                            </svg>
-                            Update
-                          </div>
-                        </td>
-                        <td className='p-2'>
-                          <div
-                            onClick={() => dispatch(setDeleteModal(true))}
-                            className="
-                        cursor-pointer
-                        text-[1.2em] font-medium text-center border-2 border-red-300 bg-red-100 text-red-600 rounded-lg p-2 h-8 flex items-center justify-center w-[5.5em] mx-auto">
-                            <svg width="40" height="20" fill="none" stroke="#131111" stroke-linecap="round" stroke-linejoin="round" stroke-width="1" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                              <path d="M10 11v6m4-6v6M4 7h16m-1 0-.867 12.142A2 2 0 0 1 16.138 21H7.862a2 2 0 0 1-1.995-1.858L5 7h14Zm-4 0V4a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v3h6Z"></path>
-                            </svg>
-                            Delete
-                          </div>
-                        </td>
-                      </tr>
+                          </td>
+                        </tr>
+                      ))}
                     </tbody>
                   </table>
                 </div>

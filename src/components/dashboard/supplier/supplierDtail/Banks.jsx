@@ -1,6 +1,8 @@
 import React from 'react';
 
-const Banks = ({ supplierData }) => {
+const Banks = ({ Data }) => {
+    const supplierData = Data && Data.length > 0 ? Data[0] : {};
+
     console.log("supplier bank", supplierData);
 
     if (!supplierData || !supplierData.banking_details) {

@@ -52,12 +52,22 @@ export async function addProduct(data) {
 }
 
 export async function listSpecifications(data) {
-	// // userToken = await getAuth();
-	try {
-		const response = await axiosInstance.get("admin/product_specifications", data);
-		return response;
-	} catch (error) {
-		console.error("Error fetching specific user:", error);
-		throw error;
-	}
+    // // userToken = await getAuth();
+    try {
+        const response = await axiosInstance.get("admin/product_specifications", data);
+        return response;
+    } catch (error) {
+        console.error("Error fetching specific user:", error);
+        throw error;
+    }
+}
+export async function updateProductStatus(data) {
+    // // userToken = await getAuth();
+    try {
+        const response = await axiosInstance.post("/admin/change-product-status", data);
+        return response;
+    } catch (error) {
+        console.error("Error fetching specific user:", error);
+        throw error;
+    }
 }

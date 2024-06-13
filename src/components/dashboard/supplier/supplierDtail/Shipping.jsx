@@ -1,6 +1,8 @@
 import React from 'react'
 
-const Shipping = ({ supplierData }) => {
+const Shipping = ({ Data }) => {
+  const supplierData = Data && Data.length > 0 ? Data[0] : {};
+
   if (!supplierData || !supplierData.shipping_city) {
     return <div>No data available</div>;
   }

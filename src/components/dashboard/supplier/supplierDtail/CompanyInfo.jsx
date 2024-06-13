@@ -1,6 +1,7 @@
 import React from 'react'
 
-const CompanyInfo = ({ supplierData }) => {
+const CompanyInfo = ({ Data }) => {
+    const supplierData = Data && Data.length > 0 ? Data[0] : {};
 
     if (!supplierData || !supplierData.company_name) {
         return <div>No data available</div>;

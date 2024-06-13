@@ -19,6 +19,7 @@ import Rejected from './components/products/Rejected';
 import AllProducts from './components/products/AllProducts';
 import DetailProduct from './components/products/models/detailProduct/DetailProduct';
 import AddProducts from './components/products/add_Product/AddProducts';
+import SupplierDetail from './components/dashboard/supplier/supplierDtail/SupplierDetail';
 function App() {
   const dispatch = useDispatch()
   const isSidebarOpen = useSelector((state) => state.ui.isSidebarOpen);
@@ -76,6 +77,9 @@ function App() {
                 {/* other */}
                 <Route path="/add-products" element={<PrivateRoute Component={AddProducts} />} />
                 <Route path="/detail/products/:productId" element={<PrivateRoute Component={DetailProduct} />} />
+
+                {/* supplier detail */}
+                <Route path="/detail/supplier/:supplierId" element={<PrivateRoute Component={SupplierDetail} />} />
               </Routes>
             </div>
           </div>

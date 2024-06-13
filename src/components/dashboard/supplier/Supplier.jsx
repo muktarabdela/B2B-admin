@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchSuppliers } from '../../../store/supplierSlice';
 import { setDeleteModal, setDetailModal, setSupplierUpdateStatus } from '../../../store/uiSlice';
-import SupplierDetail from './supplierDtail/SupplierDetail';
 import SupplierUpdateStates from './SupplierUpdateStates';
+import { useNavigate } from 'react-router-dom';
 
 function Check() {
   const dispatch = useDispatch();
@@ -23,13 +23,13 @@ function Check() {
 }
 
 const Supplier = () => {
+  const navigate = useNavigate()
   const dispatch = useDispatch();
   const { suppliers, loading, error } = useSelector((state) => state.supplier);
   const deleteModal = useSelector((state) => state.ui.deleteModal);
-  const detailModal = useSelector((state) => state.ui.detailModal);
   const supplierUpdateStatus = useSelector((state) => state.ui.supplierUpdateStatus);
 
-  const [selectedSupplier, setSelectedSupplier] = useState(null); // State to hold selected supplier data
+  const [selectedSupplier, setSelectedSupplier] = useState(null);
   const [tooltipVisible, setTooltipVisible] = useState(false);
   const [tooltipPosition, setTooltipPosition] = useState({ x: 10, y: 10 });
 
@@ -61,15 +61,17 @@ const Supplier = () => {
     setSelectedSupplier(supplier);
     dispatch(setSupplierUpdateStatus(true));
   };
+  const handleDetailSupplier = (id) => {
+    navigate(`/detail/supplier/${id}`);
+  };
 
   return (
-    <div>
-      <section className="antialiased px-4">
-        <div className="flex flex-col justify-center h-full lg:ml-20">
+    <div className='' >
+      <section className="max-w-[79em] mx-auto mr-0 ">
+        <div className="">
           {deleteModal && <Check />}
-          {detailModal && <SupplierDetail supplier={selectedSupplier} />}
           {supplierUpdateStatus && <SupplierUpdateStates supplier={selectedSupplier} />}
-          <div className="w-full max-w-5xl mx-auto bg-white shadow-lg rounded-sm border border-gray-200 mt-[8em]">
+          <div className="max-w-[74em] mx-auto bg-white shadow-lg rounded-sm border border-gray-200 mt-[8em]">
             <header className="px-5 py-4 border-b border-gray-100">
               <h2 className="font-semibold text-gray-800">Suppliers user</h2>
             </header>
@@ -86,6 +88,9 @@ const Supplier = () => {
                       </th>
                       <th className="p-2 whitespace-nowrap">
                         <div className="font-semibold text-left">Phone Number</div>
+                      </th>
+                      <th className="p-2 whitespace-nowrap">
+                        <div className="font-semibold text-left"> Role</div>
                       </th>
                       <th className="p-2 whitespace-nowrap">
                         <div className="font-semibold text-center">Status</div>
@@ -129,13 +134,20 @@ const Supplier = () => {
                           </div>
                         </td>
                         <td className="p-2 whitespace-nowrap">
-                          <div className={`text-[1.2em] font-medium text-center ${supplier.status === 'pending' ? 'bg-green-50' : ''} p-2 rounded-lg text-black-700 h-8 flex items-center justify-center w-20 mx-auto`}>
+                          <div className="text-left">{supplier.role_id === 2 && 'Supplier'}</div>
+                        </td>
+
+                        <td className="p-2 whitespace-nowrap">
+                          <div className={`text-[1.2em] font-medium text-center ${supplier.status === 'pending' ? 'bg-green-50' : ''}
+                          ${supplier.status === 'approve' ? 'bg-green-200 text-green-600' : ''}
+                          ${supplier.status === 'rejected' ? 'bg-red-100 text-red-600' : ''}
+                          p-2 rounded-lg text-black-700 h-8 flex items-center justify-center w-20 mx-auto`}>
                             {supplier.status}
                           </div>
                         </td>
                         <td className='p-2'>
                           <div
-                            onClick={() => handleShowDetail(supplier)}
+                            onClick={() => handleDetailSupplier(supplier.supplier_account_id)}
                             className="cursor-pointer text-[1.2em] font-medium text-center border-2 border-amber-300 bg-amber-100 rounded-lg p-2 h-8 flex items-center justify-center w-20 mx-auto"
                           >
                             <svg width="76" height="30" fill="none" className='flex items-center justify-center' stroke="#050505" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">

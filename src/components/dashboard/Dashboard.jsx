@@ -8,12 +8,12 @@ const Dashboard = () => {
   return (
     <>
 
-      <div className="mt-[6em] flex max-w-[58em] mx-auto">
+      <div className="mt-[6em] flex max-w-[76em] mx-auto mr-0">
 
-        <div className='flex gap-2 '>
+        <div className='lg:flex gap-2 '>
 
-          <div className="flex flex-wrap lg:flex-nowrap justify-center border w-[50em] h-[40em] bg-gray-50 rounded-lg ">
-            <div className='grid grid-cols-2 grid-rows-4 gap-10'>
+          <div className="flex flex-wrap lg:flex-nowrap justify-center border max-w-[50em] h-[40em] bg-gray-50 rounded-lg ">
+            <div className='grid lg:grid-cols-2 grid-cols-1 grid-rows-4 gap-10'>
               <DashCards icon=
                 {
                   <div className="bg-clip-border mx-4 rounded-xl overflow-hidden bg-gradient-to-tr from-blue-600 to-blue-400 text-white shadow-blue-500/40 shadow-lg  grid h-16 w-16 place-items-center">
@@ -97,17 +97,18 @@ const Dashboard = () => {
 
             </div>
           </div>
-          <div className='border bg-gray-50 rounded-lg  w-[25em] h-full'>
+          <div className='border bg-gray-50  rounded-lg  w-[25em] h-full'>
             <LatestTransactions />
           </div>
         </div>
       </div>
 
-      <div className="mt-4 flex max-w-[58em] mx-auto">
-        <div className='flex gap-2 '>
-          <div className="flex flex-wrap lg:flex-nowrap justify-center border w-[50em] h-[40em] bg-gray-50 rounded-lg ">
 
-          </div>
+      <div className="mt-[6em] flex max-w-[76em] mx-auto mr-0">
+        <div className='lg:flex gap-2 '>
+          {/* <div className="flex flex-wrap lg:flex-nowrap justify-center border w-[50em] h-[40em] bg-gray-50 rounded-lg ">
+
+          </div> */}
           <div className='border bg-gray-50 rounded-lg  w-[25em] h-full'>
             <LatestCustomers />
           </div>

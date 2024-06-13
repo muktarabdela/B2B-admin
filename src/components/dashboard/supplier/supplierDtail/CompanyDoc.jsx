@@ -1,7 +1,9 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
-const CompanyDoc = ({ supplierData }) => {
+const CompanyDoc = ({ Data }) => {
+    const supplierData = Data && Data.length > 0 ? Data[0] : {};
+
     if (!supplierData || !supplierData.tax_registration_document) {
         return <div>No data available</div>;
     }

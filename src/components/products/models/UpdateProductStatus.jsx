@@ -1,36 +1,30 @@
-import React, { useState } from 'react'
-import { setSupplierUpdateStatus } from '../../../store/uiSlice'
-import { useDispatch, useSelector } from 'react-redux'
+import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { setSupplierUpdateStatus } from '../../../store/uiSlice';
+import { updateProductStatus } from '../../../api/adminProduct';
 import { useNavigate } from 'react-router-dom';
-import { updateSupplierStatus } from '../../../api/AdminSupplier';
 
-const SupplierUpdateStates = ({ supplier }) => {
+const UpdateProductStatus = ({ product }) => {
     const navigate = useNavigate();
-
-    console.log("from update", supplier)
-    const dispatch = useDispatch()
-
-
+    const dispatch = useDispatch();
     const [status, setStatus] = useState('Pending');
 
     const handleStatusChange = (event) => {
         setStatus(event.target.value);
     };
 
-
-
     const handleFormSubmit = async (e) => {
         e.preventDefault();
         const data = {
             status: status,
-            email: supplier.email,
+            product_hash: product.product_hash,
         };
         console.log(data);
         try {
-            const response = await updateSupplierStatus(data);
-            console.log('supplier updated successfully:', response);
+            const response = await updateProductStatus(data);
+            console.log('Product updated successfully:', response);
             alert('Product updated successfully');
-            navigate("/supplier");
+            navigate("/all-products");
             window.location.reload();
 
         } catch (error) {
@@ -39,12 +33,9 @@ const SupplierUpdateStates = ({ supplier }) => {
     };
 
     return (
-
-        <div
-            className="relative z-50">
-            <div
-                className="fixed inset-0  w-screen h-screen overflow-y-auto  shadow-2xl">
-                <div className="flex min-h-full items-center justify-center p-4 text-center sm:items-center sm:p-0  ">
+        <div className="relative z-50">
+            <div className="fixed inset-0 w-screen h-screen overflow-y-auto shadow-2xl">
+                <div className="flex min-h-full items-center justify-center p-4 text-center sm:items-center sm:p-0">
                     <div className="container mx-auto w-11/12 md:w-2/3 max-w-lg">
                         <div className="relative py-8 px-5 md:px-10 bg-white shadow-md rounded border border-gray-400">
                             <div className="w-full flex justify-start text-gray-600 mb-3">
@@ -66,54 +57,30 @@ const SupplierUpdateStates = ({ supplier }) => {
                                 </svg>
                             </div>
                             <h1 className="text-gray-800 font-lg font-bold tracking-normal leading-tight text-2xl mb-20">
-                                Update Supplier status
+                                Update products status
                             </h1>
-                            <div className='flex justify-between items-center lg:lg:mx-10 py-2'>
-                                <p
-                                    className="text-gray-800 text-[1.2em] font-bold leading-tight tracking-normal"
-                                >
-                                    Supplier Name
+                            <div className='flex justify-between items-center lg:mx-10 py-2'>
+                                <p className="text-gray-800 text-[1.2em] font-bold leading-tight tracking-normal">
+                                    Owner name
                                 </p>
-                                <p
-                                    className="text-gray-600 text-[1.2em] font-bold leading-tight tracking-normal"
-                                >
-                                    {supplier?.first_name + ' ' + supplier?.last_name}
+                                <p className="text-gray-600 text-[1.2em] font-bold leading-tight tracking-normal">
+                                    {product?.owner_name}
                                 </p>
                             </div>
-                            <div className='flex justify-between  lg:mx-10 py-6'>
-                                <p
-                                    className="text-gray-800 text-[1.2em] font-bold leading-tight tracking-normal"
-                                >
+                            <div className='flex justify-between lg:mx-10 py-6'>
+                                <p className="text-gray-800 text-[1.2em] font-bold leading-tight tracking-normal">
                                     Fill all information
                                 </p>
-                                <p
-                                    className={`${supplier?.company_name || supplier?.business_registration_license_document ? ' bg-green-50 text-black-700' : "bg-red-200 text-red-700 rounded"} text-gray-600 text-[1.2em] font-bold leading-tight tracking-normal px-2`}
-                                >
-                                    {supplier?.company_name || supplier?.business_registration_license_document ? 'Yes' : 'No'}
-                                </p>
-                            </div>
-                            <div className='flex justify-between lg:mx-10 py-2'>
-                                <p
-                                    className="text-gray-800 text-[1.2em] font-bold leading-tight tracking-normal"
-                                >
-                                    Pending Products
-                                </p>
-                                <p
-                                    className="text-gray-600 text-[1.2em] font-bold leading-tight tracking-normal"
-                                >
-                                    3
+                                <p className={`${product?.company_name || product?.business_registration_license_document ? ' bg-green-50 text-black-700' : "bg-red-200 text-red-700 rounded"} text-gray-600 text-[1.2em] font-bold leading-tight tracking-normal px-2`}>
+                                    {product?.company_name || product?.business_registration_license_document ? 'Yes' : 'No'}
                                 </p>
                             </div>
                             <div className='flex justify-between lg:mx-10 py-6 lg:gap-10 whitespace-nowrap gap-2'>
-                                <p
-                                    className="text-gray-800 text-[1.2em] font-bold leading-tight tracking-normal"
-                                >
-                                    Current Supplier Status
+                                <p className="text-gray-800 text-[1.2em] font-bold leading-tight tracking-normal">
+                                    Current product Status
                                 </p>
-                                <p
-                                    className={`text-[1.2em] font-medium text-center p-2 rounded-lg h-8 flex items-center justify-center w-20 mx-auto ${supplier.status === 'Pending' ? 'bg-green-50 text-black-700' : supplier.status === 'rejected' ? 'bg-red-200 text-red-700' : 'bg-green-200 text-green-700'}`}
-                                >
-                                    {supplier.status}
+                                <p className={`text-[1.2em] font-medium text-center p-2 rounded-lg h-8 flex items-center justify-center w-20 mx-auto ${product.status === 'Pending' ? 'bg-green-50 text-black-700' : product.status === 'Rejected' ? 'bg-red-200 text-red-700' : 'bg-green-200 text-green-700'}`}>
+                                    {product.status}
                                 </p>
                             </div>
 
@@ -171,11 +138,9 @@ const SupplierUpdateStates = ({ supplier }) => {
                         </div>
                     </div>
                 </div>
-
             </div>
-
         </div>
-    )
-}
+    );
+};
 
-export default SupplierUpdateStates
+export default UpdateProductStatus;

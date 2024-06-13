@@ -6,35 +6,57 @@ import Shipping from './Shipping'
 import Banks from './Banks'
 import { useDispatch } from 'react-redux'
 import { setDetailModal } from '../../../../store/uiSlice'
+import { useParams } from 'react-router-dom'
+import { singleSupplier } from '../../../../api/AdminSupplier'
 
-const SupplierDetail = ({ supplier }) => {
-  console.log(supplier)
+const SupplierDetail = () => {
+  const [supplierData, setSupplierData] = useState(null);
+  const { supplierId } = useParams();
+  console.log(supplierId);
+  useEffect(() => {
+    const fetchProduct = async () => {
+      try {
+        const response = await singleSupplier({ contact_id: supplierId });
+        console.log(response.data.data)
+        setSupplierData(response.data.data);
+      } catch (error) {
+        console.error("Error fetching product:", error);
+      }
+    };
+    fetchProduct();
+  }, [supplierId]);
   const dispatch = useDispatch()
   const [activeComponent, setActiveComponent] = useState('Personal_info')
+
+  if (supplierId === 0) {
+    return <div>
+      the product owner is admin
+    </div>
+  }
 
   const renderActiveComponent = () => {
     switch (activeComponent) {
       case 'Personal_info':
-        return <PersonalInfo supplierData={supplier} />
+        return <PersonalInfo Data={supplierData} />
       case 'company_Info':
-        return <CompanyInfo supplierData={supplier} />
+        return <CompanyInfo Data={supplierData} />
       case 'company_documentation':
-        return <CompanyDoc supplierData={supplier} />
+        return <CompanyDoc Data={supplierData} />
       case 'shipping':
-        return <Shipping supplierData={supplier} />
+        return <Shipping Data={supplierData} />
       case 'bank_information':
-        return <Banks supplierData={supplier} />
+        return <Banks Data={supplierData} />
       default:
-        return <contactInformation supplierData={supplier} />
+        return <PersonalInfo Data={supplierData} />
     }
   }
   return (
     <div>
       <div
-        className="py-12 bg-gray-700 transition duration-150 ease-in-out z-10 absolute top-0 right-0 bottom-0 left-0"
+        className="mt-[8em] "
       >
-        <div className="container mx-auto  max-w-6xl mr-20">
-          <div className="relative py-8 px-5 md:px-10 bg-white shadow-md rounded border border-gray-400">
+        <div className="max-w-6xl mx-auto mr-0">
+          <div className="">
 
             Supplier user information Detail
 
