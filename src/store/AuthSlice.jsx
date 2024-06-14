@@ -14,7 +14,7 @@ export const login = createAsyncThunk('auth/login', async (adminData, { rejectWi
 });
 
 const initialState = {
-    isAuthenticated: false,
+    isAuthenticated: true,
     token: null,
     user: null,
 };

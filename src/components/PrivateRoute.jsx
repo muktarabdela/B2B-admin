@@ -9,7 +9,7 @@ const PrivateRoute = ({ Component }) => {
     // Check if the token is valid
     const isValidToken = typeof token === 'string' && token.length > 0;
 
-    return isValidToken ? <Component /> : <Navigate to="/auth" />;
+    return isAuthenticated ? <Component /> : <Navigate to="/auth" />;
 
 };
 

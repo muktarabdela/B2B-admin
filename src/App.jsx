@@ -41,7 +41,7 @@ function App() {
     <>
       <div>
         <Routes>
-          <Route path="/auth" element={<Auth />} />
+          {/* <Route path="/auth" element={<Auth />} /> */}
         </Routes>
 
         <div className={`${isAuthenticated ? 'block' : 'hidden'} `}>
