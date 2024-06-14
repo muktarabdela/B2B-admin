@@ -108,7 +108,7 @@ const Sidebar = () => {
             <div className="flex flex-col p-10 mt-0">
                 <h2 className="text-[1.3em] font-bold my-4">E-PHARM Admin</h2>
 
-                <form className="relative mx-auto flex w-[15em] items-center justify-between rounded-md border shadow-lg lg:hidden">
+                <form className="relative mx-auto flex w-[13em] items-center justify-between rounded-md border shadow-lg lg:hidden">
                     <svg
                         className="absolute left-2 block h-5 w-5 text-gray-400"
                         xmlns="http://www.w3.org/2000/svg"

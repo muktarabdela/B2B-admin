@@ -2,7 +2,7 @@ import React from 'react'
 
 const LatestTransactions = () => {
     return (
-        <div className='p-4'>
+        <div className='p-4 '>
             <p className='text-3xl font-bold text-black mb-2'>
                 Latest Transactions
             </p>
@@ -156,7 +156,6 @@ const LatestTransactions = () => {
                         </tbody>
                     </table>
                 </div>
-
 
             </div>
         </div>

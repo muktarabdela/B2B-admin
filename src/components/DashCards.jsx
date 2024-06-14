@@ -2,7 +2,7 @@ import React from 'react'
 
 const DashCards = ({ icon, h1text, number, highNumber, highText }) => {
     return (
-        <div className='w-[20em] h-40 border rounded-lg mt-4 bg-white shadow-md'>
+        <div className='max-w-[20em] h-40 border rounded-lg mt-4 bg-white shadow-md'>
             <div className='flex items-center justify-between p-4 '>
                 <div className=''>
                     {icon}

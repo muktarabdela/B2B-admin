@@ -91,9 +91,9 @@ const AllProducts = () => {
   };
 
   return (
-    <section className="px-4">
+    <section className="border bg-gray-50  rounded-lg  max-w-[22em] lg:max-w-[60em] -0 h-full">
 
-      <div className="max-w-[75em] mx-auto mr-0">
+      <div className='border bg-gray-50  rounded-lg  h-full'>
         {productUpdateModal && <UpdateProduct product={selectedProducts} />}
         {supplierUpdateStatus && <UpdateProductStatus product={selectedProducts} />}
         {deleteModal && <Check />}

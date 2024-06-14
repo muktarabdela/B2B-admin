@@ -17,8 +17,8 @@ const Navbar = () => {
     return (
         <header className="shadow mb-2 w-full z-100 ">
             <div className="relative flex max-w-screen-xl flex-col overflow-hidden px-4 py-4 md:mx-auto md:flex-row md:items-center">
-                <div className={` mx-auto w-screen max-w-screen-md leading-6 hidden lg:block`}>
-                    <form className="relative mx-auto flex w-[25em] items-center justify-between rounded-md border shadow-lg">
+                <div className={` mx-auto w-screen max-w-screen-md leading-6 hidden lg:block mr-0`}>
+                    <form className="relative mx-auto flex w-[25em] items-center justify-between rounded-md border shadow-lg ">
                         <svg
                             className="absolute left-2 block h-5 w-5 text-gray-400"
                             xmlns="http://www.w3.org/2000/svg"

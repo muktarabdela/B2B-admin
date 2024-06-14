@@ -46,17 +46,10 @@ function App() {
 
         <div className={`${isAuthenticated ? 'block' : 'hidden'} `}>
 
-          <div >
+          <div className=' flex '>
+            <div className='hidden lg:block w-[20em]'></div>
             <Sidebar />
-          </div>
-          <div
-
-          >
-            <div className="fixed w-full  top-0 bg-white">
-              <Navbar />
-            </div>
-
-            <div className=''>
+            <div className=' mx-auto'>
               <Routes>
                 <Route path="/" element={<PrivateRoute Component={Dashboard} />} />
                 <Route path="/dashboard" element={<PrivateRoute Component={Dashboard} />} />
@@ -82,6 +75,15 @@ function App() {
                 <Route path="/detail/supplier/:supplierId" element={<PrivateRoute Component={SupplierDetail} />} />
               </Routes>
             </div>
+          </div>
+          <div
+
+          >
+            <div className="fixed w-full  top-0 bg-white">
+              <Navbar />
+            </div>
+
+
           </div>
         </div>
       </div>
