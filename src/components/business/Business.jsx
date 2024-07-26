@@ -15,6 +15,7 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
+  CardDescription
 } from "@/components/ui/card";
 import {
   DropdownMenu,
@@ -58,6 +59,7 @@ function Check() {
 }
 const Business = () => {
   const dispatch = useDispatch()
+  const [businessType, setBusinessType] = useState('');
   const deleteModal = useSelector((state) => state.ui.deleteModal);
   const detailModal = useSelector((state) => state.ui.detailModal);
   const supplierUpdateStatus = useSelector((state) => state.ui.supplierUpdateStatus);
@@ -76,10 +78,51 @@ const Business = () => {
     setSelectedBusiness(supplier);
     dispatch(setSupplierUpdateStatus(true));
   };
+
+  // filter business
+  const getFilteredBusiness = () => {
+    switch (businessType) {
+      case 'pending':
+        return Business.filter((business) => business.status === 'pending');
+      case 'rejected':
+        return Business.filter((business) => business.status === 'rejected');
+      case 'approve':
+        return Business.filter((business) => business.status === 'approve');
+      case 'all':
+        return Business;
+      default:
+        return Business;
+    }
+  };
+  const filterBusiness = getFilteredBusiness();
+
   return (
     <Card className="max-w-6xl mx-auto mr-10 h-full mt-20">
       <CardHeader>
         <CardTitle>Business</CardTitle>
+        <CardDescription className="text-lg  p-3">
+          {businessType === 'pending' && 'Pending suppliers'}
+          {businessType === 'rejected' && 'Rejected suppliers'}
+          {businessType === 'approve' && 'Approved suppliers'}
+        </CardDescription>
+        <div className='flex items-end justify-end'>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button aria-haspopup="true" size="icon" variant="ghost" className="flex rounded border w-20 text-center justify-center items-center">
+                Filter
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuLabel>Actions</DropdownMenuLabel>
+              <DropdownMenuItem className="cursor-pointer bg-gray-700  m-2 rounded-md text-white text-center hover:bg-gray-800" onClick={() => setBusinessType('pending')}>
+                pending Business
+              </DropdownMenuItem>
+              <DropdownMenuItem className="cursor-pointer bg-gray-700  m-2 rounded-md text-white text-center hover:bg-gray-800" onClick={() => setBusinessType('rejected')}> Rejected Business</DropdownMenuItem>
+              <DropdownMenuItem className="cursor-pointer bg-gray-700  m-2 rounded-md text-white text-center hover:bg-gray-800" onClick={() => setBusinessType('approve')}>Approved Business</DropdownMenuItem>
+              <DropdownMenuItem className="cursor-pointer bg-gray-700  m-2 rounded-md text-white text-center hover:bg-gray-800" onClick={() => setBusinessType('all')}>All Business</DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
       </CardHeader>
       <CardContent>
         {deleteModal && <Check />}
@@ -101,7 +144,7 @@ const Business = () => {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {Business.map((supplier, index) => (
+            {filterBusiness.map((supplier, index) => (
               <TableRow key={index}>
                 <TableCell className="font-medium flex items-center">
                   <div className="flex items-center justify-center cursor-pointer">

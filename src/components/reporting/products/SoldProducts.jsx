@@ -37,10 +37,9 @@ function Check() {
     );
 }
 
-const SoldProducts = () => {
+const SoldProducts = ({ productReport }) => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const { loading, error, products } = useSelector((state) => state.product);
     const [reportType, setReportType] = useState('bestSold');
 
     useEffect(() => {
@@ -52,15 +51,15 @@ const SoldProducts = () => {
     const getFilteredProducts = () => {
         switch (reportType) {
             case 'bestSold':
-                return products.slice().sort((a, b) => b.price - a.price).slice(0, 4);
+                return productReport.slice().sort((a, b) => b.price - a.price).slice(0, 4);
             case 'leastSold':
-                return products.slice().sort((a, b) => a.sales - b.sales).slice(0, 4);
+                return productReport.slice().sort((a, b) => a.sales - b.sales).slice(0, 4);
             case 'priceRange':
-                return products.slice().sort((a, b) => b.price - a.price).slice(0, 4);
+                return productReport.slice().sort((a, b) => b.price - a.price).slice(0, 4);
             case 'availability':
-                return products.slice().sort((a, b) => b.stock - a.stock).slice(0, 4);
+                return productReport.slice().sort((a, b) => b.stock - a.stock).slice(0, 4);
             default:
-                return products.slice(0, 4);
+                return productReport.slice(0, 4);
         }
     };
 

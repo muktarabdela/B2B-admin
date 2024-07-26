@@ -18,9 +18,9 @@ const DashCards = ({ icon, h1text, number, highNumber, highText }) => {
             <CardContent>
                 <div className="text-xs text-muted-foreground">{highNumber} from last week</div>
             </CardContent>
-            <CardFooter>
+            {/* <CardFooter>
                 <Progress value={highNumber} aria-label="25% increase" />
-            </CardFooter>
+            </CardFooter> */}
         </Card>
     )
 }

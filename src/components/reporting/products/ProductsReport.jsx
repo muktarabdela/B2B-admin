@@ -13,13 +13,16 @@ import {
     AvatarFallback,
     AvatarImage,
 } from "@/components/ui/avatar"
+import { useSelector } from 'react-redux'
 const ProductsReport = () => {
+    const { loading, error, products } = useSelector((state) => state.product);
+
     return (
         <div className="flex min-h-screen w-full flex-col max-w-6xl mx-auto mr-10 mt-24">
             <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">
-                <QuikData />
+                <QuikData productReport={products} />
                 <div className="grid gap-4 md:gap-8 lg:grid-cols-2 xl:grid-cols-3">
-                    <SoldProducts />
+                    <SoldProducts productReport={products} />
                     <Card x-chunk="dashboard-01-chunk-5">
                         <CardHeader>
                             <CardTitle>Recent Sold Products</CardTitle>

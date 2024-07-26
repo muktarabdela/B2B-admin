@@ -5,7 +5,7 @@ import { useEffect } from 'react';
 
 export const fetchProducts = createAsyncThunk('supplier/fetchSuppliers', async () => {
     const response = await allProducts();
-    console.log("from product slice", response.data.data);
+    // console.log("from product slice", response.data.data);
     return response.data.data;
 });
 

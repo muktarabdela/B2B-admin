@@ -1,12 +1,27 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import LatestTransactions from './LatestTransactions';
 import LatestCustomers from './LatestCustomers';
 import DashCards from '../DashCards';
 import SalesChart from './SalesChart';
 import NewProducts from './NewProducts';
 import Orders from './Orders';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchProductReport, fetchSalesReport, fetchUsersReport } from '@/store/reportSlice';
 
 const Dashboard = () => {
+  const dispatch = useDispatch()
+  useEffect(() => {
+    dispatch(fetchProductReport());
+    dispatch(fetchSalesReport())
+    dispatch(fetchUsersReport())
+  }, []);
+
+  const { productReport, salesReport, usersReport } = useSelector((state) => state.report);
+  // console.log(
+  //   "product report", productReport, "sales report", salesReport,
+  //   "user report", usersReport)
+
+
   return (
     <div className="p-4 mt-20 max-w-6xl mx-auto mr-20">
       <div className="flex flex-col lg:flex-row gap-4 ">
@@ -34,7 +49,7 @@ const Dashboard = () => {
                   </div>
                 }
                 h1text={"Total Sales "}
-                number={"$53k"}
+                number={"53k ETB"}
                 highNumberText={"+20%"}
                 highNumber={20}
                 highText={"than last week"}
@@ -55,7 +70,7 @@ const Dashboard = () => {
                   </div>
                 }
                 h1text={"Total products added "}
-                number={"2,300"}
+                number={productReport?.specific_time_report?.number_of_prdouct_added_from_internal + productReport?.specific_time_report?.number_of_prdouct_added_from_supplier}
                 highNumberText={"+30%"}
                 highNumber={30}
                 highText={"than last month"}
@@ -76,7 +91,10 @@ const Dashboard = () => {
                   </div>
                 }
                 h1text={"Total users registered "}
-                number={"1,000"}
+                number={usersReport?.specific_time_report?.supplier_user_registered?.number_of_register
+                  + usersReport?.specific_time_report?.buyer_user_registered?.number_of_register
+                  + usersReport?.specific_time_report?.personal_user_registered?.number_of_register
+                }
                 highNumberText={"+3%"}
                 highNumber={3}
                 highText={"than last month"}

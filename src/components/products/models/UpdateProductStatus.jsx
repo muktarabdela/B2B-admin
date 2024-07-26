@@ -36,7 +36,7 @@ const UpdateProductStatus = ({ product }) => {
             status: status,
             product_hash: product.product_hash,
             percentage: `${percentage}%`,
-            selling_price: parseFloat(sellingPrice), // Parse float for API consistency
+            selling_price: parseFloat(sellingPrice),
         };
         try {
             const response = await updateProductStatus(data);

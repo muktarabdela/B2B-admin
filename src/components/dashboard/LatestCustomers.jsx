@@ -1,88 +1,58 @@
-import {
-    Avatar,
-    AvatarFallback,
-    AvatarImage,
-} from "@/components/ui/avatar"
+import React from "react";
+import { Badge } from "@/components/ui/badge";
 import {
     Card,
     CardContent,
     CardHeader,
     CardTitle,
-} from "@/components/ui/card"
+} from "@/components/ui/card";
+import { useSelector } from "react-redux";
 
 const LatestCustomers = () => {
+    const { usersReport } = useSelector((state) => state.report);
+
+    const getUserList = () => {
+        const suppliers = usersReport?.specific_time_report?.supplier_user_registered?.list || [];
+        const buyers = usersReport?.specific_time_report?.buyer_user_registered?.list || [];
+        const personals = usersReport?.specific_time_report?.personal_user_registered?.list || [];
+
+        // Combine all users and add user type
+        const allUsers = [
+            ...suppliers.map(user => ({ ...user, userType: "Supplier" })),
+            ...buyers.map(user => ({ ...user, userType: "Business" })),
+            ...personals.map(user => ({ ...user, userType: "Personal" }))
+        ];
+
+        // Sort users by created_at date
+        return allUsers.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+    };
+
+    const userList = getUserList();
+
     return (
         <Card className="w-[21em]">
             <CardHeader>
-                <CardTitle>Latest Customer </CardTitle>
+                <CardTitle>Latest Customer</CardTitle>
             </CardHeader>
             <CardContent className="grid gap-8 px-4">
-                <div className="flex items-center gap-3">
-                    <Avatar className="hidden h-9 w-9 sm:flex">
-                        <AvatarImage src="https://raw.githubusercontent.com/cruip/vuejs-admin-dashboard-template/main/src/images/user-36-05.jpg" alt="Avatar" />
-                        <AvatarFallback>OM</AvatarFallback>
-                    </Avatar>
-                    <div className="grid gap-1">
-                        <p className="text-sm font-medium leading-none">Olivia Martin</p>
-                        <p className="text-sm text-muted-foreground">
-                            olivia.martin@email.com
-                        </p>
+                {userList.map((user, index) => (
+                    <div key={index} className="flex items-center gap-3">
+                        <div className="grid gap-1">
+                            <p className="text-sm font-medium leading-none">{user.email.split('@')[0]}</p>
+                            <p className="text-sm text-muted-foreground">{user.email}</p>
+                        </div>
+                        <div className="ml-auto grid gap-1 text-right">
+                            <p className="font-medium">{user.userType}</p>
+
+                            <Badge className={`p-2 rounded-full ${user.status === 'pending' ? 'bg-yellow-50 text-yellow-700' : user.status === 'rejected' ? 'bg-red-50 text-red-700' : 'bg-green-50 text-green-700'}`} variant="outline">
+                                {user.status.charAt(0).toUpperCase() + user.status.slice(1)}
+                            </Badge>
+                        </div>
                     </div>
-                    <div className="ml-auto font-medium">Personal</div>
-                </div>
-                <div className="flex items-center gap-3">
-                    <Avatar className="hidden h-9 w-9 sm:flex">
-                        <AvatarImage src="/avatars/02.png" alt="Avatar" />
-                        <AvatarFallback>JL</AvatarFallback>
-                    </Avatar>
-                    <div className="grid gap-1">
-                        <p className="text-sm font-medium leading-none">Jackson Lee</p>
-                        <p className="text-sm text-muted-foreground">
-                            jackson.lee@email.com
-                        </p>
-                    </div>
-                    <div className="ml-auto font-medium">Suppler</div>
-                </div>
-                <div className="flex items-center gap-4">
-                    <Avatar className="hidden h-9 w-9 sm:flex">
-                        <AvatarImage src="/avatars/03.png" alt="Avatar" />
-                        <AvatarFallback>IN</AvatarFallback>
-                    </Avatar>
-                    <div className="grid gap-1">
-                        <p className="text-sm font-medium leading-none">Isabella Nguyen</p>
-                        <p className="text-sm text-muted-foreground">
-                            isabella.nguyen@email.com
-                        </p>
-                    </div>
-                    <div className="ml-auto font-medium">Business</div>
-                </div>
-                <div className="flex items-center gap-4">
-                    <Avatar className="hidden h-9 w-9 sm:flex">
-                        <AvatarImage src="/avatars/04.png" alt="Avatar" />
-                        <AvatarFallback>WK</AvatarFallback>
-                    </Avatar>
-                    <div className="grid gap-1">
-                        <p className="text-sm font-medium leading-none">William Kim</p>
-                        <p className="text-sm text-muted-foreground">will@email.com</p>
-                    </div>
-                    <div className="ml-auto font-medium">Personal</div>
-                </div>
-                <div className="flex items-center gap-4">
-                    <Avatar className="hidden h-9 w-9 sm:flex">
-                        <AvatarImage src="/avatars/05.png" alt="Avatar" />
-                        <AvatarFallback>SD</AvatarFallback>
-                    </Avatar>
-                    <div className="grid gap-1">
-                        <p className="text-sm font-medium leading-none">Sofia Davis</p>
-                        <p className="text-sm text-muted-foreground">
-                            sofia.davis@email.com
-                        </p>
-                    </div>
-                    <div className="ml-auto font-medium">Business</div>
-                </div>
+                ))}
             </CardContent>
         </Card>
     );
-}
+};
 
 export default LatestCustomers;

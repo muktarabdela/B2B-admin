@@ -1,6 +1,5 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { MoreHorizontal } from "lucide-react"
-
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import {
@@ -28,11 +27,11 @@ import {
 } from "@/components/ui/table"
 import product1 from "../../assets/product_02.png";
 
-
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { fetchProducts } from '../../store/ProductSlice';
-import { setDeleteModal } from '../../store/uiSlice';
+import { setDeleteModal, setSupplierUpdateStatus } from '../../store/uiSlice';
+import UpdateProductStatus from '../products/models/UpdateProductStatus'
 
 const truncateString = (str, maxLength) => {
     if (str?.length <= maxLength) return str;
@@ -60,19 +59,40 @@ function Check() {
                 </div>
             </div>
         </>
-
     )
 }
+
 const NewProducts = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const { loading, error, products } = useSelector((state) => state.product)
+    const supplierUpdateStatus = useSelector((state) => state.ui.supplierUpdateStatus);
+    const [selectedProducts, setSelectedProducts] = useState(null);
+    const { loading, error, products } = useSelector((state) => state.product);
 
     useEffect(() => {
         dispatch(fetchProducts());
     }, [dispatch]);
-    // list only 4 products 
-    const productsList = products.slice(0, 4);
+
+    const filterRecentPendingProducts = (products) => {
+        const oneWeekAgo = new Date();
+        oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
+        return products.filter(product =>
+            product.status === 'pending' && new Date(product.created_at) >= oneWeekAgo
+        );
+    };
+    const recentPendingProducts = filterRecentPendingProducts(products).slice(0, 4);
+    const handleUpdateStatus = (product) => {
+        setSelectedProducts(product);
+        dispatch(setSupplierUpdateStatus(true));
+    };
+
+    const handleDetailProduct = (id) => {
+        navigate(`/detail/products/${id}`);
+    };
+
+    const handleDetailSupplier = (id) => {
+        navigate(`/detail/supplier/${id}`);
+    };
     return (
         <Card>
             <CardHeader>
@@ -82,35 +102,37 @@ const NewProducts = () => {
                 </CardDescription>
             </CardHeader>
             <CardContent>
+                {supplierUpdateStatus && <UpdateProductStatus product={selectedProducts} />}
+                {/* {deleteModal && <Check />} */}
                 <Table>
                     <TableHeader>
                         <TableRow>
-                            <TableHead className="whitespace-nowrap">Product Owner</TableHead>
-                            <TableHead className=" w-[100px] sm:table-cell">
-                                <span className="">Image</span>
+                            <TableHead className="whitespace-nowrap text-center">Product Owner</TableHead>
+                            <TableHead className="w-[100px] sm:table-cell">
+                                <span className="text-center">Image</span>
                             </TableHead>
-                            <TableHead className="whitespace-nowrap">Brand Name</TableHead>
-                            <TableHead className="whitespace-nowrap">Status</TableHead>
-                            <TableHead className="hidden md:table-cell">Price</TableHead>
-                            <TableHead className="hidden md:table-cell whitespace-nowrap">
+                            <TableHead className="whitespace-nowrap text-center">Brand Name</TableHead>
+                            <TableHead className="whitespace-nowrap text-center">Status</TableHead>
+                            <TableHead className=" md:table-cell text-center">Price</TableHead>
+                            <TableHead className=" md:table-cell whitespace-nowrap text-center">
                                 Stock on Hand
                             </TableHead>
-                            <TableHead className="hidden md:table-cell whitespace-nowrap">Created at</TableHead>
+                            <TableHead className=" md:table-cell whitespace-nowrap text-center">Created at</TableHead>
                             <TableHead>
                                 <span className="sr-only">Actions</span>
                             </TableHead>
                         </TableRow>
                     </TableHeader>
                     <TableBody className="">
-                        {productsList.map((product) => (
-                            <TableRow>
+                        {recentPendingProducts.map((product) => (
+                            <TableRow key={product.product_id}>
                                 <TableCell className="font-medium">
-                                    <div onClick={() => handleDetailSupplier(product.owner)} className="flex items-center justify-center cursor-pointer">
+                                    <div onClick={() => handleDetailSupplier(product.owner)} className="flex items-center justify-center cursor-pointer text-center">
                                         <img className="rounded-full w-10 h-10 mr-2" src="https://raw.githubusercontent.com/cruip/vuejs-admin-dashboard-template/main/src/images/user-36-05.jpg" alt="Owner" />
                                         <span className="font-medium">{product.owner === 0 ? 'admin' : 'supplier'}</span>
                                     </div>
                                 </TableCell>
-                                <TableCell className="hidden sm:table-cell">
+                                <TableCell className="text-center sm:table-cell">
                                     <img
                                         alt="Product image"
                                         className="aspect-square rounded-md object-cover"
@@ -119,16 +141,16 @@ const NewProducts = () => {
                                         width="64"
                                     />
                                 </TableCell>
-                                <TableCell>{truncateString(product.brand_name, 20)}</TableCell>
-                                <TableCell>
+                                <TableCell className="text-center">{truncateString(product.brand_name, 20)}</TableCell>
+                                <TableCell className="text-center">
                                     <Badge className={`p-2 rounded-full ${product.status === 'pending' ? 'bg-yellow-50 text-yellow-700' : product.status === 'rejected' ? 'bg-red-50 text-red-700' : 'bg-green-50 text-green-700'}`} variant="outline">
                                         {product.status}
                                     </Badge>
                                 </TableCell>
-                                <TableCell className="hidden md:table-cell">${product.price}</TableCell>
-                                <TableCell className="hidden md:table-cell text-center">{product.stock}</TableCell>
-                                <TableCell className="hidden md:table-cell whitespace-nowrap">
-                                    2023-07-12 10:42 AM
+                                <TableCell className="text-center md:table-cell">${product.price}</TableCell>
+                                <TableCell className="text-center md:table-cell">{product.stock}</TableCell>
+                                <TableCell className="text-center md:table-cell whitespace-nowrap">
+                                    {new Date(product.created_at).toLocaleString()}
                                 </TableCell>
                                 <TableCell>
                                     <DropdownMenu>
@@ -139,9 +161,15 @@ const NewProducts = () => {
                                             </Button>
                                         </DropdownMenuTrigger>
                                         <DropdownMenuContent align="end">
-                                            <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                                            <DropdownMenuItem>Edit</DropdownMenuItem>
-                                            <DropdownMenuItem>Delete</DropdownMenuItem>
+                                            <DropdownMenuItem onClick={() => handleDetailProduct(product.product_hash)}>
+                                                <Button variant="outline">view detail</Button>
+                                            </DropdownMenuItem>
+                                            <DropdownMenuItem onClick={() => handleUpdateStatus(product)}>
+                                                <Button variant="outline">update status</Button>
+                                            </DropdownMenuItem>
+                                            <DropdownMenuItem onClick={() => dispatch(setDeleteModal(true))}>
+                                                <Button variant="outline" className="bg-red-600 text-white">delete</Button>
+                                            </DropdownMenuItem>
                                         </DropdownMenuContent>
                                     </DropdownMenu>
                                 </TableCell>
@@ -152,15 +180,11 @@ const NewProducts = () => {
             </CardContent>
             <CardFooter>
                 <div className="text-xs text-muted-foreground">
-                    Showing <strong>1-10</strong> of <strong>32</strong> products
+                    Showing <strong>1-10</strong> of <strong>{products.length}</strong> products
                 </div>
             </CardFooter>
-        </Card>
-    )
+        </Card >
+    );
 }
 
-export default NewProducts
-
-
-
-
+export default NewProducts;

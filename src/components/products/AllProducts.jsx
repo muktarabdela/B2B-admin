@@ -67,10 +67,8 @@ const AllProducts = () => {
   const [selectedProducts, setSelectedProducts] = useState(null);
 
   const supplierUpdateStatus = useSelector((state) => state.ui.supplierUpdateStatus);
-  const productUpdateModal = useSelector((state) => state.ui.productUpdateModal);
   const deleteModal = useSelector((state) => state.ui.deleteModal);
   const { loading, error, products } = useSelector((state) => state.product);
-
   const [productType, setProductType] = useState('bestSold');
 
   const getFilteredProducts = () => {
@@ -81,6 +79,8 @@ const AllProducts = () => {
         return products.filter((product) => product.status === 'rejected');
       case 'approve':
         return products.filter((product) => product.status === 'approve');
+      case 'all':
+        return products;
       default:
         return products;
     }
@@ -96,7 +96,6 @@ const AllProducts = () => {
     dispatch(setSupplierUpdateStatus(true));
   };
 
-
   const handleDetailProduct = (id) => {
     navigate(`/detail/products/${id}`);
   };
@@ -106,7 +105,7 @@ const AllProducts = () => {
   };
 
   return (
-    <Card className="max-w-6xl mx-auto mr-10 h-full mt-20">
+    <Card className="max-w-6xl mx-auto mr-1 h-full mt-20">
       <CardHeader>
         <CardTitle>Products</CardTitle>
         <CardDescription className="text-lg  p-3">
@@ -117,9 +116,8 @@ const AllProducts = () => {
         <div className='flex items-end justify-end'>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button aria-haspopup="true" size="icon" variant="ghost">
-                <MoreHorizontal className="h-4 w-4" />
-                <span className="sr-only">Toggle menu</span>
+              <Button aria-haspopup="true" size="icon" variant="ghost" className="flex rounded border w-20 text-center justify-center items-center">
+                Filter
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
@@ -127,6 +125,7 @@ const AllProducts = () => {
               <DropdownMenuItem className="cursor-pointer" onClick={() => setProductType('pending')}>pending Products</DropdownMenuItem>
               <DropdownMenuItem className="cursor-pointer" onClick={() => setProductType('rejected')}> Rejected Products</DropdownMenuItem>
               <DropdownMenuItem className="cursor-pointer" onClick={() => setProductType('approve')}>Approved Products</DropdownMenuItem>
+              <DropdownMenuItem className="cursor-pointer" onClick={() => setProductType('all')}>All Products</DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
@@ -139,15 +138,21 @@ const AllProducts = () => {
             <TableRow>
               <TableHead className="whitespace-nowrap">Product Owner</TableHead>
               <TableHead className=" w-[100px] sm:table-cell">
-                <span className="">Image</span>
+                <span className="text-center">Image</span>
               </TableHead>
-              <TableHead className="whitespace-nowrap">Brand Name</TableHead>
-              <TableHead className="whitespace-nowrap">Status</TableHead>
-              <TableHead className="hidden md:table-cell">Price</TableHead>
-              <TableHead className="hidden md:table-cell whitespace-nowrap">
+              <TableHead className="whitespace-nowrap text-center">Brand Name</TableHead>
+              <TableHead className="whitespace-nowrap text-center">Status</TableHead>
+              <TableHead className=" md:table-cell text-center">Price</TableHead>
+              <TableHead className=" md:table-cell text-center whitespace-nowrap">
+                selling Price
+              </TableHead>
+              <TableHead className=" md:table-cell text-center whitespace-nowrap">
+                Add percentage
+              </TableHead>
+              <TableHead className=" md:table-cell whitespace-nowrap">
                 Stock on Hand
               </TableHead>
-              <TableHead className="hidden md:table-cell whitespace-nowrap">Created at</TableHead>
+              <TableHead className="md:table-cell whitespace-nowrap">Created at</TableHead>
               <TableHead>
                 <span className="sr-only">Actions</span>
               </TableHead>
@@ -162,7 +167,7 @@ const AllProducts = () => {
                     <span className="font-medium">{product.owner === 0 ? 'admin' : 'supplier'}</span>
                   </div>
                 </TableCell>
-                <TableCell className="hidden sm:table-cell">
+                <TableCell className=" sm:table-cell">
                   <img
                     alt="Product image"
                     className="aspect-square rounded-md object-cover"
@@ -171,15 +176,17 @@ const AllProducts = () => {
                     width="64"
                   />
                 </TableCell>
-                <TableCell>{truncateString(product.brand_name, 20)}</TableCell>
+                <TableCell className="whitespace-nowrap text-center">{truncateString(product.brand_name, 20)}</TableCell>
                 <TableCell>
                   <Badge className={`p-2 rounded-full ${product.status === 'pending' ? 'bg-yellow-50 text-yellow-700' : product.status === 'rejected' ? 'bg-red-50 text-red-700' : 'bg-green-50 text-green-700'}`} variant="outline">
                     {product.status}
                   </Badge>
                 </TableCell>
-                <TableCell className="hidden md:table-cell">${product.price}</TableCell>
-                <TableCell className="hidden md:table-cell text-center">{product.stock}</TableCell>
-                <TableCell className="hidden md:table-cell whitespace-nowrap">
+                <TableCell className=" md:table-cell text-center whitespace-nowrap">{product.price} ETB</TableCell>
+                <TableCell className=" md:table-cell text-center ">{product.selling_price} ETB</TableCell>
+                <TableCell className=" md:table-cell text-center ">{product.percentage}%</TableCell>
+                <TableCell className=" md:table-cell text-center">{product.stock}</TableCell>
+                <TableCell className=" md:table-cell whitespace-nowrap text-center">
                   2023-07-12 10:42 AM
                 </TableCell>
                 <TableCell>

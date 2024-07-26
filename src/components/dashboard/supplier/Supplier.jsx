@@ -14,6 +14,7 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
+  CardDescription
 } from "@/components/ui/card";
 import {
   DropdownMenu,
@@ -51,6 +52,7 @@ function Check() {
 const Supplier = () => {
   const navigate = useNavigate()
   const dispatch = useDispatch();
+  const [supplierType, setSupplierType] = useState("")
   const { suppliers, loading, error } = useSelector((state) => state.supplier);
   const deleteModal = useSelector((state) => state.ui.deleteModal);
   const supplierUpdateStatus = useSelector((state) => state.ui.supplierUpdateStatus);
@@ -64,11 +66,6 @@ const Supplier = () => {
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
 
-  const handleShowDetail = (supplier) => {
-    setSelectedSupplier(supplier);
-    dispatch(setDetailModal(true));
-  };
-
   const handleUpdateStatus = (supplier) => {
     console.log(supplier);
     setSelectedSupplier(supplier);
@@ -78,10 +75,50 @@ const Supplier = () => {
     navigate(`/detail/supplier/${id}`);
   };
 
+  // filter supplier
+  const getFilteredSuppliers = () => {
+    switch (supplierType) {
+      case 'pending':
+        return suppliers.filter((supplier) => supplier.status === 'pending');
+      case 'rejected':
+        return suppliers.filter((supplier) => supplier.status === 'rejected');
+      case 'approve':
+        return suppliers.filter((supplier) => supplier.status === 'approve');
+      case 'all':
+        return suppliers;
+      default:
+        return suppliers;
+    }
+  };
+  const filterSuppliers = getFilteredSuppliers();
+
   return (
     <Card className="max-w-6xl mx-auto mr-10 h-full mt-20">
       <CardHeader>
         <CardTitle>Suppliers</CardTitle>
+        <CardDescription className="text-lg  p-3">
+          {supplierType === 'pending' && 'Pending suppliers'}
+          {supplierType === 'rejected' && 'Rejected suppliers'}
+          {supplierType === 'approve' && 'Approved suppliers'}
+        </CardDescription>
+        <div className='flex items-end justify-end'>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button aria-haspopup="true" size="icon" variant="ghost" className="flex rounded border w-20 text-center justify-center items-center">
+                Filter
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuLabel>Actions</DropdownMenuLabel>
+              <DropdownMenuItem className="cursor-pointer bg-gray-700  m-2 rounded-md text-white text-center hover:bg-gray-800" onClick={() => setSupplierType('pending')}>
+                pending Suppliers
+              </DropdownMenuItem>
+              <DropdownMenuItem className="cursor-pointer bg-gray-700  m-2 rounded-md text-white text-center hover:bg-gray-800" onClick={() => setSupplierType('rejected')}> Rejected Suppliers</DropdownMenuItem>
+              <DropdownMenuItem className="cursor-pointer bg-gray-700  m-2 rounded-md text-white text-center hover:bg-gray-800" onClick={() => setSupplierType('approve')}>Approved Suppliers</DropdownMenuItem>
+              <DropdownMenuItem className="cursor-pointer bg-gray-700  m-2 rounded-md text-white text-center hover:bg-gray-800" onClick={() => setSupplierType('all')}>All Suppliers</DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
       </CardHeader>
       <CardContent>
         {deleteModal && <Check />}
@@ -89,32 +126,32 @@ const Supplier = () => {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead className="whitespace-nowrap">Name</TableHead>
-              <TableHead className="w-[100px] sm:table-cell">
+              <TableHead className="whitespace-nowrap text-center">Name</TableHead>
+              <TableHead className="w-[100px] sm:table-cell text-center">
                 <span>Email</span>
               </TableHead>
-              <TableHead className="whitespace-nowrap">Phone Number</TableHead>
-              <TableHead className="whitespace-nowrap">Date Of Birth</TableHead>
-              <TableHead className="hidden md:table-cell whitespace-nowrap">Created at</TableHead>
+              <TableHead className="whitespace-nowrap text-center">Phone Number</TableHead>
+              <TableHead className="whitespace-nowrap text-center">Date Of Birth</TableHead>
+              <TableHead className="md:table-cell whitespace-nowrap text-center" >Created at</TableHead>
               <TableHead>
                 <span className="sr-only">Actions</span>
               </TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
-            {suppliers.map((supplier, index) => (
+            {filterSuppliers.map((supplier, index) => (
               <TableRow key={index}>
                 <TableCell className="font-medium flex items-center">
-                  <div className="flex items-center justify-center cursor-pointer">
+                  <div className="flex items-center justify-center cursor-pointer text-center">
                     <img className="rounded-full w-10 h-10 mr-2" src="https://raw.githubusercontent.com/cruip/vuejs-admin-dashboard-template/main/src/images/user-36-05.jpg" alt="Owner" />
                     <span className="font-medium">
                       {supplier.first_name} {supplier.last_name}
                     </span>
                   </div>
                 </TableCell>
-                <TableCell>{supplier.email}</TableCell>
-                <TableCell>{supplier.phone_number}</TableCell>
-                <TableCell> <Badge className={`p-2 rounded-full ${supplier.status === 'pending' ? 'bg-yellow-50 text-yellow-700' : supplier.status === 'rejected' ? 'bg-red-50 text-red-700' : 'bg-green-50 text-green-700'}`} variant="outline">
+                <TableCell className="text-center sm:table-cell">{supplier.email}</TableCell>
+                <TableCell className="text-center">{supplier.phone_number}</TableCell>
+                <TableCell className="text-center"> <Badge className={`p-2 rounded-full ${supplier.status === 'pending' ? 'bg-yellow-50 text-yellow-700' : supplier.status === 'rejected' ? 'bg-red-50 text-red-700' : 'bg-green-50 text-green-700'}`} variant="outline">
                   {supplier.status}
                 </Badge></TableCell>
                 <TableCell className="hidden md:table-cell">09/12/2000</TableCell>

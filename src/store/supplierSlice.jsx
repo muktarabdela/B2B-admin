@@ -4,7 +4,7 @@ import { allSuppliers } from '../api/AdminSupplier';
 // Define async thunk for fetching suppliers
 export const fetchSuppliers = createAsyncThunk('supplier/fetchSuppliers', async () => {
     const response = await allSuppliers();
-    console.log("from supplier slice", response.data.data);
+    // console.log("from supplier slice", response.data.data);
     return response.data.data;
 });
 
