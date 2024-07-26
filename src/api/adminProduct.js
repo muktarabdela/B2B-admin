@@ -1,4 +1,5 @@
 import axiosInstance from "./axios"
+const token = localStorage.getItem('token');
 export async function allProducts(data) {
     // // userToken = await getAuth();
     try {
@@ -13,7 +14,14 @@ export async function allProducts(data) {
 export async function productById(id) {
     // // userToken = await getAuth();
     try {
-        const response = await axiosInstance.get(`/admin/product/${id}`);
+        const response = await axiosInstance.get(`/admin/product/${id}`
+            ,
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                }
+            }
+        );
         return response;
     } catch (error) {
         console.error("Error fetching specific user:", error);
@@ -54,7 +62,14 @@ export async function addProduct(data) {
 export async function listSpecifications(data) {
     // // userToken = await getAuth();
     try {
-        const response = await axiosInstance.get("admin/product_specifications", data);
+        const response = await axiosInstance.get("admin/product_specifications", data
+            ,
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                }
+            }
+        );
         return response;
     } catch (error) {
         console.error("Error fetching specific user:", error);
@@ -64,7 +79,7 @@ export async function listSpecifications(data) {
 export async function updateProductStatus(data) {
     // // userToken = await getAuth();
     try {
-        const response = await axiosInstance.post("/admin/change-product-status", data);
+        const response = await axiosInstance.put("/admin/change-product-status", data);
         return response;
     } catch (error) {
         console.error("Error fetching specific user:", error);

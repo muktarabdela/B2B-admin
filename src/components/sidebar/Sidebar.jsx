@@ -20,6 +20,8 @@ const Sidebar = () => {
     const links = [
         { name: 'Dashboard', to: '/dashboard', icon: <FaTachometerAlt /> },
         { name: 'Profile', to: '/profile', icon: <FaUser /> },
+        { name: 'All Products', to: '/all-products', icon: <img className='w-6 h-6' src={all_product} alt="" /> },
+
     ];
 
     const users = [
@@ -28,36 +30,44 @@ const Sidebar = () => {
         { name: 'Personal user', href: '/personal', icon: <FaUser /> },
     ];
 
-    const products = [
-        { name: 'Add Products', to: '/add-products', },
-        { name: 'All Products', to: '/all-products', icon: <img className='w-6 h-6' src={all_product} alt="" /> },
+    // const products = [
+    //     { name: 'Add Products', to: '/add-products', },
+    //     { name: 'All Products', to: '/all-products', icon: <img className='w-6 h-6' src={all_product} alt="" /> },
+    //     {
+    //         name: 'Pending', to: '/pending', icon: <div>
+    //             <svg width="30" height="25" fill="none" stroke="#363636" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    //                 <path d="M12 2a10 10 0 1 0 0 20 10 10 0 1 0 0-20z"></path>
+    //                 <path d="M12 6v6l4 2"></path>
+    //             </svg>
+    //         </div>
+    //     },
+    //     {
+    //         name: 'Approve', to: '/approve', icon: <svg width="30" height="25" fill="none" stroke="#363636" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    //             <path d="m9 11 3 3L22 4"></path>
+    //             <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
+    //         </svg>
+    //     },
+    //     {
+    //         name: 'Rejected', to: '/rejected', icon: <svg width="30" height="25" fill="none" stroke="#363636" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    //             <rect width="18" height="18" x="3" y="3" rx="2" ry="2"></rect>
+    //             <path d="m9 9 6 6"></path>
+    //             <path d="m15 9-6 6"></path>
+    //         </svg>
+    //     },
+    //     // { name: 'Failed', to: '/failed', icon: <FaChartLine /> },
+    //     ,
+
+    // ];
+    const reports = [
+        { name: 'Sales report', to: '/sales-report', icon: <img className='w-6 h-6' src={all_product} alt="" /> },
         {
-            name: 'Pending', to: '/pending', icon: <div>
+            name: 'products report', to: '/products-report', icon: <div>
                 <svg width="30" height="25" fill="none" stroke="#363636" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                     <path d="M12 2a10 10 0 1 0 0 20 10 10 0 1 0 0-20z"></path>
                     <path d="M12 6v6l4 2"></path>
                 </svg>
             </div>
         },
-        {
-            name: 'Approve', to: '/approve', icon: <svg width="30" height="25" fill="none" stroke="#363636" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path d="m9 11 3 3L22 4"></path>
-                <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
-            </svg>
-        },
-        {
-            name: 'Rejected', to: '/rejected', icon: <svg width="30" height="25" fill="none" stroke="#363636" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <rect width="18" height="18" x="3" y="3" rx="2" ry="2"></rect>
-                <path d="m9 9 6 6"></path>
-                <path d="m15 9-6 6"></path>
-            </svg>
-        },
-        // { name: 'Failed', to: '/failed', icon: <FaChartLine /> },
-        ,
-
-    ];
-    const reports = [
-        { name: 'Sales report', to: '/sales-report', icon: <img className='w-6 h-6' src={all_product} alt="" /> },
         {
             name: 'Users report', to: '/users-report', icon: <div>
                 <svg width="30" height="25" fill="none" stroke="#363636" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -157,7 +167,7 @@ const Sidebar = () => {
                     </ul>
 
 
-                    <ul>
+                    {/* <ul>
                         <li className={inactiveLink}>
                             <div
                                 onClick={() => {
@@ -207,7 +217,7 @@ const Sidebar = () => {
                                 ))}
                             </div>
                         )}
-                    </ul>
+                    </ul> */}
 
 
                     <ul>

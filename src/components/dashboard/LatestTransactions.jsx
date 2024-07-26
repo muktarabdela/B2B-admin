@@ -1,165 +1,86 @@
-import React from 'react'
+import {
+    Avatar,
+    AvatarFallback,
+    AvatarImage,
+} from "@/components/ui/avatar"
+import {
+    Card,
+    CardContent,
+    CardHeader,
+    CardTitle,
+} from "@/components/ui/card"
 
-const LatestTransactions = () => {
+export default function LatestTransactions() {
     return (
-        <div className='p-4 '>
-            <p className='text-3xl font-bold text-black mb-2'>
-                Latest Transactions
-            </p>
-            <p className='text-lg text-gray-600'>
-                This is a list of latest transactions
-            </p>
-
-            <div>
-                <div className="overflow-x-auto border rounded-lg mt-4">
-                    <table className="w-full text-sm text-left rtl:text-right text-gray-500 bg-[#F9FAFB] ">
-                        <thead className="text-xs text-gray-700 uppercase">
-                            <tr>
-                                <th scope="col" className="px-6 py-3">
-                                    TRANSACTION
-                                </th>
-                                <th scope="col" className="px-6 py-3 whitespace-nowrap">
-                                    DATE & TIME
-                                </th>
-                                <th scope="col" className="px-6 py-3">
-                                    AMOUNT
-                                </th>
-                                <th scope="col" className="px-6 py-3">
-                                    STATUS
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr className="bg-white text-gray-500  dark:border-gray-700">
-                                <th
-                                    scope="row"
-                                    className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap "
-                                >
-                                    Payment from Bonnie Green
-                                </th>
-                                <td className="px-6 py-4 whitespace-nowrap">Apr 23 ,2021</td>
-                                <td className="px-6 py-4">$2300	</td>
-                                <td className="">
-                                    <span className='p-2 rounded-md font-semibold text-green-900 bg-green-200'>
-                                        Completed
-                                    </span>
-                                </td>
-                            </tr>
-                            <tr className="bg-gray-100 text-gray-500  dark:border-gray-700">
-                                <th
-                                    scope="row"
-                                    className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap "
-                                >
-                                    Payment failed from muka
-                                </th>
-                                <td className="px-6 py-4 whitespace-nowrap">jun 13 ,2022</td>
-                                <td className="px-6 py-4">$1300	</td>
-                                <td className="">
-                                    <span className='p-2 rounded-md font-semibold text-red-900 bg-red-200'>
-                                        Cancelled
-                                    </span>
-                                </td>
-                            </tr>
-                            <tr className="bg-gray-100 text-gray-500  dark:border-gray-700">
-                                <th
-                                    scope="row"
-                                    className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap "
-                                >
-                                    Payment failed from muka
-                                </th>
-                                <td className="px-6 py-4 whitespace-nowrap">jun 13 ,2022</td>
-                                <td className="px-6 py-4">$1300	</td>
-                                <td className="">
-                                    <span className='p-2 rounded-md font-semibold text-red-900 bg-red-200'>
-                                        Cancelled
-                                    </span>
-                                </td>
-                            </tr>
-                            <tr className="bg-gray-100 text-gray-500  dark:border-gray-700">
-                                <th
-                                    scope="row"
-                                    className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap "
-                                >
-                                    Payment failed from muka
-                                </th>
-                                <td className="px-6 py-4 whitespace-nowrap">jun 13 ,2022</td>
-                                <td className="px-6 py-4">$1300	</td>
-                                <td className="">
-                                    <span className='p-2 rounded-md font-semibold text-red-900 bg-red-200'>
-                                        Cancelled
-                                    </span>
-                                </td>
-                            </tr>
-                            <tr className="bg-gray-100 text-gray-500  dark:border-gray-700">
-                                <th
-                                    scope="row"
-                                    className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap "
-                                >
-                                    Payment failed from muka
-                                </th>
-                                <td className="px-6 py-4 whitespace-nowrap">jun 13 ,2022</td>
-                                <td className="px-6 py-4">$1300	</td>
-                                <td className="">
-                                    <span className='p-2 rounded-md font-semibold text-red-900 bg-red-200'>
-                                        Cancelled
-                                    </span>
-                                </td>
-                            </tr>
-
-                            <tr className="bg-white text-gray-500  dark:border-gray-700">
-                                <th
-                                    scope="row"
-                                    className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap "
-                                >
-                                    Payment from Bonnie Green
-                                </th>
-                                <td className="px-6 py-4 whitespace-nowrap">Apr 23 ,2021</td>
-                                <td className="px-6 py-4">$2300	</td>
-                                <td className="">
-                                    <span className='p-2 rounded-md font-semibold text-green-900 bg-green-200'>
-                                        Completed
-                                    </span>
-                                </td>
-                            </tr>
-
-                            <tr className="bg-gray-100 text-gray-500  dark:border-gray-700 ">
-                                <th
-                                    scope="row"
-                                    className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap "
-                                >
-                                    Payment failed from muka
-                                </th>
-                                <td className="px-6 py-4 whitespace-nowrap">jun 13 ,2022</td>
-                                <td className="px-6 py-4">$1300	</td>
-                                <td className="">
-                                    <span className='p-2 rounded-md font-semibold text-red-900 bg-red-200'>
-                                        Cancelled
-                                    </span>
-                                </td>
-                            </tr>
-
-                            <tr className="bg-white border-b text-gray-500  dark:border-gray-700">
-                                <th
-                                    scope="row"
-                                    className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap "
-                                >
-                                    Payment from Bonnie Green
-                                </th>
-                                <td className="px-6 py-4 whitespace-nowrap">Apr 23 ,2021</td>
-                                <td className="px-6 py-4">$2300	</td>
-                                <td className="">
-                                    <span className='p-2 rounded-md font-semibold text-green-900 bg-green-200'>
-                                        Completed
-                                    </span>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+        <Card className="w-[21em]  mx-auto">
+            <CardHeader>
+                <CardTitle>Recent Sales</CardTitle>
+            </CardHeader>
+            <CardContent className="grid gap-8 px-4">
+                <div className="flex items-center gap-4">
+                    <Avatar className="hidden h-9 w-9 sm:flex">
+                        <AvatarImage src="https://raw.githubusercontent.com/cruip/vuejs-admin-dashboard-template/main/src/images/user-36-05.jpg" alt="Avatar" />
+                        <AvatarFallback>OM</AvatarFallback>
+                    </Avatar>
+                    <div className="grid gap-1">
+                        <p className="text-sm font-medium leading-none">Olivia Martin</p>
+                        <p className="text-sm text-muted-foreground">
+                            olivia.martin@email.com
+                        </p>
+                    </div>
+                    <div className="ml-auto font-medium">+$1,999.00</div>
                 </div>
-
-            </div>
-        </div>
+                <div className="flex items-center gap-4">
+                    <Avatar className="hidden h-9 w-9 sm:flex">
+                        <AvatarImage src="/avatars/02.png" alt="Avatar" />
+                        <AvatarFallback>JL</AvatarFallback>
+                    </Avatar>
+                    <div className="grid gap-1">
+                        <p className="text-sm font-medium leading-none">Jackson Lee</p>
+                        <p className="text-sm text-muted-foreground">
+                            jackson.lee@email.com
+                        </p>
+                    </div>
+                    <div className="ml-auto font-medium">+$39.00</div>
+                </div>
+                <div className="flex items-center gap-4">
+                    <Avatar className="hidden h-9 w-9 sm:flex">
+                        <AvatarImage src="/avatars/03.png" alt="Avatar" />
+                        <AvatarFallback>IN</AvatarFallback>
+                    </Avatar>
+                    <div className="grid gap-1">
+                        <p className="text-sm font-medium leading-none">Isabella Nguyen</p>
+                        <p className="text-sm text-muted-foreground">
+                            isabella.nguyen@email.com
+                        </p>
+                    </div>
+                    <div className="ml-auto font-medium">+$299.00</div>
+                </div>
+                <div className="flex items-center gap-4">
+                    <Avatar className="hidden h-9 w-9 sm:flex">
+                        <AvatarImage src="/avatars/04.png" alt="Avatar" />
+                        <AvatarFallback>WK</AvatarFallback>
+                    </Avatar>
+                    <div className="grid gap-1">
+                        <p className="text-sm font-medium leading-none">William Kim</p>
+                        <p className="text-sm text-muted-foreground">will@email.com</p>
+                    </div>
+                    <div className="ml-auto font-medium">+$99.00</div>
+                </div>
+                <div className="flex items-center gap-4">
+                    <Avatar className="hidden h-9 w-9 sm:flex">
+                        <AvatarImage src="/avatars/05.png" alt="Avatar" />
+                        <AvatarFallback>SD</AvatarFallback>
+                    </Avatar>
+                    <div className="grid gap-1">
+                        <p className="text-sm font-medium leading-none">Sofia Davis</p>
+                        <p className="text-sm text-muted-foreground">
+                            sofia.davis@email.com
+                        </p>
+                    </div>
+                    <div className="ml-auto font-medium">+$39.00</div>
+                </div>
+            </CardContent>
+        </Card>
     )
 }
-
-export default LatestTransactions

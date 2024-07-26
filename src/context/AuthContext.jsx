@@ -19,15 +19,19 @@ export const AuthProvider = ({ children }) => {
     const login = async (adminData) => {
         try {
             const response = await loginAdmin(adminData);
-            const token = response.token;
-            localStorage.setItem('token', token);
-            setToken(token); // Set the token in the state
-            setIsAuthenticated(true);
-            setIsAuthenticated(true);
-            setUser(response.user); // Set user information
+            console.log(response)
+            if (response.data.status === true) {
+                const token = response.data.token;
+                localStorage.setItem('token', token);
+                console.log(token)
+                setToken(token);
+                setIsAuthenticated(true);
+                setIsAuthenticated(true);
+                setUser(response.user); // Set user information
+            }
             return response.data;
         } catch (error) {
-            console.error('Error logging in:', error);
+            console.log('Error logging in:', error);
             throw error;
         }
     };

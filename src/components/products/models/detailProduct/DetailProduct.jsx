@@ -6,14 +6,13 @@ import { productById } from '../../../../api/adminProduct';
 
 const DetailProduct = () => {
     const { productId } = useParams();
-    console.log(productId)
     const [product, setProduct] = useState(null);
     useEffect(() => {
         const fetchProduct = async () => {
             try {
                 const response = await productById(productId)
-                console.log(response.data)
-                setProduct(response.data);
+                console.log(response.data.data.data)
+                setProduct(response.data.data.data);
             } catch (error) {
                 console.error("Error fetching product:", error);
             } finally {

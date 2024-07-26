@@ -10,7 +10,6 @@ const SupplierUpdateStates = ({ supplier }) => {
     console.log("from update", supplier)
     const dispatch = useDispatch()
 
-
     const [status, setStatus] = useState('Pending');
 
     const handleStatusChange = (event) => {

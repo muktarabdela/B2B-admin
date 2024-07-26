@@ -2,9 +2,35 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchSuppliers } from '../../../store/supplierSlice';
 import { setDeleteModal, setDetailModal, setSupplierUpdateStatus } from '../../../store/uiSlice';
-import SupplierUpdateStates from './SupplierUpdateStates';
 import { useNavigate } from 'react-router-dom';
 
+
+import { MoreHorizontal } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import SupplierUpdateStates from '@/components/model/SupplierUpdateStatus';
 function Check() {
   const dispatch = useDispatch();
   return (
@@ -30,8 +56,6 @@ const Supplier = () => {
   const supplierUpdateStatus = useSelector((state) => state.ui.supplierUpdateStatus);
 
   const [selectedSupplier, setSelectedSupplier] = useState(null);
-  const [tooltipVisible, setTooltipVisible] = useState(false);
-  const [tooltipPosition, setTooltipPosition] = useState({ x: 10, y: 10 });
 
   useEffect(() => {
     dispatch(fetchSuppliers());
@@ -40,24 +64,13 @@ const Supplier = () => {
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
 
-  const handleMouseEnter = (event) => {
-    setTooltipPosition({
-      x: event.pageX,
-      y: event.pageY
-    });
-    setTooltipVisible(true);
-  };
-
-  const handleMouseLeave = () => {
-    setTooltipVisible(false);
-  };
-
   const handleShowDetail = (supplier) => {
     setSelectedSupplier(supplier);
     dispatch(setDetailModal(true));
   };
 
   const handleUpdateStatus = (supplier) => {
+    console.log(supplier);
     setSelectedSupplier(supplier);
     dispatch(setSupplierUpdateStatus(true));
   };
@@ -66,143 +79,82 @@ const Supplier = () => {
   };
 
   return (
-    <div className='' >
-      <section className="max-w-[79em] mx-auto mr-0 ">
-        <div className="">
-          {deleteModal && <Check />}
-          {supplierUpdateStatus && <SupplierUpdateStates supplier={selectedSupplier} />}
-          <div className="max-w-[74em] mx-auto bg-white shadow-lg rounded-sm border border-gray-200 mt-[8em]">
-            <header className="px-5 py-4 border-b border-gray-100">
-              <h2 className="font-semibold text-gray-800">Suppliers user</h2>
-            </header>
-            <div className="p-3">
-              <div className="overflow-x-auto">
-                <table className="table-auto w-full">
-                  <thead className="text-xs uppercase text-black font-semibold bg-gray-50">
-                    <tr>
-                      <th className="p-2 whitespace-nowrap">
-                        <div className="font-semibold text-left">Name</div>
-                      </th>
-                      <th className="p-2 whitespace-nowrap">
-                        <div className="font-semibold text-left">Email</div>
-                      </th>
-                      <th className="p-2 whitespace-nowrap">
-                        <div className="font-semibold text-left">Phone Number</div>
-                      </th>
-                      <th className="p-2 whitespace-nowrap">
-                        <div className="font-semibold text-left"> Role</div>
-                      </th>
-                      <th className="p-2 whitespace-nowrap">
-                        <div className="font-semibold text-center">Status</div>
-                      </th>
-                      <th className="p-2 whitespace-nowrap">
-                        <div className="font-semibold text-center">Detail</div>
-                      </th>
-                      <th className="p-2 whitespace-nowrap">
-                        <div className="font-semibold text-center">Update Supplier Status</div>
-                      </th>
-                      <th className="p-2 whitespace-nowrap">
-                        <div className="font-semibold text-center">Delete</div>
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody className="text-sm divide-y divide-gray-100">
-                    {suppliers.map((supplier, index) => (
-                      <tr key={index}>
-                        <td className="p-2 whitespace-nowrap">
-                          <div className="flex items-center">
-                            <div className="w-10 h-10 flex-shrink-0 mr-2 sm:mr-3">
-                              <img
-                                className="rounded-full"
-                                src="https://raw.githubusercontent.com/cruip/vuejs-admin-dashboard-template/main/src/images/user-36-05.jpg"
-                                width={40}
-                                height={40}
-                                alt={supplier.first_name}
-                              />
-                            </div>
-                            <div className="font-medium text-gray-800">
-                              {supplier.first_name} {supplier.last_name}
-                            </div>
-                          </div>
-                        </td>
-                        <td className="p-2 whitespace-nowrap">
-                          <div className="text-left">{supplier.email}</div>
-                        </td>
-                        <td className="p-2 whitespace-nowrap">
-                          <div className="text-left font-medium text-gray-500">
-                            {supplier.phone_number}
-                          </div>
-                        </td>
-                        <td className="p-2 whitespace-nowrap">
-                          <div className="text-left">{supplier.role_id === 2 && 'Supplier'}</div>
-                        </td>
+    <Card className="max-w-6xl mx-auto mr-10 h-full mt-20">
+      <CardHeader>
+        <CardTitle>Suppliers</CardTitle>
+      </CardHeader>
+      <CardContent>
+        {deleteModal && <Check />}
+        {supplierUpdateStatus && <SupplierUpdateStates supplier={selectedSupplier} />}
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead className="whitespace-nowrap">Name</TableHead>
+              <TableHead className="w-[100px] sm:table-cell">
+                <span>Email</span>
+              </TableHead>
+              <TableHead className="whitespace-nowrap">Phone Number</TableHead>
+              <TableHead className="whitespace-nowrap">Date Of Birth</TableHead>
+              <TableHead className="hidden md:table-cell whitespace-nowrap">Created at</TableHead>
+              <TableHead>
+                <span className="sr-only">Actions</span>
+              </TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {suppliers.map((supplier, index) => (
+              <TableRow key={index}>
+                <TableCell className="font-medium flex items-center">
+                  <div className="flex items-center justify-center cursor-pointer">
+                    <img className="rounded-full w-10 h-10 mr-2" src="https://raw.githubusercontent.com/cruip/vuejs-admin-dashboard-template/main/src/images/user-36-05.jpg" alt="Owner" />
+                    <span className="font-medium">
+                      {supplier.first_name} {supplier.last_name}
+                    </span>
+                  </div>
+                </TableCell>
+                <TableCell>{supplier.email}</TableCell>
+                <TableCell>{supplier.phone_number}</TableCell>
+                <TableCell> <Badge className={`p-2 rounded-full ${supplier.status === 'pending' ? 'bg-yellow-50 text-yellow-700' : supplier.status === 'rejected' ? 'bg-red-50 text-red-700' : 'bg-green-50 text-green-700'}`} variant="outline">
+                  {supplier.status}
+                </Badge></TableCell>
+                <TableCell className="hidden md:table-cell">09/12/2000</TableCell>
+                <TableCell className="hidden md:table-cell whitespace-nowrap">
+                  2023-07-12 10:42 AM
+                </TableCell>
+                <TableCell>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button aria-haspopup="true" size="icon" variant="ghost">
+                        <MoreHorizontal className="h-4 w-4" />
+                        <span className="sr-only">Toggle menu</span>
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                      <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                      <DropdownMenuItem>
+                        <Button onClick={() => handleDetailSupplier(supplier)} variant="outline">view detail </Button>
+                      </DropdownMenuItem>
+                      <DropdownMenuItem>
+                        <Button onClick={() => handleUpdateStatus(supplier)} variant="outline">update status  </Button>
+                      </DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => dispatch(setDeleteModal(true))}>
+                        <Button variant="outline" className="bg-red-600 text-white">delete</Button>
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </TableCell>
+              </TableRow>
+            ))}
 
-                        <td className="p-2 whitespace-nowrap">
-                          <div className={`text-[1.2em] font-medium text-center ${supplier.status === 'pending' ? 'bg-green-50' : ''}
-                          ${supplier.status === 'approve' ? 'bg-green-200 text-green-600' : ''}
-                          ${supplier.status === 'rejected' ? 'bg-red-100 text-red-600' : ''}
-                          p-2 rounded-lg text-black-700 h-8 flex items-center justify-center w-20 mx-auto`}>
-                            {supplier.status}
-                          </div>
-                        </td>
-                        <td className='p-2'>
-                          <div
-                            onClick={() => handleDetailSupplier(supplier.supplier_account_id)}
-                            className="cursor-pointer text-[1.2em] font-medium text-center border-2 border-amber-300 bg-amber-100 rounded-lg p-2 h-8 flex items-center justify-center w-20 mx-auto"
-                          >
-                            <svg width="76" height="30" fill="none" className='flex items-center justify-center' stroke="#050505" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                              <path d="M14.121 14.121A3 3 0 1 0 9.88 9.88a3 3 0 0 0 4.242 4.242Z"></path>
-                              <path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7Z"></path>
-                            </svg>
-                            Show
-                          </div>
-                        </td>
-
-                        <td onClick={() => handleUpdateStatus(supplier)} className='p-2'>
-                          {tooltipVisible && (
-                            <div
-                              className="absolute z-10 px-3 py-2 text-sm font-medium text-white bg-gray-900 rounded-lg shadow-sm"
-                              style={{
-                                top: `${tooltipPosition.y}px`,
-                                left: `${tooltipPosition.x}px`
-                              }}
-                            >
-                              Update Supplier Status
-                            </div>
-                          )}
-                          <div
-                            onMouseEnter={handleMouseEnter}
-                            onMouseLeave={handleMouseLeave}
-                            className="cursor-pointer text-[1.2em] font-medium text-center border-2 border-lime-900 bg-lime-100 rounded-lg p-2 h-8 flex items-center justify-center w-[6em] mx-auto"
-                          >
-                            <svg width="40" height="20" fill="none" stroke="#1a1a1a" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                              <path d="m15.232 5.232 3.536 3.536m-2.036-5.036a2.5 2.5 0 0 1 3.536 3.536L6.5 21.036H3v-3.572L16.732 3.732Z"></path>
-                            </svg>
-                            Update
-                          </div>
-                        </td>
-
-                        <td className='p-2'>
-                          <div
-                            onClick={() => dispatch(setDeleteModal(true))}
-                            className="cursor-pointer text-[1.2em] font-medium text-center border-2 border-red-300 bg-red-100 text-red-600 rounded-lg p-2 h-8 flex items-center justify-center w-[5.5em] mx-auto"
-                          >
-                            <svg width="40" height="20" fill="none" stroke="#131111" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                              <path d="M10 11v6m4-6v6M4 7h16m-1 0-.867 12.142A2 2 0 0 1 16.138 21H7.862a2 2 0 0 1-1.995-1.858L5 7h14Zm-4 0V4a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v3h6Z"></path>
-                            </svg>
-                            Delete
-                          </div>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </div>
+          </TableBody>
+        </Table>
+      </CardContent>
+      <CardFooter>
+        <div className="text-xs text-muted-foreground">
+          Showing <strong>1-10</strong> of <strong>32</strong> suppliers
         </div>
-      </section>
-    </div>
+      </CardFooter>
+    </Card>
   );
 }
 

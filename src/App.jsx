@@ -13,13 +13,19 @@ import Auth from './components/Auth';
 import PrivateRoute from './components/PrivateRoute';
 import { useAuth } from './context/AuthContext';
 import Approve from './components/products/Approve';
-import Failed from './components/products/Failed';
+import { Button } from "@/components/ui/button"
 import Pending from './components/products/Pending';
 import Rejected from './components/products/Rejected';
 import AllProducts from './components/products/AllProducts';
 import DetailProduct from './components/products/models/detailProduct/DetailProduct';
 import AddProducts from './components/products/add_Product/AddProducts';
 import SupplierDetail from './components/dashboard/supplier/supplierDtail/SupplierDetail';
+import Profile from './components/dashboard/pages/Profile';
+import SalesReports from './components/reporting/sales/Sales';
+import ProductsReport from './components/reporting/products/ProductsReport';
+import UsersReport from './components/reporting/users/UsersReport';
+import { TooltipProvider } from "@/components/ui/tooltip";
+
 function App() {
   const dispatch = useDispatch()
   const isSidebarOpen = useSelector((state) => state.ui.isSidebarOpen);
@@ -43,16 +49,17 @@ function App() {
         <Routes>
           <Route path="/auth" element={<Auth />} />
         </Routes>
-
         <div className={`${isAuthenticated ? 'block' : 'hidden'} `}>
-
-          <div className=' flex '>
-            <div className='hidden lg:block w-[20em]'></div>
-            <Sidebar />
+          <div className=''>
+            <TooltipProvider>
+              <Sidebar />
+            </TooltipProvider>
+            <div className='hidden lg:block g-black w-[13rem] rounded-md border '></div>
             <div className=' mx-auto'>
               <Routes>
                 <Route path="/" element={<PrivateRoute Component={Dashboard} />} />
                 <Route path="/dashboard" element={<PrivateRoute Component={Dashboard} />} />
+                <Route path="/profile" element={<PrivateRoute Component={Profile} />} />
 
                 {/* Products */}
                 <Route path="/all-products" element={<PrivateRoute Component={AllProducts} />} />
@@ -60,6 +67,11 @@ function App() {
                 <Route path="/approve" element={<PrivateRoute Component={Approve} />} />
                 <Route path="/rejected" element={<PrivateRoute Component={Rejected} />} />
                 {/* <Route path="/failed" element={<PrivateRoute Component={Failed} />} /> */}
+
+                {/* reports */}
+                <Route path="/sales-report" element={<PrivateRoute Component={SalesReports} />} />
+                <Route path="/products-report" element={<PrivateRoute Component={ProductsReport} />} />
+                <Route path="/users-report" element={<PrivateRoute Component={UsersReport} />} />
 
 
                 {/* users */}
@@ -82,8 +94,6 @@ function App() {
             <div className="fixed w-full  top-0 bg-white">
               <Navbar />
             </div>
-
-
           </div>
         </div>
       </div>

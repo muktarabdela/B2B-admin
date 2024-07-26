@@ -1,30 +1,27 @@
 import React from 'react'
-
+import {
+    Card,
+    CardContent,
+    CardDescription,
+    CardFooter,
+    CardHeader,
+    CardTitle,
+} from "@/components/ui/card"
+import { Progress } from "@/components/ui/progress"
 const DashCards = ({ icon, h1text, number, highNumber, highText }) => {
     return (
-        <div className='max-w-[20em] h-40 border rounded-lg mt-4 bg-white shadow-md'>
-            <div className='flex items-center justify-between p-4 '>
-                <div className=''>
-                    {icon}
-                </div>
-
-                <div className='flex-col'>
-                    <p className='text-lg font-semibold text-gray-400'>
-                        {h1text}
-                    </p>
-                    <span className='text-2xl flex items-end justify-end font-bold'>{number}</span>
-                </div>
-            </div>
-            <div className='border-b-2 w-[17em] border-gray-400 mx-auto '></div>
-            <div className='flex justify-between px-10 pt-2'>
-                <p className='text-green-600 font-semibold text-xl'>
-                    {highNumber}
-                </p>
-                <p className='text-lg font-medium'>
-                    {highText}
-                </p>
-            </div>
-        </div>
+        <Card>
+            <CardHeader className="pb-2">
+                <CardDescription>This Week {h1text}</CardDescription>
+                <CardTitle className="text-4xl">{number}</CardTitle>
+            </CardHeader>
+            <CardContent>
+                <div className="text-xs text-muted-foreground">{highNumber} from last week</div>
+            </CardContent>
+            <CardFooter>
+                <Progress value={highNumber} aria-label="25% increase" />
+            </CardFooter>
+        </Card>
     )
 }
 
