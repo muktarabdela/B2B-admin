@@ -62,12 +62,13 @@ export async function addProduct(data) {
 export async function listSpecifications(data) {
     // // userToken = await getAuth();
     try {
-        const response = await axiosInstance.get("admin/product_specifications", data
+        const response = await axiosInstance.get("/product_specifications", data
             ,
             {
                 headers: {
+                    "Content-Type": "multipart/form-data",
                     Authorization: `Bearer ${token}`,
-                }
+                },
             }
         );
         return response;
@@ -85,4 +86,27 @@ export async function updateProductStatus(data) {
         console.error("Error fetching specific user:", error);
         throw error;
     }
+}
+
+export async function listOfCategories() {
+    // // userToken = await getAuth();
+    try {
+        const response = await axiosInstance.get("/admin/category-list");
+        return response;
+    } catch (error) {
+        console.error("Error fetching specific user:", error);
+        throw error;
+    }
+}
+
+export async function addCategory(data) {
+    console.log("data from api edpoint", data)
+    try {
+        const response = await axiosInstance.post("/admin/category", data);
+        return response;
+    } catch (error) {
+        console.error("Error fetching specific user:", error);
+        throw error;
+    }
+
 }

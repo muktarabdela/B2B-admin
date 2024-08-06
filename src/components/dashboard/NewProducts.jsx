@@ -93,6 +93,8 @@ const NewProducts = () => {
     const handleDetailSupplier = (id) => {
         navigate(`/detail/supplier/${id}`);
     };
+    // get the first image in the array
+    const getFirstImage = recentPendingProducts?.map((product) => product?.product_images[0])
     return (
         <Card>
             <CardHeader>
@@ -124,7 +126,7 @@ const NewProducts = () => {
                         </TableRow>
                     </TableHeader>
                     <TableBody className="">
-                        {recentPendingProducts.map((product) => (
+                        {recentPendingProducts.map((product, index) => (
                             <TableRow key={product.product_id}>
                                 <TableCell className="font-medium">
                                     <div onClick={() => handleDetailSupplier(product.owner)} className="flex items-center justify-center cursor-pointer text-center">
@@ -137,7 +139,7 @@ const NewProducts = () => {
                                         alt="Product image"
                                         className="aspect-square rounded-md object-cover"
                                         height="64"
-                                        src={product1}
+                                        src={getFirstImage[index]?.image}
                                         width="64"
                                     />
                                 </TableCell>

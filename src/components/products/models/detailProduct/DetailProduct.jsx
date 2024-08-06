@@ -1,30 +1,31 @@
-import React, { useEffect, useState } from 'react'
-import ProductImages from './ProductImages'
-import ProductDetail from './ProductDetail'
-import { useParams } from "react-router-dom";
+import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import ProductImages from './ProductImages';
+import ProductDetail from './ProductDetail';
 import { productById } from '../../../../api/adminProduct';
 
 const DetailProduct = () => {
     const { productId } = useParams();
     const [product, setProduct] = useState(null);
+
     useEffect(() => {
         const fetchProduct = async () => {
             try {
-                const response = await productById(productId)
-                console.log(response.data.data.data)
-                setProduct(response.data.data.data);
+                const response = await productById(productId);
+                setProduct(response.data.data);
             } catch (error) {
-                console.error("Error fetching product:", error);
-            } finally {
+                console.error('Error fetching product:', error);
             }
         };
         fetchProduct();
     }, [productId]);
+
     if (!product) {
         return <div>Product not found</div>;
     }
+
     return (
-        <section className="py-12 sm:py-16 mt-20">
+        <section className="py-12 sm:py-16 mt-20 lg:ml-80">
             <div className="container mx-auto px-4">
                 <div className="lg:col-gap-12 xl:col-gap-16 mt-8 grid grid-cols-1 gap-12 lg:mt-12 lg:grid-cols-5 lg:gap-16 max-w-7xl mx-auto">
                     <ProductImages data={product} />
@@ -37,8 +38,7 @@ const DetailProduct = () => {
                                     title=""
                                     className="border-b-2 border-gray-900 py-4 text-sm font-medium text-gray-900 hover:border-gray-400 hover:text-gray-800"
                                 >
-                                    {" "}
-                                    Description{" "}
+                                    Description
                                 </a>
                                 <a
                                     href="#"
@@ -47,24 +47,19 @@ const DetailProduct = () => {
                                 >
                                     Reviews
                                     <span className="ml-2 block rounded-full bg-gray-500 px-2 py-px text-xs font-bold text-gray-100">
-                                        {" "}
-                                        1,209{" "}
+                                        1,209
                                     </span>
                                 </a>
                             </nav>
                         </div>
                         <div className="mt-8 flow-root sm:mt-12">
                             <h1 className="text-3xl font-bold">Delivered To Your Door</h1>
-
                         </div>
                     </div>
                 </div>
             </div>
         </section>
+    );
+};
 
-
-
-    )
-}
-
-export default DetailProduct
+export default DetailProduct;

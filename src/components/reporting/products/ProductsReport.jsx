@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import QuikData from './QuikData'
 import SoldProducts from './SoldProducts'
 import {
@@ -13,16 +13,35 @@ import {
     AvatarFallback,
     AvatarImage,
 } from "@/components/ui/avatar"
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
+import { fetchProductReport } from '@/store/reportSlice'
 const ProductsReport = () => {
-    const { loading, error, products } = useSelector((state) => state.product);
+    const dispatch = useDispatch();
+    const { productReport, loading, error } = useSelector((state) => state.report);
+    const { products } = useSelector((state) => state.product);
+
+    useEffect(() => {
+        dispatch(fetchProductReport());
+    }, [dispatch]);
+
+    if (loading) {
+        return <div>Loading...</div>;
+    }
+    if (error) {
+        return <div>Error: {error}</div>;
+    }
+    if (!productReport) {
+        return <div className='text-center h-screen'>No data available</div>;
+    }
+
+    console.log(productReport)
 
     return (
         <div className="flex min-h-screen w-full flex-col max-w-6xl mx-auto mr-10 mt-24">
             <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">
                 <QuikData productReport={products} />
                 <div className="grid gap-4 md:gap-8 lg:grid-cols-2 xl:grid-cols-3">
-                    <SoldProducts productReport={products} />
+                    <SoldProducts productReport={productReport} loading={loading} error={error} />
                     <Card x-chunk="dashboard-01-chunk-5">
                         <CardHeader>
                             <CardTitle>Recent Sold Products</CardTitle>

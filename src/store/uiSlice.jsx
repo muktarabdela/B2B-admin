@@ -1,5 +1,16 @@
 import { createSlice } from '@reduxjs/toolkit';
+const loadState = (key, defaultValue) => {
+    const stored = localStorage.getItem(key);
+    return stored ? JSON.parse(stored) : defaultValue;
+};
 
+const saveState = (key, state) => {
+    localStorage.setItem(key, JSON.stringify(state));
+};
+
+const removeState = (key) => {
+    localStorage.removeItem(key);
+};
 const initialState = {
     isSidebarOpen: true,
     selectedLink: 'dashboard',
@@ -9,6 +20,7 @@ const initialState = {
 
     isOpenCategory: false,
     category: "",
+    isAuthenticated: loadState('isAuthenticated', false),
 
 
     productUpdateModal: false,
@@ -16,6 +28,9 @@ const initialState = {
     productDeleteModal: false,
 
     supplierUpdateStatus: false,
+    orderStatus: false,
+
+    categoryId: null
 };
 
 const uiSlice = createSlice({
@@ -24,6 +39,10 @@ const uiSlice = createSlice({
     reducers: {
         toggleSidebar: (state) => {
             state.isSidebarOpen = !state.isSidebarOpen;
+        },
+        setIsAuthenticated: (state, action) => {
+            state.isAuthenticated = action.payload;
+            saveState('isAuthenticated', state.isAuthenticated);
         },
         closeSidebar: (state) => {
             state.isSidebarOpen = false;
@@ -64,9 +83,22 @@ const uiSlice = createSlice({
         setSupplierUpdateStatus: (state, action) => {
             state.supplierUpdateStatus = action.payload;
         },
+        setCategoryId: (state, action) => {
+            state.categoryId = action.payload;
+        },
+        logout: (state) => {
+            state.isAuthenticated = false;
+            state.role = null;
+            removeState('isAuthenticated');
+            localStorage.removeItem('token');
+            window.location.href = '/';
+        },
+        setOrderStatus: (state, action) => {
+            state.orderStatus = action.payload;
+        },
     },
 });
 
-export const { selectLink, setIsSidebarOpen, setOpenSetting, setDeleteModal, setIsOpenCategory, setCategory, setDetailModal, setUpdateProductModal, setProductDetailModal, setProductDeleteModal, setSupplierUpdateStatus } = uiSlice.actions;
+export const { selectLink, setIsSidebarOpen, setOpenSetting, setDeleteModal, setIsOpenCategory, setCategory, setDetailModal, setUpdateProductModal, setProductDetailModal, setProductDeleteModal, setSupplierUpdateStatus, setOrderStatus, setIsAuthenticated, logout, setCategoryId } = uiSlice.actions;
 
 export default uiSlice.reducer;

@@ -1,13 +1,8 @@
 import {
     Activity,
-    ArrowUpRight,
-    CircleUser,
+    Users,
     CreditCard,
     DollarSign,
-    Menu,
-    Package2,
-    Search,
-    Users,
 } from "lucide-react"
 
 import {
@@ -20,20 +15,9 @@ import { Button } from "@/components/ui/button"
 import {
     Card,
     CardContent,
-    CardDescription,
     CardHeader,
     CardTitle,
 } from "@/components/ui/card"
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuLabel,
-    DropdownMenuSeparator,
-    DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { Input } from "@/components/ui/input"
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 import {
     Table,
     TableBody,
@@ -45,293 +29,145 @@ import {
 import { Link } from "react-router-dom"
 import SalesByProductCategory from "./SalesByProductCategory"
 import Transactions from "./SalesByUserType"
+import { useDispatch, useSelector } from "react-redux"
+import { fetchSalesReport } from "@/store/reportSlice"
+import { useEffect } from "react"
+import Orders from '../../dashboard/Orders';
 
 export function Sales() {
+    const dispatch = useDispatch();
+    const { salesReport, loading, error } = useSelector((state) => state.report);
+
+    useEffect(() => {
+        dispatch(fetchSalesReport());
+    }, [dispatch]);
+
+    if (loading) {
+        return <div>Loading...</div>;
+    }
+    if (error) {
+        return <div>Error: {error}</div>;
+    }
+    if (!salesReport) {
+        return <div className='text-center h-screen'>No data available</div>;
+    }
+
+    const {
+        total_sales_from_business,
+        total_completed_orders_from_business,
+        completed_orders_list_from_business,
+        sales_by_category_from_business,
+        sales_by_region_from_business,
+        total_profit_from_business,
+        total_sales_from_personal,
+        total_completed_orders_from_personal,
+        completed_orders_list_from_personal,
+        sales_by_category_from_personal,
+        sales_by_region_from_personal,
+        total_profit_from_personal,
+    } = salesReport.specific_time_report;
+    // change this total_profit_from_business negative number to posetive
+    const total_profit_from_business_positive = total_profit_from_business * -1
     return (
         <div className="flex min-h-screen w-full flex-col max-w-6xl mx-auto mr-10 mt-20">
             <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">
                 <div className="grid gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-4">
-                    <Card x-chunk="dashboard-01-chunk-0">
-                        {/* <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                            <CardTitle className="text-sm font-medium">
-                                Total Revenue
-                            </CardTitle>
+                    <Card>
+                        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                            <CardTitle className="text-sm font-medium">Total Sales </CardTitle>
                             <DollarSign className="h-4 w-4 text-muted-foreground" />
                         </CardHeader>
                         <CardContent>
-                            <div className="text-2xl font-bold">$45,231.89</div>
-                            <p className="text-xs text-muted-foreground">
-                                +20.1% from last month
-                            </p>
-                        </CardContent> */}
-                        <SalesByProductCategory />
-                    </Card>
-                    <Card x-chunk="dashboard-01-chunk-1">
-                        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                            <CardTitle className="text-sm font-medium">
-                                Subscriptions
-                            </CardTitle>
-                            <Users className="h-4 w-4 text-muted-foreground" />
-                        </CardHeader>
-                        <CardContent>
-                            <div className="text-2xl font-bold">+2350</div>
-                            <p className="text-xs text-muted-foreground">
-                                +180.1% from last month
-                            </p>
+                            <div className="text-2xl font-bold">{total_profit_from_business_positive} ETB</div>
                         </CardContent>
                     </Card>
-                    <Card x-chunk="dashboard-01-chunk-2">
+                    <Card>
                         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                            <CardTitle className="text-sm font-medium">Sales</CardTitle>
+                            <CardTitle className="text-sm font-medium">Total Orders </CardTitle>
                             <CreditCard className="h-4 w-4 text-muted-foreground" />
                         </CardHeader>
                         <CardContent>
-                            <div className="text-2xl font-bold">+12,234</div>
-                            <p className="text-xs text-muted-foreground">
-                                +19% from last month
-                            </p>
+                            <div className="text-2xl font-bold">{total_completed_orders_from_business}</div>
                         </CardContent>
                     </Card>
-                    <Card x-chunk="dashboard-01-chunk-3">
+                    <Card>
                         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                            <CardTitle className="text-sm font-medium">Active Now</CardTitle>
+                            <CardTitle className="text-sm font-medium">Total Profit </CardTitle>
+                            <DollarSign className="h-4 w-4 text-muted-foreground" />
+                        </CardHeader>
+                        <CardContent>
+                            <div className="text-2xl font-bold">{total_profit_from_business} ETB</div>
+                        </CardContent>
+                    </Card>
+                    <Card>
+                        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                            <CardTitle className="text-sm font-medium">Sales by Region (Business)</CardTitle>
                             <Activity className="h-4 w-4 text-muted-foreground" />
                         </CardHeader>
                         <CardContent>
-                            <div className="text-2xl font-bold">+573</div>
-                            <p className="text-xs text-muted-foreground">
-                                +201 since last hour
-                            </p>
+                            {sales_by_region_from_business.map((region, index) => (
+                                <div key={index} className="text-sm">
+                                    <div className="font-medium">{region.shipping_region}</div>
+                                    <div>Total Orders: {region.total_completed_orders}</div>
+                                    <div>Total Amount: {region.total_completed_amount}</div>
+                                </div>
+                            ))}
+                        </CardContent>
+                    </Card>
+                    <Card>
+                        <CardHeader>
+                            <CardTitle>Sales by Category </CardTitle>
+                        </CardHeader>
+                        <CardContent className="grid gap-8">
+                            {sales_by_category_from_business.map((category, index) => (
+                                <div key={index} className="flex items-center gap-4">
+                                    <div className="grid gap-1">
+                                        <p className="text-sm font-medium leading-none">
+                                            {category.main_category}
+                                        </p>
+                                        <p className="text-sm text-muted-foreground">
+                                            Quantity Sold: {category.total_quantity_sold}
+                                        </p>
+                                        <p className="text-sm text-muted-foreground">
+                                            Products Sold: {category.total_products_sold}
+                                        </p>
+                                    </div>
+                                </div>
+                            ))}
                         </CardContent>
                     </Card>
                 </div>
-                <div className="grid gap-4 md:gap-8 lg:grid-cols-2 xl:grid-cols-3">
-                    {/* <Card
-                        className="xl:col-span-2" x-chunk="dashboard-01-chunk-4"
-                    >
-                        <CardHeader className="flex flex-row items-center">
-                            <div className="grid gap-2">
-                                <CardTitle>Transactions</CardTitle>
-                                <CardDescription>
-                                    Recent transactions from your store.
-                                </CardDescription>
-                            </div>
-                            <Button asChild size="sm" className="ml-auto gap-1">
-                                <Link to="#">
-                                    View All
-                                    <ArrowUpRight className="h-4 w-4" />
-                                </Link>
-                            </Button>
-                        </CardHeader>
-                        <CardContent>
-                            <Table>
-                                <TableHeader>
-                                    <TableRow>
-                                        <TableHead>Customer</TableHead>
-                                        <TableHead className="hidden xl:table-column">
-                                            Type
-                                        </TableHead>
-                                        <TableHead className="hidden xl:table-column">
-                                            Status
-                                        </TableHead>
-                                        <TableHead className="hidden xl:table-column">
-                                            Date
-                                        </TableHead>
-                                        <TableHead className="text-right">Amount</TableHead>
-                                    </TableRow>
-                                </TableHeader>
-                                <TableBody>
-                                    <TableRow>
-                                        <TableCell>
-                                            <div className="font-medium">Liam Johnson</div>
-                                            <div className="hidden text-sm text-muted-foreground md:inline">
-                                                liam@example.com
-                                            </div>
-                                        </TableCell>
-                                        <TableCell className="hidden xl:table-column">
-                                            Sale
-                                        </TableCell>
-                                        <TableCell className="hidden xl:table-column">
-                                            <Badge className="text-xs" variant="outline">
-                                                Approved
-                                            </Badge>
-                                        </TableCell>
-                                        <TableCell className="hidden md:table-cell lg:hidden xl:table-column">
-                                            2023-06-23
-                                        </TableCell>
-                                        <TableCell className="text-right">$250.00</TableCell>
-                                    </TableRow>
-                                    <TableRow>
-                                        <TableCell>
-                                            <div className="font-medium">Olivia Smith</div>
-                                            <div className="hidden text-sm text-muted-foreground md:inline">
-                                                olivia@example.com
-                                            </div>
-                                        </TableCell>
-                                        <TableCell className="hidden xl:table-column">
-                                            Refund
-                                        </TableCell>
-                                        <TableCell className="hidden xl:table-column">
-                                            <Badge className="text-xs" variant="outline">
-                                                Declined
-                                            </Badge>
-                                        </TableCell>
-                                        <TableCell className="hidden md:table-cell lg:hidden xl:table-column">
-                                            2023-06-24
-                                        </TableCell>
-                                        <TableCell className="text-right">$150.00</TableCell>
-                                    </TableRow>
-                                    <TableRow>
-                                        <TableCell>
-                                            <div className="font-medium">Noah Williams</div>
-                                            <div className="hidden text-sm text-muted-foreground md:inline">
-                                                noah@example.com
-                                            </div>
-                                        </TableCell>
-                                        <TableCell className="hidden xl:table-column">
-                                            Subscription
-                                        </TableCell>
-                                        <TableCell className="hidden xl:table-column">
-                                            <Badge className="text-xs" variant="outline">
-                                                Approved
-                                            </Badge>
-                                        </TableCell>
-                                        <TableCell className="hidden md:table-cell lg:hidden xl:table-column">
-                                            2023-06-25
-                                        </TableCell>
-                                        <TableCell className="text-right">$350.00</TableCell>
-                                    </TableRow>
-                                    <TableRow>
-                                        <TableCell>
-                                            <div className="font-medium">Emma Brown</div>
-                                            <div className="hidden text-sm text-muted-foreground md:inline">
-                                                emma@example.com
-                                            </div>
-                                        </TableCell>
-                                        <TableCell className="hidden xl:table-column">
-                                            Sale
-                                        </TableCell>
-                                        <TableCell className="hidden xl:table-column">
-                                            <Badge className="text-xs" variant="outline">
-                                                Approved
-                                            </Badge>
-                                        </TableCell>
-                                        <TableCell className="hidden md:table-cell lg:hidden xl:table-column">
-                                            2023-06-26
-                                        </TableCell>
-                                        <TableCell className="text-right">$450.00</TableCell>
-                                    </TableRow>
-                                    <TableRow>
-                                        <TableCell>
-                                            <div className="font-medium">Liam Johnson</div>
-                                            <div className="hidden text-sm text-muted-foreground md:inline">
-                                                liam@example.com
-                                            </div>
-                                        </TableCell>
-                                        <TableCell className="hidden xl:table-column">
-                                            Sale
-                                        </TableCell>
-                                        <TableCell className="hidden xl:table-column">
-                                            <Badge className="text-xs" variant="outline">
-                                                Approved
-                                            </Badge>
-                                        </TableCell>
-                                        <TableCell className="hidden md:table-cell lg:hidden xl:table-column">
-                                            2023-06-27
-                                        </TableCell>
-                                        <TableCell className="text-right">$550.00</TableCell>
-                                    </TableRow>
-                                </TableBody>
-                            </Table>
-                        </CardContent>
-                    </Card> */}
-                    <Transactions />
-                    <Card x-chunk="dashboard-01-chunk-5">
+                <div className="lg:flex gap-6">
+                    <Orders />
+                    <Card className="w-[21em]  mx-auto">
                         <CardHeader>
-                            <CardTitle>Recent Sales</CardTitle>
+                            <CardTitle>Recent Sales </CardTitle>
                         </CardHeader>
                         <CardContent className="grid gap-8">
-                            <div className="flex items-center gap-4">
-                                <Avatar className="hidden h-9 w-9 sm:flex">
-                                    <AvatarImage src="/avatars/01.png" alt="Avatar" />
-                                    <AvatarFallback>OM</AvatarFallback>
-                                </Avatar>
-                                <div className="grid gap-1">
-                                    <p className="text-sm font-medium leading-none">
-                                        Olivia Martin
-                                    </p>
-                                    <p className="text-sm text-muted-foreground">
-                                        olivia.martin@email.com
-                                    </p>
+                            {completed_orders_list_from_business.map((order, index) => (
+                                <div key={index} className="flex items-center gap-4">
+                                    <Avatar className="hidden h-9 w-9 sm:flex">
+                                        <AvatarImage src="/avatars/01.png" alt="Avatar" />
+                                        <AvatarFallback>OM</AvatarFallback>
+                                    </Avatar>
+                                    <div className="grid gap-1">
+                                        <p className="text-sm font-medium leading-none">
+                                            Order ID: {order.order_id}
+                                        </p>
+                                        <p className="text-sm text-muted-foreground">
+                                            Date: {order.order_date}
+                                        </p>
+                                    </div>
+                                    <div className="ml-auto font-medium">{order.total_amount}</div>
                                 </div>
-                                <div className="ml-auto font-medium">+$1,999.00</div>
-                            </div>
-                            <div className="flex items-center gap-4">
-                                <Avatar className="hidden h-9 w-9 sm:flex">
-                                    <AvatarImage src="/avatars/02.png" alt="Avatar" />
-                                    <AvatarFallback>JL</AvatarFallback>
-                                </Avatar>
-                                <div className="grid gap-1">
-                                    <p className="text-sm font-medium leading-none">
-                                        Jackson Lee
-                                    </p>
-                                    <p className="text-sm text-muted-foreground">
-                                        jackson.lee@email.com
-                                    </p>
-                                </div>
-                                <div className="ml-auto font-medium">+$39.00</div>
-                            </div>
-                            <div className="flex items-center gap-4">
-                                <Avatar className="hidden h-9 w-9 sm:flex">
-                                    <AvatarImage src="/avatars/03.png" alt="Avatar" />
-                                    <AvatarFallback>IN</AvatarFallback>
-                                </Avatar>
-                                <div className="grid gap-1">
-                                    <p className="text-sm font-medium leading-none">
-                                        Isabella Nguyen
-                                    </p>
-                                    <p className="text-sm text-muted-foreground">
-                                        isabella.nguyen@email.com
-                                    </p>
-                                </div>
-                                <div className="ml-auto font-medium">+$299.00</div>
-                            </div>
-                            <div className="flex items-center gap-4">
-                                <Avatar className="hidden h-9 w-9 sm:flex">
-                                    <AvatarImage src="/avatars/04.png" alt="Avatar" />
-                                    <AvatarFallback>WK</AvatarFallback>
-                                </Avatar>
-                                <div className="grid gap-1">
-                                    <p className="text-sm font-medium leading-none">
-                                        William Kim
-                                    </p>
-                                    <p className="text-sm text-muted-foreground">
-                                        will@email.com
-                                    </p>
-                                </div>
-                                <div className="ml-auto font-medium">+$99.00</div>
-                            </div>
-                            <div className="flex items-center gap-4">
-                                <Avatar className="hidden h-9 w-9 sm:flex">
-                                    <AvatarImage src="/avatars/05.png" alt="Avatar" />
-                                    <AvatarFallback>SD</AvatarFallback>
-                                </Avatar>
-                                <div className="grid gap-1">
-                                    <p className="text-sm font-medium leading-none">
-                                        Sofia Davis
-                                    </p>
-                                    <p className="text-sm text-muted-foreground">
-                                        sofia.davis@email.com
-                                    </p>
-                                </div>
-                                <div className="ml-auto font-medium">+$39.00</div>
-                            </div>
+                            ))}
                         </CardContent>
                     </Card>
+
                 </div>
             </main>
         </div>
     )
 }
 
-export default Sales
+export default Sales;

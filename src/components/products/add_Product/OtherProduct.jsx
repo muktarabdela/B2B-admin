@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import { setProductData } from '../../../store/ProductSlice';
-import { listSpecifications } from '../../../api/adminProduct';
+import { useDispatch, useSelector } from 'react-redux';
+import { message } from 'antd';
+import { listSpecifications } from '@/api/adminProduct';
+
 
 const OtherProduct = () => {
+    const [messageApi, contextHolder] = message.useMessage()
     const [data, setData] = useState([]);
     const [showMessage, setShowMessage] = useState(false);
 
@@ -20,6 +23,26 @@ const OtherProduct = () => {
         });
     };
 
+    const openSpecification = () => {
+        const key = 'updatable';
+        messageApi.open({
+            key,
+            type: 'success',
+            content: 'Added to specification!',
+            duration: 1,
+        });
+    }
+    const openAddData = () => {
+        const key = 'updatable';
+        messageApi.open({
+            key,
+            type: 'success',
+            content: 'Added specification!',
+            duration: 1,
+        });
+    }
+
+
     const handleAddData = (e) => {
         e.preventDefault();
         console.log('Current data:', currentData);
@@ -35,9 +58,10 @@ const OtherProduct = () => {
         } else {
             alert('Please fill out all fields before adding.');
         }
+        openAddData()
     };
 
-    const handleDeleteBank = (index) => {
+    const handleDeleteData = (index) => {
         const updatedData = otherData.filter((_, i) => i !== index);
         setOtherData(updatedData);
         dispatch(setProductData({
@@ -47,20 +71,16 @@ const OtherProduct = () => {
     };
 
     const handleClick = (specificationName) => {
-        setShowMessage(true);
+        openSpecification()
         setCurrentData({ ...currentData, name: specificationName });
-
-        setTimeout(() => {
-            setShowMessage(false);
-        }, 2000);
     };
 
     useEffect(() => {
         const fetchSupplierData = async () => {
             try {
-                const data = await listSpecifications();
-                setData(data.data.data);
-                console.log(data.data.data);
+                const response = await listSpecifications();
+                setData(response.data.data);
+                console.log(response.data.data);
             } catch (error) {
                 console.error('Error fetching supplier data:', error);
             }
@@ -69,133 +89,96 @@ const OtherProduct = () => {
         fetchSupplierData();
     }, []);
 
-
     return (
-        <div className=" w-[40em]">
-            <h2 className="text-2xl justify-center font-semibold flex items-center p-4">
-                Add other product specification
-            </h2>
+        <>
+            {contextHolder}
+            <div className="max-w-4xl mx-auto p-4">
+                <h2 className="text-3xl font-semibold text-center mb-6">Add Other Product Specification</h2>
 
-            <div>
-                <h1 className='text-2xl justify-center font-semibold flex items-center p-4'>most common product specification name</h1>
-                <div className='grid grid-cols-3 gap-4 border p-3 rounded'>
-                    {data?.map((spec, i) => (
-                        <div key={i}>
-                            <button
-                                onClick={() => handleClick(spec.specification_name)}
-                                type="button" className="text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-3 py-2.5 text-center inline-flex justify-center items-center dark:bg-blue-500 dark:hover:bg-blue-600 dark:focus:ring-blue-700 whitespace-nowrap">
-                                {spec.specification_name}
-                                <svg className="rtl:rotate-180 w-3.5 h-3.5 ms-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
-                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9" />
-                                </svg>
-                            </button>
-                        </div>
-                    ))}
+                <div className="mb-6">
+                    <h3 className='text-2xl font-semibold mb-4'>Most Common Product Specification Names</h3>
+                    <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4'>
+                        {data?.map((spec, i) => (
+                            <div key={i}>
+                                <button
+                                    onClick={() => handleClick(spec.specification_name)}
+                                    type="button"
+                                    className="w-full text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-xl  text-sm px-4 py-3.5 text-center inline-flex items-center"
+                                >
+                                    {spec.specification_name}
+                                    <svg className="rtl:rotate-180 w-4 h-4 ms-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
+                                        <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M1 5h12m0 0L9 1m4 4L9 9" />
+                                    </svg>
+                                </button>
+                            </div>
+                        ))}
+                    </div>
                 </div>
-            </div>
 
-            <div className='rounded border-2 max-w-1xl mx-auto my-4 border-blue-600'>
-                <div className="relative overflow-x-auto">
-                    <table className="w-full text-sm text-left rtl:text-right text-black dark:text-gray-400">
-                        <thead className="text-xs text-gray-700 uppercase bg-gray-800 dark:bg-gray-50">
+                <div className='border-2 border-blue-600 rounded-xl overflow-x-auto mb-6'>
+                    <table className="min-w-full text-sm text-left text-gray-900 dark:text-gray-400">
+                        <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                             <tr>
-                                <th scope="col" className="px-6 py-3">
-                                    Product specification name
-                                </th>
-                                <th scope="col" className="px-6 py-3">
-                                    Product specification value
-                                </th>
-                                <th scope="col" className="px-6 py-3">
-                                    CLEAR
-                                </th>
+                                <th scope="col" className="px-6 py-3">Specification Name</th>
+                                <th scope="col" className="px-6 py-3">Specification Value</th>
+                                <th scope="col" className="px-6 py-3">Clear</th>
                             </tr>
                         </thead>
                         <tbody>
                             {otherData.map((data, index) => (
-                                <tr key={index} className="text-gray-900">
-                                    <th
-                                        scope="row"
-                                        className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:-white"
-                                    >
-                                        {data.name}
-                                    </th>
+                                <tr key={index} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                                    <td className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">{data.name}</td>
                                     <td className="px-6 py-4">{data.value}</td>
-                                    <td className="px-6 py-4">
-                                        <div onClick={() => handleDeleteBank(index)}>
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                width={40}
-                                                height={40}
-                                                viewBox="0 0 24 24"
-                                                style={{ fill: 'rgba(254, 3, 3, 1)', transform: '', msfilter: '' }}
-                                                className="inline-block w-4 h-4 mr-2 cursor-pointer"
-                                            >
-                                                <path d="M16.192 6.344l-4.243 4.242-4.242-4.242-1.414 1.414 4.242 4.242-4.242 4.242 1.414 1.414 4.242-4.242 4.243 4.242 1.414-1.414-4.242-4.242 4.242-4.242z" />
-                                            </svg>
-                                        </div>
+                                    <td className="px-6 py-4 text-red-600 cursor-pointer" onClick={() => handleDeleteData(index)}>
+                                        <svg
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            width={24}
+                                            height={24}
+                                            viewBox="0 0 24 24"
+                                            className="w-6 h-6"
+                                        >
+                                            <path d="M16.192 6.344l-4.243 4.242-4.242-4.242-1.414 1.414 4.242 4.242-4.242 4.242 1.414 1.414 4.242-4.242 4.243 4.242 1.414-1.414-4.242-4.242 4.242-4.242z" />
+                                        </svg>
                                     </td>
                                 </tr>
                             ))}
                         </tbody>
                     </table>
                 </div>
+                <form className="mb-6">
+                    <div className="flex flex-col md:flex-row gap-4">
+                        <div className="relative w-full">
+                            <input
+                                onChange={handleInputChange}
+                                value={currentData.name}
+                                id="name"
+                                name="name"
+                                type="text"
+                                className="border border-gray-300 rounded-xl w-full px-3 py-3 text-sm text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-1"
+                                placeholder="Name"
+                            />
+                        </div>
+
+                        <div className="relative w-full">
+                            <input
+                                onChange={handleInputChange}
+                                value={currentData.value}
+                                name="value"
+                                id="value"
+                                type="text"
+                                className="border border-gray-300 rounded-xl w-full px-3 py-3 text-sm text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-1"
+                                placeholder="Value "
+                            />
+                        </div>
+                    </div>
+
+                    <button onClick={handleAddData} className="mt-4 bg-blue-600 text-white px-6 py-2 rounded-xl font-medium hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        Add Product
+                    </button>
+                </form>
             </div>
+        </>
 
-            <div>
-                {showMessage && (
-                    <div
-                        style={{
-                            border: 'none',
-                            borderRadius: '120px 0',
-                            margin: '0 0 20px'
-                        }}
-                        className="absolute left-[13em] bottom-[-48em] mt-4 mr-4 bg-green-100 border-l-4 border-green-500 p-4 rounded-lg w-[15em] text-black">
-                        <p>add specification in to input.</p>
-                    </div>
-                )}
-                <div className="flex gap-4">
-                    <div className="relative mb-4 w-full">
-                        <input
-                            onChange={handleInputChange}
-                            value={currentData.name} // Controlled input
-                            id="name" // Add an id here
-                            name="name"
-                            type="text"
-                            className="border-1 peer block w-full appearance-none rounded-lg border border-gray-900 bg-gray-100 bg-transparent px-2.5 pb-2.5 pt-4 text-sm text-gray-900 focus:border-blue-600 focus:outline-none focus:ring-0"
-                            placeholder=" "
-                        />
-                        <label
-                            htmlFor="name" // Match this with the id of the input
-                            className="absolute rounded top-2 left-1 z-10 origin-[0] -translate-y-4 scale-75 transform cursor-text select-none px-2 mr-4 text-sm text-black duration-300 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100 peer-focus:top-[0.4em] peer-focus:bg-gray-100 peer-focus:rounded peer-focus:text-white peer-focus:-translate-y-4 peer-focus:scale-75 peer-focus:px-2 peer-focus:whitespace-nowrap"
-                        >
-                            Name
-                        </label>
-                    </div>
-
-                    <div className="relative mb-4 w-full">
-                        <input
-                            onChange={handleInputChange}
-                            value={currentData.value} // Controlled input
-                            name="value"
-                            id="value"
-                            type="text"
-                            className="border-1 peer block w-full appearance-none rounded-lg border border-gray-900 bg-gray-100 bg-transparent px-2.5 pb-2.5 pt-4 text-sm text-gray-900 focus:border-blue-600 focus:outline-none focus:ring-0"
-                            placeholder=" "
-                        />
-                        <label
-                            htmlFor="value"
-                            className="absolute rounded top-2 left-1 z-10 origin-[0] -translate-y-4 scale-75 transform cursor-text select-none px-2 mr-4 text-sm text-black duration-300 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100 peer-focus:top-[0.4em] peer-focus:bg-gray-100 peer-focus:rounded peer-focus:text-white peer-focus:-translate-y-4 peer-focus:scale-75 peer-focus:px-2 peer-focus:whitespace-nowrap"
-                        >
-                            Value
-                        </label>
-                    </div>
-                </div>
-            </div>
-
-            <button onClick={handleAddData} className="bg-blue-500 text-white px-4 py-2 rounded">
-                Add product
-            </button>
-        </div>
     );
 };
 

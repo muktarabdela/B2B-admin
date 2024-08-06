@@ -25,6 +25,7 @@ import SalesReports from './components/reporting/sales/Sales';
 import ProductsReport from './components/reporting/products/ProductsReport';
 import UsersReport from './components/reporting/users/UsersReport';
 import { TooltipProvider } from "@/components/ui/tooltip";
+import AddCategory from './components/products/AddCategory';
 
 function App() {
   const dispatch = useDispatch()
@@ -82,6 +83,8 @@ function App() {
                 {/* other */}
                 <Route path="/add-products" element={<PrivateRoute Component={AddProducts} />} />
                 <Route path="/detail/products/:productId" element={<PrivateRoute Component={DetailProduct} />} />
+                <Route path="/add-category" element={<PrivateRoute Component={AddCategory} />} />
+
 
                 {/* supplier detail */}
                 <Route path="/detail/supplier/:supplierId" element={<PrivateRoute Component={SupplierDetail} />} />

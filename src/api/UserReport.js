@@ -1,5 +1,6 @@
 import axiosInstance from "./axios"
-const tokenFrom = localStorage.getItem('token');
+const token = localStorage.getItem('token');
+console.log("token from user report", token);
 
 export async function userReport(data) {
     const send = { report_time: "weekly" }
@@ -7,7 +8,7 @@ export async function userReport(data) {
         const response = await axiosInstance.post("/admin/user-report", send
             , {
                 headers: {
-                    Authorization: `Bearer ${tokenFrom}`,
+                    Authorization: `Bearer ${token}`,
                 },
             }
         );

@@ -1,35 +1,30 @@
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { productReport } from '@/api/ProductReport';
 import { salesReport } from '@/api/SalesReport';
 import { userReport } from '@/api/UserReport';
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
-// Define async thunk for fetching products report
+// Define async thunks
 export const fetchProductReport = createAsyncThunk('report/fetchProductReport', async () => {
     const response = await productReport();
-    // console.log("products from report slice", response.data.data);
     return response.data.data;
 });
-// define async thunk for fetching sales report
+
 export const fetchSalesReport = createAsyncThunk('report/fetchSalesReport', async () => {
     const response = await salesReport();
-    // console.log("sales from report slice", response.data.data);
     return response.data.data;
-})
-// Define async thunk for fetching users report
+});
 
 export const fetchUsersReport = createAsyncThunk('report/fetchUsersReport', async () => {
     const response = await userReport();
-    // console.log("users from report slice", response.data.data);
     return response.data.data;
-})
-
+});
 
 const reportSlice = createSlice({
     name: 'report',
     initialState: {
-        productReport: [],
-        salesReport: [],
-        usersReport: [],
+        productReport: null,
+        salesReport: null,
+        usersReport: null,
         loading: false,
         error: null,
     },
@@ -71,7 +66,7 @@ const reportSlice = createSlice({
             .addCase(fetchUsersReport.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.error.message;
-            })
+            });
     },
 });
 

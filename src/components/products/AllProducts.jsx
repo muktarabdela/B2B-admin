@@ -70,7 +70,7 @@ const AllProducts = () => {
   const deleteModal = useSelector((state) => state.ui.deleteModal);
   const { loading, error, products } = useSelector((state) => state.product);
   const [productType, setProductType] = useState('bestSold');
-
+  console.log(products)
   const getFilteredProducts = () => {
     switch (productType) {
       case 'pending':
@@ -103,7 +103,8 @@ const AllProducts = () => {
   const handleDetailSupplier = (id) => {
     navigate(`/detail/supplier/${id}`);
   };
-
+  // get the first image in the array
+  const getFirstImage = filteredProducts?.map((product) => product?.product_images[0])
   return (
     <Card className="max-w-6xl mx-auto mr-1 h-full mt-20">
       <CardHeader>
@@ -140,6 +141,9 @@ const AllProducts = () => {
               <TableHead className=" w-[100px] sm:table-cell">
                 <span className="text-center">Image</span>
               </TableHead>
+              <TableHead className="sm:table-cell text-center">
+                <span className="text-center whitespace-nowrap">Main Category</span>
+              </TableHead>
               <TableHead className="whitespace-nowrap text-center">Brand Name</TableHead>
               <TableHead className="whitespace-nowrap text-center">Status</TableHead>
               <TableHead className=" md:table-cell text-center">Price</TableHead>
@@ -172,10 +176,11 @@ const AllProducts = () => {
                     alt="Product image"
                     className="aspect-square rounded-md object-cover"
                     height="64"
-                    src={product1}
+                    src={getFirstImage[index]?.image}
                     width="64"
                   />
                 </TableCell>
+                <TableCell className="whitespace-nowrap text-center">{product.category[0]}</TableCell>
                 <TableCell className="whitespace-nowrap text-center">{truncateString(product.brand_name, 20)}</TableCell>
                 <TableCell>
                   <Badge className={`p-2 rounded-full ${product.status === 'pending' ? 'bg-yellow-50 text-yellow-700' : product.status === 'rejected' ? 'bg-red-50 text-red-700' : 'bg-green-50 text-green-700'}`} variant="outline">
@@ -218,7 +223,9 @@ const AllProducts = () => {
       </CardContent>
       <CardFooter>
         <div className="text-xs text-muted-foreground">
-          Showing <strong>1-10</strong> of <strong>32</strong> products
+
+          {/* Showing <strong>1-10</strong> of <strsong>32</strsong> products */}
+          all products <strong>{products.length}</strong> products
         </div>
       </CardFooter>
     </Card>

@@ -1,22 +1,31 @@
-import React from 'react'
-import { useStateContext } from '../../../../context/UseContext'
-const ProductImages = () => {
-    const { isOpen,
-        setIsOpen,
-        selectedImage,
-        openImage,
-        closeImage, products } = useStateContext()
+import React, { useEffect, useState } from 'react'
+const ProductImages = ({ data }) => {
+    const images = data?.product_images || [];
+    const products = images.map(image => ({ thumbnail: image.image, large: image.image }));
+    const [isOpen, setIsOpen] = useState(false);
+    const [selectedImage, setSelectedImage] = useState(products[0]);
+
+    useEffect(() => {
+        setIsOpen(true)
+        setSelectedImage(products[0].large)
+    }, [])
+
+    const openImage = (image) => {
+        setSelectedImage(image);
+        setIsOpen(true);
+    };
+
     return (
 
         <>
-            <div className="lg:col-span-3 lg:row-end-1 lg:ml-[13em]">
+            <div className="lg:col-span-3 lg:row-end-1">
                 <div className="lg:flex lg:items-start">
                     <div className="lg:order-2 lg:ml-5">
 
                         {isOpen && selectedImage && (
-                            <div className="max-w-xl overflow-hidden rounded-lg">
+                            <div className="max-w-[25em] overflow-hidden rounded-xl">
                                 <img
-                                    className="h-full w-full max-w-full object-cover"
+                                    className="h-full w-full object-cover mx-auto"
                                     src={selectedImage}
                                     alt=""
                                 />
@@ -30,7 +39,7 @@ const ProductImages = () => {
                                     key={index}
                                     onClick={() => openImage(product.large)}
                                     type="button"
-                                    className={`${isOpen && selectedImage === product.large ? "border-2 rounded-lg opacity-60 border-orange-600 " : ""} flex-0 aspect-square mb-3 h-20 overflow-hidden rounded-lg border-2 border-gray-900 text-center`}
+                                    className={`${isOpen && selectedImage === product.large ? "border-2 rounded-lg opacity-60 border-orange-600 " : ""} flex-0 aspect-square mb-3 h-20 overflow-hidden rounded-xl border-2 border-gray-900 text-center`}
                                 >
                                     <img
                                         className="h-full w-full object-cover"

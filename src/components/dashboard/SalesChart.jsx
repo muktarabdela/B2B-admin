@@ -79,7 +79,7 @@ function valueFormatter(number) {
 export default function Example() {
     const [showComparison, setShowComparison] = useState(false);
     return (
-        <div className="sm:mx-auto lg:w-[52em] p-4 bg-white rounded-lg shadow">
+        <div className="sm:mx-auto lg:w-[52em] p-4 bg-white rounded-lg shadow w-[21em]">
             <h3 className="text-lg font-semibold text-gray-900">
                 Sales overview
             </h3>

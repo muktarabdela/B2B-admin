@@ -30,34 +30,15 @@ const Sidebar = () => {
         { name: 'Personal user', href: '/personal', icon: <FaUser /> },
     ];
 
-    // const products = [
-    //     { name: 'Add Products', to: '/add-products', },
-    //     { name: 'All Products', to: '/all-products', icon: <img className='w-6 h-6' src={all_product} alt="" /> },
-    //     {
-    //         name: 'Pending', to: '/pending', icon: <div>
-    //             <svg width="30" height="25" fill="none" stroke="#363636" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-    //                 <path d="M12 2a10 10 0 1 0 0 20 10 10 0 1 0 0-20z"></path>
-    //                 <path d="M12 6v6l4 2"></path>
-    //             </svg>
-    //         </div>
-    //     },
-    //     {
-    //         name: 'Approve', to: '/approve', icon: <svg width="30" height="25" fill="none" stroke="#363636" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-    //             <path d="m9 11 3 3L22 4"></path>
-    //             <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
-    //         </svg>
-    //     },
-    //     {
-    //         name: 'Rejected', to: '/rejected', icon: <svg width="30" height="25" fill="none" stroke="#363636" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-    //             <rect width="18" height="18" x="3" y="3" rx="2" ry="2"></rect>
-    //             <path d="m9 9 6 6"></path>
-    //             <path d="m15 9-6 6"></path>
-    //         </svg>
-    //     },
-    //     // { name: 'Failed', to: '/failed', icon: <FaChartLine /> },
-    //     ,
+    const Other = [
+        {
+            name: 'Add Products', href: '/add-products', icon: <FaTachometerAlt />
+        },
+        {
+            name: 'Add Category', href: '/add-category', icon: <FaTachometerAlt />
+        }
+    ]
 
-    // ];
     const reports = [
         { name: 'Sales report', to: '/sales-report', icon: <img className='w-6 h-6' src={all_product} alt="" /> },
         {
@@ -112,7 +93,7 @@ const Sidebar = () => {
         setIsOpenReports(false)
     };
     return (
-        <div className={`fixed inset-0 overflow-hidden z-50 ${isSidebarOpen ? 'block' : 'hidden '} 
+        <div className={`fixed inset-0 overflow-hidden z-50 hidden lg:block
         transition-transform duration-300 ease-in-out border bg-gray-50 border-gray-400 rounded-lg text-black w-[18em] overflow-y-scroll mt-20 lg:mt-0`}>
 
             <div className="flex flex-col p-10 mt-0">
@@ -320,8 +301,27 @@ const Sidebar = () => {
 
                 </nav>
 
+                <h2 className="text-[1.3em] font-semibold text-gray-800">Other</h2>
+                <nav className="mt-4 text-gray-500 text-[1.1em] font-normal">
+                    <ul>
+                        {Other.map((link) => (
+                            <li key={link.name} className={selectedLink === link.name.toLowerCase() ? activeLink : inactiveLink}>
+                                <Link to={link.href} onClick={() => {
+                                    dispatch(selectLink(link.name.toLowerCase()));
+                                    if (window.innerWidth <= 768) {
+                                        dispatch(setIsSidebarOpen(false));
+                                    }
+                                }} className="flex items-center gap-2">
+                                    {link.icon}
+                                    {link.name}
+                                </Link>
+                            </li>
+                        ))}
+                    </ul>
+                </nav>
 
-                <h2 className="text-[1.3em] font-bold">Users</h2>
+
+                <h2 className="text-[1.3em] font-semibold text-gray-800">Users</h2>
                 <nav className="mt-4 text-gray-500 text-[1.1em] font-normal">
                     <ul>
                         {users.map((link) => (
@@ -339,6 +339,7 @@ const Sidebar = () => {
                         ))}
                     </ul>
                 </nav>
+
             </div>
         </div >
     );

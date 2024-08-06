@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 
 
 import { Button } from "@/components/ui/button"
@@ -10,13 +10,19 @@ import {
     CardTitle,
     CardContent
 } from "@/components/ui/card"
+import { fetchProducts } from '@/store/ProductSlice';
+import { useDispatch } from 'react-redux';
 
 
 const QuikData = ({ productReport }) => {
     // Calculate the counts based on productReport
+    const dispatch = useDispatch();
+    useEffect(() => {
+        dispatch(fetchProducts());
+    }, [dispatch]);
     console.log(productReport)
     const totalProducts = productReport.length;
-    const pendingProducts = productReport.filter(product => product.status === 'pending').length;
+    const pendingProducts = productReport.filter(product => product.status === 'pending ').length;
     const approvedProducts = productReport.filter(product => product.status === 'approve').length;
     const rejectedProducts = productReport.filter(product => product.status === 'rejected').length; return (
         <div className="grid gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-4">

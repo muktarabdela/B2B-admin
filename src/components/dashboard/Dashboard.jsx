@@ -10,16 +10,14 @@ import { fetchProductReport, fetchSalesReport, fetchUsersReport } from '@/store/
 
 const Dashboard = () => {
   const dispatch = useDispatch()
+  const { productReport, salesReport, usersReport } = useSelector((state) => state.report);
+  const { products } = useSelector((state) => state.product);
+
   useEffect(() => {
     dispatch(fetchProductReport());
     dispatch(fetchSalesReport())
     dispatch(fetchUsersReport())
   }, []);
-
-  const { productReport, salesReport, usersReport } = useSelector((state) => state.report);
-  // console.log(
-  //   "product report", productReport, "sales report", salesReport,
-  //   "user report", usersReport)
 
 
   return (
@@ -70,7 +68,7 @@ const Dashboard = () => {
                   </div>
                 }
                 h1text={"Total products added "}
-                number={productReport?.specific_time_report?.number_of_prdouct_added_from_internal + productReport?.specific_time_report?.number_of_prdouct_added_from_supplier}
+                number={products.length}
                 highNumberText={"+30%"}
                 highNumber={30}
                 highText={"than last month"}
@@ -105,12 +103,12 @@ const Dashboard = () => {
             </div>
           </div>
           <div className='border bg--50  rounded-lg max-w-[30em] mx-auto h-full'>
-            <LatestTransactions />
+            <LatestTransactions SalesReport={salesReport} />
           </div>
         </div>
       </div>
 
-      <div className="mt-10 flex flex-col lg:flex-row gap-4">
+      <div className="mt-10 flex flex-col lg:flex-row gap-4" >
         <div className="flex flex-col gap-6">
           <SalesChart />
           <div className=''>
