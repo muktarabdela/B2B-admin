@@ -90,7 +90,7 @@ export default function SupplierUpdateStates({ supplier }) {
                         >
                             <option value="Pending">Pending</option>
                             <option value="approve">Approve</option>
-                            <option value="Rejected">Rejected</option>
+                            <option value="rejected">Rejected</option>
                         </select>
                     </div>
                     <div className="mb-4">

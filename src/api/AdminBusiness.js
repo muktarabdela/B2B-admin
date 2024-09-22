@@ -1,14 +1,18 @@
 import axiosInstance from "./axios";
-const tokenFrom = localStorage.getItem('token');
 
+const getToken = () => {
+    if (typeof window !== 'undefined') {
+        return localStorage.getItem('token');
+    }
+    return null;
+};
 export async function allBusiness() {
-    // // userToken = await getAuth();
-
+    const token = getToken();
     try {
         const response = await axiosInstance.get("/admin/buyers"
             , {
                 headers: {
-                    Authorization: `Bearer ${tokenFrom}`,
+                    Authorization: `Bearer ${token}`,
                 },
             }
         );
@@ -20,6 +24,7 @@ export async function allBusiness() {
 }
 
 export async function updateBusinessStatus(data) {
+    const token = getToken();
     console.log("data from api endpoint", data);
     try {
         const response = await axiosInstance.put(
@@ -28,7 +33,7 @@ export async function updateBusinessStatus(data) {
             {
                 headers: {
                     "Content-Type": "application/json",
-                    Authorization: `Bearer ${tokenFrom}`,
+                    Authorization: `Bearer ${token}`,
                 },
             }
         );

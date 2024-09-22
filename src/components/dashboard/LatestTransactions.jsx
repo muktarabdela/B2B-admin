@@ -34,7 +34,7 @@ export default function LatestTransactions() {
         completed_orders_list_from_business,
     } = salesReport?.specific_time_report;
     return (
-        <Card className="w-[21em]  mx-auto">
+        <Card className="w- mx-auto">
             <CardHeader>
                 <CardTitle>Recent Sales </CardTitle>
             </CardHeader>

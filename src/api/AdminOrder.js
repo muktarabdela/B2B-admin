@@ -1,15 +1,20 @@
 import axiosInstance from "./axios";
 
-const tokenFrom = localStorage.getItem('token');
-console.log(tokenFrom)
+
+const getToken = () => {
+    if (typeof window !== 'undefined') {
+        return localStorage.getItem('token');
+    }
+    return null;
+};
 export async function AllOrder() {
-    // // userToken = await getAuth();
+    const token = getToken();
 
     try {
         const response = await axiosInstance.get("/admin/orders"
             , {
                 headers: {
-                    Authorization: `Bearer ${tokenFrom}`,
+                    Authorization: `Bearer ${token}`,
                 },
             }
         );
@@ -21,14 +26,13 @@ export async function AllOrder() {
 
 }
 export async function updateOrder(data) {
-    // // userToken = await getAuth();
-    console.log(data)
 
+const token = getToken();
     try {
         const response = await axiosInstance.put("/admin/change-order-status", data
             , {
                 headers: {
-                    Authorization: `Bearer ${tokenFrom}`,
+                    Authorization: `Bearer ${token}`,
                 },
             }
         );

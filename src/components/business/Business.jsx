@@ -33,6 +33,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import BusinessUpdateStates from '../model/BusinessUpdateStatus';
+import { ScrollArea, ScrollBar } from '../ui/scroll-area';
 function Check() {
   const dispatch = useDispatch()
   return (
@@ -97,7 +98,7 @@ const Business = () => {
   const filterBusiness = getFilteredBusiness();
 
   return (
-    <Card className="max-w-6xl mx-auto mr-10 h-full mt-20">
+    <Card className="max-w-6xl mx-auto  h-full">
       <CardHeader>
         <CardTitle>Business</CardTitle>
         <CardDescription className="text-lg  p-3">
@@ -128,71 +129,75 @@ const Business = () => {
         {deleteModal && <Check />}
         {detailModal && <SupplierDetail supplier={selectedBusiness} />}
         {supplierUpdateStatus && <BusinessUpdateStates supplier={selectedBusiness} />}
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead className="whitespace-nowrap">Name</TableHead>
-              <TableHead className="w-[100px] sm:table-cell">
-                <span>Email</span>
-              </TableHead>
-              <TableHead className="whitespace-nowrap">Phone Number</TableHead>
-              <TableHead className="whitespace-nowrap">Date Of Birth</TableHead>
-              <TableHead className="hidden md:table-cell whitespace-nowrap">Created at</TableHead>
-              <TableHead>
-                <span className="sr-only">Actions</span>
-              </TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {filterBusiness.map((supplier, index) => (
-              <TableRow key={index}>
-                <TableCell className="font-medium flex items-center">
-                  <div className="flex items-center justify-center cursor-pointer">
-                    <img className="rounded-full w-10 h-10 mr-2" src="https://raw.githubusercontent.com/cruip/vuejs-admin-dashboard-template/main/src/images/user-36-05.jpg" alt="Owner" />
-                    <span className="font-medium">
-                      {supplier.first_name} {supplier.last_name}
-                    </span>
-                  </div>
-                </TableCell>
-                <TableCell>{supplier.email}</TableCell>
-                <TableCell>{supplier.phone_number}</TableCell>
-                <TableCell>
-                  <Badge className={`p-2 rounded-full text-center ${supplier.status === 'pending' ? 'bg-yellow-50 text-yellow-700' : supplier.status === 'rejected' ? 'bg-red-50 text-red-700' : 'bg-green-50 text-green-700'}`} variant="outline">
-                    {supplier.status}
-                  </Badge>
-                </TableCell>
+        <ScrollArea className="w-96 lg:w-full whitespace-nowrap rounded-md border">
 
-                <TableCell className="hidden md:table-cell">09/12/2000</TableCell>
-                <TableCell className="hidden md:table-cell whitespace-nowrap">
-                  2023-07-12 10:42 AM
-                </TableCell>
-                <TableCell>
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button aria-haspopup="true" size="icon" variant="ghost">
-                        <MoreHorizontal className="h-4 w-4" />
-                        <span className="sr-only">Toggle menu</span>
-                      </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
-                      <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                      <DropdownMenuItem>
-                        <Button onClick={() => handleDetailSupplier(supplier.id)} variant="outline">view detail </Button>
-                      </DropdownMenuItem>
-                      <DropdownMenuItem>
-                        <Button onClick={() => handleUpdateStatus(supplier)} variant="outline">update status  </Button>
-                      </DropdownMenuItem>
-                      <DropdownMenuItem onClick={() => dispatch(setDeleteModal(true))}>
-                        <Button variant="outline" className="bg-red-600 text-white">delete</Button>
-                      </DropdownMenuItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
-                </TableCell>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead className="whitespace-nowrap">Name</TableHead>
+                <TableHead className="w-[100px] sm:table-cell">
+                  <span>Email</span>
+                </TableHead>
+                <TableHead className="whitespace-nowrap">Phone Number</TableHead>
+                <TableHead className="whitespace-nowrap">Date Of Birth</TableHead>
+                <TableHead className="hidden md:table-cell whitespace-nowrap">Created at</TableHead>
+                <TableHead>
+                  <span className="sr-only">Actions</span>
+                </TableHead>
               </TableRow>
-            ))}
+            </TableHeader>
+            <TableBody>
+              {filterBusiness.map((supplier, index) => (
+                <TableRow key={index}>
+                  <TableCell className="font-medium flex items-center">
+                    <div className="flex items-center justify-center cursor-pointer">
+                      <img className="rounded-full w-10 h-10 mr-2" src="https://raw.githubusercontent.com/cruip/vuejs-admin-dashboard-template/main/src/images/user-36-05.jpg" alt="Owner" />
+                      <span className="font-medium">
+                        {supplier.first_name} {supplier.last_name}
+                      </span>
+                    </div>
+                  </TableCell>
+                  <TableCell>{supplier.email}</TableCell>
+                  <TableCell>{supplier.phone_number}</TableCell>
+                  <TableCell>
+                    <Badge className={`p-2 rounded-full text-center ${supplier.status === 'pending' ? 'bg-yellow-50 text-yellow-700' : supplier.status === 'rejected' ? 'bg-red-50 text-red-700' : 'bg-green-50 text-green-700'}`} variant="outline">
+                      {supplier.status}
+                    </Badge>
+                  </TableCell>
 
-          </TableBody>
-        </Table>
+                  <TableCell className="hidden md:table-cell">09/12/2000</TableCell>
+                  <TableCell className="hidden md:table-cell whitespace-nowrap">
+                    2023-07-12 10:42 AM
+                  </TableCell>
+                  <TableCell>
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button aria-haspopup="true" size="icon" variant="ghost">
+                          <MoreHorizontal className="h-4 w-4" />
+                          <span className="sr-only">Toggle menu</span>
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end">
+                        <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                        <DropdownMenuItem>
+                          <Button onClick={() => handleDetailSupplier(supplier.id)} variant="outline">view detail </Button>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem>
+                          <Button onClick={() => handleUpdateStatus(supplier)} variant="outline">update status  </Button>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => dispatch(setDeleteModal(true))}>
+                          <Button variant="outline" className="bg-red-600 text-white">delete</Button>
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  </TableCell>
+                </TableRow>
+              ))}
+
+            </TableBody>
+          </Table>
+          <ScrollBar orientation="horizontal" />
+        </ScrollArea>
       </CardContent>
       <CardFooter>
         <div className="text-xs text-muted-foreground">

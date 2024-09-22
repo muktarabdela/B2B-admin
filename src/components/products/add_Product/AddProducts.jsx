@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import ListCategory from './ListCategory';
-import { setIsOpenCategory } from '../../../store/uiSlice';
-import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import ListCategory from './ListCategory';
 import OtherProduct from "./OtherProduct";
+import { setIsOpenCategory } from '../../../store/uiSlice';
 import { setProductData } from '../../../store/ProductSlice';
 import { addProduct } from '@/api/adminProduct';
 
@@ -17,19 +17,15 @@ function AddProduct() {
     const category = useSelector((state) => state.ui.category);
     const [imageFiles, setImageFiles] = useState([]);
     const status = useSelector((state) => state.ui.status);
-    console.log(category)
+
     useEffect(() => {
-        if (status === "pending") {
-            alert("Please wait for the account to be approved");
-            navigate("/");
-        } if (status === "rejected") {
+        if (status === "pending" || status === "rejected") {
             alert("Please wait for the account to be approved");
             navigate("/");
         }
     }, [status, navigate]);
 
     useEffect(() => {
-        // Avoid setting product data if category has not changed
         if (productData.category !== category) {
             dispatch(setProductData({
                 ...productData,
@@ -76,21 +72,19 @@ function AddProduct() {
     };
 
     return (
-        <div className="my-10 max-w-6xl mx-auto px-4 mr-0 mt-20">
-            {/* Loader */}
+        <div className="my-0 max-w-5xl mx-auto px">
             {loading && (
                 <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
                     <div className="w-12 h-12 border-4 border-blue-500 border-t-transparent border-solid rounded-full animate-spin"></div>
                 </div>
             )}
-            {/* Loader CSS */}
             <style jsx>{`
-                .animate-spin {
-                    animation: spin 1s linear infinite;
-                }
                 @keyframes spin {
                     0% { transform: rotate(0deg); }
                     100% { transform: rotate(360deg); }
+                }
+                .animate-spin {
+                    animation: spin 1s linear infinite;
                 }
             `}</style>
 
@@ -99,12 +93,12 @@ function AddProduct() {
                 <h2 className="text-2xl font-bold text-gray-800 mb-4">Add Product</h2>
                 <p className="text-gray-500 mb-6">Provide detailed information about the product.</p>
                 <form onSubmit={handleSubmit} className="space-y-6">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                         <div>
                             <label className="block text-gray-700 font-semibold mb-2" htmlFor="category">Category</label>
                             <div
                                 onClick={() => dispatch(setIsOpenCategory(true))}
-                                className="cursor-pointer shadow border rounded py-3 px-4 text-gray-700 hover:border-blue-500 focus:outline-none"
+                                className="cursor-pointer shadow border rounded py-3 px-4 text-gray-700 hover:border-blue-500 focus:outline-none w-full"
                             >
                                 {category[0] || "Select category"}
                             </div>
@@ -120,16 +114,16 @@ function AddProduct() {
                                 placeholder="Brand Name"
                             />
                         </div>
-                        <div>
+                        <div className="sm:col-span-2">
                             <label className="block text-gray-700 font-semibold mb-2" htmlFor="description">Description</label>
-                            <input
+                            <textarea
                                 onChange={handleChange}
                                 className="shadow border rounded w-full py-3 px-4 text-gray-700 focus:border-blue-500 focus:ring-1"
                                 name="description"
                                 id="description"
-                                type="text"
+                                rows="3"
                                 placeholder="Description"
-                            />
+                            ></textarea>
                         </div>
                         <div>
                             <label className="block text-gray-700 font-semibold mb-2" htmlFor="manufacturer">Manufacturer</label>
@@ -186,7 +180,7 @@ function AddProduct() {
                                 placeholder="Stock"
                             />
                         </div>
-                        <div>
+                        <div className="sm:col-span-2">
                             <label className="block text-gray-700 font-semibold mb-2" htmlFor="images">Images</label>
                             <input
                                 type="file"

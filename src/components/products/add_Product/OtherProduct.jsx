@@ -3,7 +3,10 @@ import { setProductData } from '../../../store/ProductSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { message } from 'antd';
 import { listSpecifications } from '@/api/adminProduct';
-
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+import { PlusIcon, XIcon } from 'lucide-react';
 
 const OtherProduct = () => {
     const [messageApi, contextHolder] = message.useMessage()
@@ -90,95 +93,81 @@ const OtherProduct = () => {
     }, []);
 
     return (
-        <>
+        <div className="max-w-4xl mx-auto ">
             {contextHolder}
-            <div className="max-w-4xl mx-auto p-4">
-                <h2 className="text-3xl font-semibold text-center mb-6">Add Other Product Specification</h2>
+            <h2 className="text-2xl font-semibold text-center mb-6">Add Product Specifications</h2>
 
-                <div className="mb-6">
-                    <h3 className='text-2xl font-semibold mb-4'>Most Common Product Specification Names</h3>
-                    <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4'>
-                        {data?.map((spec, i) => (
-                            <div key={i}>
-                                <button
-                                    onClick={() => handleClick(spec.specification_name)}
-                                    type="button"
-                                    className="w-full text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-xl  text-sm px-4 py-3.5 text-center inline-flex items-center"
-                                >
-                                    {spec.specification_name}
-                                    <svg className="rtl:rotate-180 w-4 h-4 ms-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
-                                        <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M1 5h12m0 0L9 1m4 4L9 9" />
-                                    </svg>
-                                </button>
-                            </div>
-                        ))}
-                    </div>
+            <div className="mb-6">
+                <h3 className='text-xl font-m mb-4'>Available Specifications</h3>
+                <div className='grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2'>
+                    {data.map((spec, index) => (
+                        <Button
+                            key={index}
+                            variant="outline"
+                            className="w-full text-left justify-start overflow-hidden whitespace-nowrap text-ellipsis"
+                            onClick={() => handleClick(spec.specification_name)}
+                        >
+                            <span className="mr-2">{spec.specification_name}</span>
+                            <PlusIcon className="h-4 w-4 ml-auto flex-shrink-0" />
+                        </Button>
+                    ))}
                 </div>
-
-                <div className='border-2 border-blue-600 rounded-xl overflow-x-auto mb-6'>
-                    <table className="min-w-full text-sm text-left text-gray-900 dark:text-gray-400">
-                        <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                            <tr>
-                                <th scope="col" className="px-6 py-3">Specification Name</th>
-                                <th scope="col" className="px-6 py-3">Specification Value</th>
-                                <th scope="col" className="px-6 py-3">Clear</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {otherData.map((data, index) => (
-                                <tr key={index} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                                    <td className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">{data.name}</td>
-                                    <td className="px-6 py-4">{data.value}</td>
-                                    <td className="px-6 py-4 text-red-600 cursor-pointer" onClick={() => handleDeleteData(index)}>
-                                        <svg
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            width={24}
-                                            height={24}
-                                            viewBox="0 0 24 24"
-                                            className="w-6 h-6"
-                                        >
-                                            <path d="M16.192 6.344l-4.243 4.242-4.242-4.242-1.414 1.414 4.242 4.242-4.242 4.242 1.414 1.414 4.242-4.242 4.243 4.242 1.414-1.414-4.242-4.242 4.242-4.242z" />
-                                        </svg>
-                                    </td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                </div>
-                <form className="mb-6">
-                    <div className="flex flex-col md:flex-row gap-4">
-                        <div className="relative w-full">
-                            <input
-                                onChange={handleInputChange}
-                                value={currentData.name}
-                                id="name"
-                                name="name"
-                                type="text"
-                                className="border border-gray-300 rounded-xl w-full px-3 py-3 text-sm text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-1"
-                                placeholder="Name"
-                            />
-                        </div>
-
-                        <div className="relative w-full">
-                            <input
-                                onChange={handleInputChange}
-                                value={currentData.value}
-                                name="value"
-                                id="value"
-                                type="text"
-                                className="border border-gray-300 rounded-xl w-full px-3 py-3 text-sm text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-1"
-                                placeholder="Value "
-                            />
-                        </div>
-                    </div>
-
-                    <button onClick={handleAddData} className="mt-4 bg-blue-600 text-white px-6 py-2 rounded-xl font-medium hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
-                        Add Product
-                    </button>
-                </form>
             </div>
-        </>
 
+            <div className='border rounded-lg overflow-hidden mb-6'>
+                <Table>
+                    <TableHeader>
+                        <TableRow>
+                            <TableHead>Specification Name</TableHead>
+                            <TableHead>Specification Value</TableHead>
+                            <TableHead className="w-[100px]">Actions</TableHead>
+                        </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                        {otherData.map((data, index) => (
+                            <TableRow key={index}>
+                                <TableCell className="font-medium">{data.name}</TableCell>
+                                <TableCell>{data.value}</TableCell>
+                                <TableCell>
+                                    <Button
+                                        variant="ghost"
+                                        size="icon"
+                                        onClick={() => handleDeleteData(index)}
+                                        aria-label={`Delete ${data.name} specification`}
+                                    >
+                                        <XIcon className="h-4 w-4" />
+                                    </Button>
+                                </TableCell>
+                            </TableRow>
+                        ))}
+                    </TableBody>
+                </Table>
+            </div>
+
+            <form className="space-y-4">
+                <div className="flex flex-col sm:flex-row gap-4">
+                    <Input
+                        onChange={handleInputChange}
+                        value={currentData.name}
+                        id="name"
+                        name="name"
+                        placeholder="Specification Name"
+                        aria-label="Specification Name"
+                    />
+                    <Input
+                        onChange={handleInputChange}
+                        value={currentData.value}
+                        name="value"
+                        id="value"
+                        placeholder="Specification Value"
+                        aria-label="Specification Value"
+                    />
+                </div>
+                <Button onClick={handleAddData} className="w-full">
+                    Add Specification
+                </Button>
+            </form>
+        </div>
     );
 };
 

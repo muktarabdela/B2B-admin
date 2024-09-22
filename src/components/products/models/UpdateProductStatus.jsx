@@ -11,7 +11,7 @@ const UpdateProductStatus = ({ product }) => {
     const [status, setStatus] = useState('Pending');
     const [percentage, setPercentage] = useState(null);
     const [sellingPrice, setSellingPrice] = useState(product.price);
-
+    console.log(percentage)
     useEffect(() => {
         if (percentage !== null) {
             const percentageValue = parseFloat(percentage);
@@ -33,6 +33,7 @@ const UpdateProductStatus = ({ product }) => {
     const handleFormSubmit = async (e) => {
         e.preventDefault();
         const data = {
+            user_hash: product.owner,
             status: status,
             product_hash: product.product_hash,
             percentage: `${percentage}%`,
@@ -128,7 +129,7 @@ const UpdateProductStatus = ({ product }) => {
                         >
                             <option value="Pending">Pending</option>
                             <option value="approve">Approve</option>
-                            <option value="Rejected">Rejected</option>
+                            <option value="rejected">Rejected</option>
                         </select>
                     </div>
                     <div className="flex items-center justify-start mt-4">

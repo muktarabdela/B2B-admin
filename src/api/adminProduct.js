@@ -1,7 +1,13 @@
 import axiosInstance from "./axios"
-const token = localStorage.getItem('token');
+
+const getToken = () => {
+    if (typeof window !== 'undefined') {
+        return localStorage.getItem('token');
+    }
+    return null;
+};
 export async function allProducts(data) {
-    // // userToken = await getAuth();
+    const token = getToken();
     try {
         const response = await axiosInstance.get("/admin/all-products", data);
         return response;
@@ -12,7 +18,7 @@ export async function allProducts(data) {
 }
 
 export async function productById(id) {
-    // // userToken = await getAuth();
+    const token = getToken()
     try {
         const response = await axiosInstance.get(`/admin/product/${id}`
             ,
@@ -60,13 +66,11 @@ export async function addProduct(data) {
 }
 
 export async function listSpecifications(data) {
-    // // userToken = await getAuth();
+    const token = getToken();
     try {
-        const response = await axiosInstance.get("/product_specifications", data
-            ,
+        const response = await axiosInstance.get("/product_specifications",
             {
                 headers: {
-                    "Content-Type": "multipart/form-data",
                     Authorization: `Bearer ${token}`,
                 },
             }

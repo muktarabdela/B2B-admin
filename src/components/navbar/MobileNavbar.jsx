@@ -5,24 +5,23 @@ import { FaTachometerAlt, FaCalendarAlt, FaUser, FaWpforms, FaChartLine, FaLayer
 import { Link } from 'react-router-dom';
 import product from "../../assets/product.png"
 import all_product from "../../assets/all-product.png"
-import { BadgeDollarSign, FolderKanban, PackageSearch, Proportions, Users } from 'lucide-react';
 import { ScrollArea } from '../ui/scroll-area';
-const Sidebar = () => {
+
+const MobileNavbar = ({ setIsOpen }) => {
     const [isOpenProducts, setIsOpenProducts] = useState(false);
     const [isOpenReports, setIsOpenReports] = useState(false);
     const [isOpenBill, setIsOpenBill] = useState(false);
-    const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
 
     const dispatch = useDispatch();
-    const isSidebarOpen = useSelector((state) => state.ui.isSidebarOpen);
     const selectedLink = useSelector((state) => state.ui.selectedLink);
-    const activeLink = 'flex items-center gap-5 pl-4 pt-3 pb-2.5 mx-auto rounded-lg text-white bg-blue-800 text-white text-md m-2 w-full';
-    const inactiveLink = 'flex items-center gap-5  pt-3 pb-2.5 text-gray-700 font-semibold text-md m-2 hover:bg- rounded-md hover:w-[] hover:shadow-md';
+
+    const activeLink = 'flex items-center gap-5 pl-4 pt-3 pb-2.5 mx-auto rounded-lg text-white bg-blue-800 text-white text-md m-2';
+    const inactiveLink = 'flex items-center gap-5  pt-3 pb-2.5 text-gray-700 font-semibold text-md m-2 hover:bg-white rounded-md hover:w-[12em] hover:shadow-md';
 
     const links = [
         { name: 'Dashboard', to: '/dashboard', icon: <FaTachometerAlt /> },
         { name: 'Profile', to: '/profile', icon: <FaUser /> },
-        { name: 'All Products', to: '/all-products', icon: <PackageSearch /> },
+        { name: 'All Products', to: '/all-products', icon: <img className='w-6 h-6' src={all_product} alt="" /> },
 
     ];
 
@@ -42,12 +41,22 @@ const Sidebar = () => {
     ]
 
     const reports = [
-        { name: 'Sales report', to: '/sales-report', icon: <BadgeDollarSign className='w-6 h-5' /> },
+        { name: 'Sales report', to: '/sales-report', icon: <img className='w-6 h-6' src={all_product} alt="" /> },
         {
-            name: 'products report', to: '/products-report', icon: <FolderKanban className='w-6 h-5' />
+            name: 'products report', to: '/products-report', icon: <div>
+                <svg width="30" height="25" fill="none" stroke="#363636" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 2a10 10 0 1 0 0 20 10 10 0 1 0 0-20z"></path>
+                    <path d="M12 6v6l4 2"></path>
+                </svg>
+            </div>
         },
         {
-            name: 'Users report', to: '/users-report', icon: <Users className='w-6 h-5' />
+            name: 'Users report', to: '/users-report', icon: <div>
+                <svg width="30" height="25" fill="none" stroke="#363636" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 2a10 10 0 1 0 0 20 10 10 0 1 0 0-20z"></path>
+                    <path d="M12 6v6l4 2"></path>
+                </svg>
+            </div>
         },
     ];
     const Bills = [
@@ -69,11 +78,6 @@ const Sidebar = () => {
             </div>
         },
     ];
-    const handleProductClick = () => {
-        setIsOpenProducts(!isOpenProducts);
-        setIsOpenReports(false)
-        setIsOpenBill(false)
-    };
     const handleReportClick = () => {
         setIsOpenReports(!isOpenReports);
         setIsOpenProducts(false)
@@ -85,9 +89,11 @@ const Sidebar = () => {
         setIsOpenReports(false)
     };
     return (
-        <div className={`fixed inset-0 overflow-hidden z-50 ${isMobile && isSidebarOpen ? 'block' : 'hidden'} lg:block 
-        transition-transform duration-300 ease-in-out border bg-gray-50 border-gray-400 rounded-lg text-black w-[14.9em] overflow-y- mt-20 lg:mt-0`}>
+        <div className={`inset-0 overflow-hidden z-50  lg:block 
+        transition-transform duration-300 ease-in-out border bg-gray-50 border-gray-400 rounded-lg text-black  overflow-y-scroll lg:mt-0`}>
+
             <ScrollArea className="h-screen lg:w-full -nowrap rounded-md border">
+
                 <div className="flex flex-col p-4 mt-0">
                     <h2 className="text-[1.3em] font-bold my-4">E-PHARM Admin</h2>
                     <nav className="mt-4 text-gray-500 text-[1.1em] font-normal ">
@@ -99,6 +105,7 @@ const Sidebar = () => {
                                             dispatch(selectLink(link.name.toLowerCase()));
                                             if (window.innerWidth <= 768) {
                                                 dispatch(setIsSidebarOpen(false));
+                                                setIsOpen(false);
                                             }
                                         }} className="flex items-center gap-2 ">
                                         {link.icon}
@@ -111,8 +118,9 @@ const Sidebar = () => {
                         <ul>
                             <li className={inactiveLink}>
                                 <div
-                                    onClick={() => handleReportClick()}
+                                    onClick={() => handleReportClick() && setIsOpen(false)}
                                     className="flex items-center gap-2 cursor-pointer">
+                                    <img className='w-6 h-6' src={product} alt="" />
                                     Reports
                                     {isOpenReports ? (<svg
                                         xmlns="http://www.w3.org/2000/svg"
@@ -145,6 +153,7 @@ const Sidebar = () => {
                                                     dispatch(selectLink(link.name.toLowerCase()));
                                                     if (window.innerWidth <= 768) {
                                                         dispatch(setIsSidebarOpen(false));
+                                                        setIsOpen(false);
                                                     }
                                                 }} className="flex items-center gap-2 ">
                                                 {link.icon}
@@ -192,6 +201,7 @@ const Sidebar = () => {
                                                     dispatch(selectLink(link.name.toLowerCase()));
                                                     if (window.innerWidth <= 768) {
                                                         dispatch(setIsSidebarOpen(false));
+                                                        setIsOpen(false);
                                                     }
                                                 }} className="flex items-center gap-2 ">
                                                 {link.icon}
@@ -215,6 +225,7 @@ const Sidebar = () => {
                                         dispatch(selectLink(link.name.toLowerCase()));
                                         if (window.innerWidth <= 768) {
                                             dispatch(setIsSidebarOpen(false));
+                                            setIsOpen(false);
                                         }
                                     }} className="flex items-center gap-2">
                                         {link.icon}
@@ -235,6 +246,7 @@ const Sidebar = () => {
                                         dispatch(selectLink(link.name.toLowerCase()));
                                         if (window.innerWidth <= 768) {
                                             dispatch(setIsSidebarOpen(false));
+                                            setIsOpen(false);
                                         }
                                     }} className="flex items-center gap-2">
                                         {link.icon}
@@ -249,7 +261,7 @@ const Sidebar = () => {
             </ScrollArea>
 
         </div >
-    );
-};
+    )
+}
 
-export default Sidebar;
+export default MobileNavbar 

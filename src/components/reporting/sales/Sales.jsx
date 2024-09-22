@@ -69,8 +69,8 @@ export function Sales() {
     // change this total_profit_from_business negative number to posetive
     const total_profit_from_business_positive = total_profit_from_business * -1
     return (
-        <div className="flex min-h-screen w-full flex-col max-w-6xl mx-auto mr-10 mt-20">
-            <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">
+        <div className="">
+            <main className="flex flex-1 flex-col gap-4 p-4 md-8">
                 <div className="grid gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-4">
                     <Card>
                         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -144,7 +144,7 @@ export function Sales() {
                             <CardTitle>Recent Sales </CardTitle>
                         </CardHeader>
                         <CardContent className="grid gap-8">
-                            {completed_orders_list_from_business.map((order, index) => (
+                            {completed_orders_list_from_business?.map((order, index) => (
                                 <div key={index} className="flex items-center gap-4">
                                     <Avatar className="hidden h-9 w-9 sm:flex">
                                         <AvatarImage src="/avatars/01.png" alt="Avatar" />

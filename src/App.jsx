@@ -13,7 +13,6 @@ import Auth from './components/Auth';
 import PrivateRoute from './components/PrivateRoute';
 import { useAuth } from './context/AuthContext';
 import Approve from './components/products/Approve';
-import { Button } from "@/components/ui/button"
 import Pending from './components/products/Pending';
 import Rejected from './components/products/Rejected';
 import AllProducts from './components/products/AllProducts';
@@ -28,7 +27,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import AddCategory from './components/products/AddCategory';
 
 function App() {
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const isSidebarOpen = useSelector((state) => state.ui.isSidebarOpen);
   const { isAuthenticated, checkAuth } = useAuth();
 
@@ -42,67 +41,52 @@ function App() {
     window.addEventListener('resize', handleResize);
 
     return () => window.removeEventListener('resize', handleResize);
-  }, []);
+  }, [dispatch]);
 
   return (
     <>
-      <div>
-        <Routes>
-          <Route path="/auth" element={<Auth />} />
-        </Routes>
-        <div className={`${isAuthenticated ? 'block' : 'hidden'} `}>
-          <div className=''>
+      <div className="flex h-screen">
+        {/* Only show Sidebar and Navbar if the user is authenticated */}
+        {isAuthenticated && (
+          <div className={`${isSidebarOpen ? 'block' : 'hidden'} lg:block w-64 bg-gray- text-white`}>
             <TooltipProvider>
               <Sidebar />
             </TooltipProvider>
-            <div className='hidden lg:block g-black w-[13rem] rounded-md border '></div>
-            <div className=' mx-auto'>
-              <Routes>
-                <Route path="/" element={<PrivateRoute Component={Dashboard} />} />
-                <Route path="/dashboard" element={<PrivateRoute Component={Dashboard} />} />
-                <Route path="/profile" element={<PrivateRoute Component={Profile} />} />
-
-                {/* Products */}
-                <Route path="/all-products" element={<PrivateRoute Component={AllProducts} />} />
-                <Route path="/pending" element={<PrivateRoute Component={Pending} />} />
-                <Route path="/approve" element={<PrivateRoute Component={Approve} />} />
-                <Route path="/rejected" element={<PrivateRoute Component={Rejected} />} />
-                {/* <Route path="/failed" element={<PrivateRoute Component={Failed} />} /> */}
-
-                {/* reports */}
-                <Route path="/sales-report" element={<PrivateRoute Component={SalesReports} />} />
-                <Route path="/products-report" element={<PrivateRoute Component={ProductsReport} />} />
-                <Route path="/users-report" element={<PrivateRoute Component={UsersReport} />} />
-
-
-                {/* users */}
-                <Route path="/supplier" element={<PrivateRoute Component={Supplier} />} />
-                <Route path="/business" element={<PrivateRoute Component={Business} />} />
-                <Route path="/personal" element={<PrivateRoute Component={Personal} />} />
-
-                {/* other */}
-                <Route path="/add-products" element={<PrivateRoute Component={AddProducts} />} />
-                <Route path="/detail/products/:productId" element={<PrivateRoute Component={DetailProduct} />} />
-                <Route path="/add-category" element={<PrivateRoute Component={AddCategory} />} />
-
-
-                {/* supplier detail */}
-                <Route path="/detail/supplier/:supplierId" element={<PrivateRoute Component={SupplierDetail} />} />
-              </Routes>
-            </div>
           </div>
-          <div
-
-          >
-            <div className="fixed w-full  top-0 bg-white">
+        )}
+        <div className="mt-20">
+          {isAuthenticated && (
+            <div className="">
               <Navbar />
             </div>
-          </div>
+          )}
+          <main className="">
+            <Routes>
+              {/* Public Route for Authentication */}
+              <Route path="/auth" element={<Auth />} />
+              {/* Protected Routes (PrivateRoute component ensures authentication) */}
+              <Route path="/" element={<PrivateRoute Component={Dashboard} />} />
+              <Route path="/dashboard" element={<PrivateRoute Component={Dashboard} />} />
+              <Route path="/profile" element={<PrivateRoute Component={Profile} />} />
+              <Route path="/all-products" element={<PrivateRoute Component={AllProducts} />} />
+              <Route path="/pending" element={<PrivateRoute Component={Pending} />} />
+              <Route path="/approve" element={<PrivateRoute Component={Approve} />} />
+              <Route path="/rejected" element={<PrivateRoute Component={Rejected} />} />
+              <Route path="/sales-report" element={<PrivateRoute Component={SalesReports} />} />
+              <Route path="/products-report" element={<PrivateRoute Component={ProductsReport} />} />
+              <Route path="/users-report" element={<PrivateRoute Component={UsersReport} />} />
+              <Route path="/supplier" element={<PrivateRoute Component={Supplier} />} />
+              <Route path="/business" element={<PrivateRoute Component={Business} />} />
+              <Route path="/personal" element={<PrivateRoute Component={Personal} />} />
+              <Route path="/add-products" element={<PrivateRoute Component={AddProducts} />} />
+              <Route path="/detail/products/:productId" element={<PrivateRoute Component={DetailProduct} />} />
+              <Route path="/add-category" element={<PrivateRoute Component={AddCategory} />} />
+              <Route path="/detail/supplier/:supplierId" element={<PrivateRoute Component={SupplierDetail} />} />
+            </Routes>
+          </main>
         </div>
       </div>
-
     </>
-
   );
 }
 

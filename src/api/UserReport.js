@@ -1,8 +1,13 @@
 import axiosInstance from "./axios"
-const token = localStorage.getItem('token');
-console.log("token from user report", token);
 
+export const getToken = () => {
+    if (typeof window !== 'undefined') {
+        return localStorage.getItem('token');
+    }
+    return null;
+};
 export async function userReport(data) {
+    const token = getToken();
     const send = { report_time: "weekly" }
     try {
         const response = await axiosInstance.post("/admin/user-report", send

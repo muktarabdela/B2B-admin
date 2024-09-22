@@ -37,7 +37,7 @@ const Auth = () => {
     setShow(false);
   };
   return (
-    <div className='h-screen flex items-center justify-center '>
+    <div className='w-screen flex items-center justify-center '>
       <div className=" shadow-md border-4  mx-auo my-10 px-10 ">
         <div className="py-4 flex ">
           <div>

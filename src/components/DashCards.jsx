@@ -10,7 +10,7 @@ import {
 import { Progress } from "@/components/ui/progress"
 const DashCards = ({ icon, h1text, number, highNumber, highText }) => {
     return (
-        <Card>
+        <Card className="w-full">
             <CardHeader className="pb-2">
                 <CardDescription>This Week {h1text}</CardDescription>
                 <CardTitle className="text-4xl">{number}</CardTitle>

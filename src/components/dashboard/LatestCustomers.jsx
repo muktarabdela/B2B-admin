@@ -30,7 +30,7 @@ const LatestCustomers = () => {
     const userList = getUserList();
 
     return (
-        <Card className="w-[21em]">
+        <Card className="w-full">
             <CardHeader>
                 <CardTitle>Latest Customer</CardTitle>
             </CardHeader>

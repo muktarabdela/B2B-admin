@@ -1,15 +1,24 @@
 import axiosInstance from "./axios";
 
-const tokenFrom = localStorage.getItem('token');
-console.log(tokenFrom)
+
+const getToken = () => {
+    if (typeof window !== 'undefined') {
+        return localStorage.getItem('token');
+    }
+    return null;
+};
+
+
 export async function allSuppliers() {
     // // userToken = await getAuth();
+
+    const token = getToken();
 
     try {
         const response = await axiosInstance.get("/admin/suppliers"
             , {
                 headers: {
-                    Authorization: `Bearer ${tokenFrom}`,
+                    Authorization: `Bearer ${token}`,
                 },
             }
         );
@@ -23,6 +32,8 @@ export async function allSuppliers() {
 
 //service to get all suppliers
 export async function singleSupplier(data) {
+    const token = getToken();
+
     console.log("data from api endpoint", data);
     try {
         const response = await axiosInstance.post("admin/single-supplier", data);
@@ -49,9 +60,17 @@ export async function pendingSuppliers() {
 }
 //service to change supplier status
 export async function changeSupplierStatus(data) {
+    const token = getToken();
     // userToken = await getAuth();
     try {
-        const response = await axiosInstance.put("/admin/supplier-status", data);
+        const response = await axiosInstance.put("/admin/supplier-status", data,
+            {
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`,
+                },
+            }
+        );
         return response;
     } catch (error) {
         console.error("Error fetching specific user:", error);
@@ -61,6 +80,8 @@ export async function changeSupplierStatus(data) {
 
 
 export async function updateSupplierStatus(data) {
+    const token = getToken();
+
     console.log("data from api endpoint", data);
     try {
         const response = await axiosInstance.put(
@@ -69,7 +90,7 @@ export async function updateSupplierStatus(data) {
             {
                 headers: {
                     "Content-Type": "application/json",
-                    Authorization: `Bearer ${tokenFrom}`,
+                    Authorization: `Bearer ${token}`,
                 },
             }
         );
