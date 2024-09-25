@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { MoreHorizontal } from "lucide-react";
+import { ChevronLeft, ChevronRight, MoreHorizontal } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -28,7 +28,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import product1 from "../../assets/product_02.png";
 
 import { fetchProducts } from '../../store/ProductSlice';
 import { setDeleteModal, setSupplierUpdateStatus, setUpdateProductModal } from '../../store/uiSlice';
@@ -67,21 +66,21 @@ const AllProducts = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [selectedProducts, setSelectedProducts] = useState(null);
-  const [firstImage, setFirstImage] = useState([]);
-
   const supplierUpdateStatus = useSelector((state) => state.ui.supplierUpdateStatus);
   const deleteModal = useSelector((state) => state.ui.deleteModal);
   const { loading, error, products } = useSelector((state) => state.product);
   const [productType, setProductType] = useState('bestSold');
-  console.log(products)
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 4;
   const getFilteredProducts = () => {
     switch (productType) {
       case 'pending':
-        return products.filter((product) => product.status === 'pending');
+        return products.filter((product) => product?.status === 'pending');
       case 'rejected':
-        return products.filter((product) => product.status === 'rejected');
+        return products.filter((product) => product?.status === 'rejected');
       case 'approve':
-        return products.filter((product) => product.status === 'approve');
+        return products.filter((product) => product?.status === 'approve');
       case 'all':
         return products;
       default:
@@ -89,22 +88,10 @@ const AllProducts = () => {
     }
   };
   const filteredProducts = getFilteredProducts();
-
-
-  // Handle setting the first image with a delay
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      if (filteredProducts?.length) {
-        const images = filteredProducts.map((product) => {
-          return product?.product_images?.[0]?.image || "default-image-url";
-        });
-        setFirstImage(images);
-      }
-    }, 500);
-
-    return () => clearTimeout(timer);
-  }, [filteredProducts]);
-
+  const totalPages = Math.ceil(filteredProducts?.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const currentProducts = filteredProducts?.slice(startIndex, endIndex);
   useEffect(() => {
     dispatch(fetchProducts());
   }, [dispatch]);
@@ -118,11 +105,14 @@ const AllProducts = () => {
   };
 
   const handleDetailProduct = (id) => {
-    navigate(`/detail/products/${id}`);
+    navigate(`/detail/product/${id}`);
   };
 
   const handleDetailSupplier = (id) => {
     navigate(`/detail/supplier/${id}`);
+  };
+  const handlePageChange = (newPage) => {
+    setCurrentPage(newPage);
   };
 
   return (
@@ -160,9 +150,6 @@ const AllProducts = () => {
               <TableHeader>
                 <TableRow>
                   <TableHead className="whitespace-nowrap">Product Owner</TableHead>
-                  <TableHead className="w-[100px] sm:table-cell">
-                    <span className="text-center">Image</span>
-                  </TableHead>
                   <TableHead className="whitespace-nowrap text-center">Main Category</TableHead>
                   <TableHead className="whitespace-nowrap text-center">Brand Name</TableHead>
                   <TableHead className="whitespace-nowrap text-center">Status</TableHead>
@@ -177,35 +164,26 @@ const AllProducts = () => {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {filteredProducts.map((product, index) => (
+                {currentProducts.map((product, index) => (
                   <TableRow key={index}>
                     <TableCell className="font-medium">
-                      <div onClick={() => handleDetailSupplier(product.owner)} className="flex items-center justify-center cursor-pointer">
+                      <div onClick={() => handleDetailSupplier(product?.owner)} className="flex items-center justify-center cursor-pointer">
                         <img className="rounded-full w-10 h-10 mr-2" src="https://raw.githubusercontent.com/cruip/vuejs-admin-dashboard-template/main/src/images/user-36-05.jpg" alt="Owner" />
-                        <span className="font-medium">{product.owner === 0 ? 'admin' : 'supplier'}</span>
+                        <span className="font-medium">{product?.owner === 0 ? 'admin' : 'supplier'}</span>
                       </div>
                     </TableCell>
-                    <TableCell className="sm:table-cell">
-                      {/* if first image is array */}
-                      <img
-                        alt="Product image"
-                        className="aspect-square rounded-md object-cover"
-                        height="64"
-                        src={firstImage.length > index ? firstImage[index] : "https://raw.githubusercontent.com/cruip/vuejs-admin-dashboard-template/main/src/images/product-default-bg.png"}
-                        width="64"
-                      />
-                    </TableCell>
-                    <TableCell className="whitespace-nowrap text-center">{product.category[0]}</TableCell>
-                    <TableCell className="whitespace-nowrap text-center">{truncateString(product.brand_name, 20)}</TableCell>
+
+                    <TableCell className="whitespace-nowrap text-center">{product?.category[0]}</TableCell>
+                    <TableCell className="whitespace-nowrap text-center">{truncateString(product?.brand_name, 20)}</TableCell>
                     <TableCell>
-                      <Badge className={`p-2 rounded-full ${product.status === 'pending' ? 'bg-yellow-50 text-yellow-700' : product.status === 'rejected' ? 'bg-red-50 text-red-700' : 'bg-green-50 text-green-700'}`} variant="outline">
-                        {product.status}
+                      <Badge className={`p-2 rounded-full ${product?.status === 'pending' ? 'bg-yellow-50 text-yellow-700' : product?.status === 'rejected' ? 'bg-red-50 text-red-700' : 'bg-green-50 text-green-700'}`} variant="outline">
+                        {product?.status}
                       </Badge>
                     </TableCell>
-                    <TableCell className="md:table-cell text-center whitespace-nowrap">{product.price} ETB</TableCell>
-                    <TableCell className="md:table-cell text-center">{product.selling_price} ETB</TableCell>
-                    <TableCell className="md:table-cell text-center">{product.percentage}%</TableCell>
-                    <TableCell className="md:table-cell text-center">{product.stock}</TableCell>
+                    <TableCell className="md:table-cell text-center whitespace-nowrap">{product?.price} ETB</TableCell>
+                    <TableCell className="md:table-cell text-center">{product?.selling_price} ETB</TableCell>
+                    <TableCell className="md:table-cell text-center">{product?.percentage}%</TableCell>
+                    <TableCell className="md:table-cell text-center">{product?.stock}</TableCell>
                     <TableCell className="md:table-cell whitespace-nowrap text-center">
                       2023-07-12 10:10:00
                     </TableCell>
@@ -218,7 +196,7 @@ const AllProducts = () => {
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
                           <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                          <DropdownMenuItem onClick={() => handleDetailProduct(product._id)}>Preview</DropdownMenuItem>
+                          <DropdownMenuItem onClick={() => handleDetailProduct(product?.product_hash)}>Preview</DropdownMenuItem>
                           <DropdownMenuItem onClick={() => handleUpdateStatus(product)}>Update</DropdownMenuItem>
                           <DropdownMenuItem onClick={() => dispatch(setDeleteModal(true))}>Delete</DropdownMenuItem>
                         </DropdownMenuContent>
@@ -233,9 +211,33 @@ const AllProducts = () => {
         </ScrollArea>
 
       </CardContent>
-      <CardFooter className="flex justify-between">
-        <p>All Products</p>
-        <Button>View more</Button>
+      <CardFooter className="flex items-center justify-between">
+        <div className="text-sm text-muted-foreground ">
+          Showing <strong>{startIndex + 1}-{Math?.min(endIndex, filteredProducts?.length)}</strong> of <strong>{filteredProducts?.length}</strong> products
+        </div>
+        <div className="flex items-center space-x-2">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => handlePageChange(currentPage - 1)}
+            disabled={currentPage === 1}
+          >
+            <ChevronLeft className="h-4 w-4" />
+            Previous
+          </Button>
+          <div className="text-sm font-medium whitespace-nowrap">
+            Page {currentPage} of {totalPages}
+          </div>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => handlePageChange(currentPage + 1)}
+            disabled={currentPage === totalPages}
+          >
+            Next
+            <ChevronRight className="h-4 w-4" />
+          </Button>
+        </div>
       </CardFooter>
     </Card>
   );

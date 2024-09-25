@@ -1,6 +1,6 @@
 import { AllOrder } from "@/api/AdminOrder"
 import { useNavigate } from 'react-router-dom';
-import { MoreHorizontal } from "lucide-react";
+import { ChevronLeft, ChevronRight, MoreHorizontal } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -41,6 +41,9 @@ export default function Component() {
     const [orders, setOrders] = useState([])
     const [selectOrder, setSelectOrder] = useState(null)
     const orderStatus = useSelector((state) => state.ui.orderStatus)
+
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 4;
     useEffect(() => {
         const getALLOrders = async () => {
             const response = await AllOrder()
@@ -54,6 +57,15 @@ export default function Component() {
         setSelectOrder(order)
         dispatch(setOrderStatus(true))
     }
+
+    const totalPages = Math.ceil(orders?.length / itemsPerPage);
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+    const currentOrders = orders?.slice(startIndex, endIndex);
+    const handlePageChange = (newPage) => {
+        setCurrentPage(newPage);
+    };
+
     return (
         <Card className="w-[21em] lg:w-full">
             <CardHeader>
@@ -79,7 +91,7 @@ export default function Component() {
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        {orders?.map((order, index) => (
+                        {currentOrders?.map((order, index) => (
                             <TableRow key={index}>
                                 <TableCell className="font-medium flex items-center">
                                     <div className="flex items-center justify-center cursor-pointer text-center">
@@ -131,9 +143,32 @@ export default function Component() {
                     </TableBody>
                 </Table>
             </CardContent>
-            <CardFooter>
-                <div className="text-xs text-muted-foreground">
-                    Showing <strong>1-10</strong> of <strong>{orders.length}</strong> orders
+            <CardFooter className="flex items-center justify-between">
+                <div className="text-sm text-muted-foreground ">
+                    Showing <strong>{startIndex + 1}-{Math?.min(endIndex, orders?.length)}</strong> of <strong>{orders?.length}</strong> products
+                </div>
+                <div className="flex items-center space-x-2">
+                    <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => handlePageChange(currentPage - 1)}
+                        disabled={currentPage === 1}
+                    >
+                        <ChevronLeft className="h-4 w-4" />
+                        Previous
+                    </Button>
+                    <div className="text-sm font-medium whitespace-nowrap">
+                        Page {currentPage} of {totalPages}
+                    </div>
+                    <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => handlePageChange(currentPage + 1)}
+                        disabled={currentPage === totalPages}
+                    >
+                        Next
+                        <ChevronRight className="h-4 w-4" />
+                    </Button>
                 </div>
             </CardFooter>
         </Card>

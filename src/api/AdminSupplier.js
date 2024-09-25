@@ -33,10 +33,14 @@ export async function allSuppliers() {
 //service to get all suppliers
 export async function singleSupplier(data) {
     const token = getToken();
-
-    console.log("data from api endpoint", data);
     try {
-        const response = await axiosInstance.post("admin/single-supplier", data);
+        const response = await axiosInstance.get(`/admin/single-supplier/${data.contact_id}`
+            , {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            }
+        )
         return response;
     } catch (error) {
         console.error("Error fetching specific user:", error);

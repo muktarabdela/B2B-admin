@@ -6,7 +6,7 @@ import SupplierUpdateStates from '../dashboard/supplier/SupplierUpdateStates';
 import { fetchBusiness } from '../../store/BusinessSlice';
 
 
-import { MoreHorizontal } from "lucide-react";
+import { ChevronLeft, ChevronRight, MoreHorizontal } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -34,6 +34,7 @@ import {
 } from "@/components/ui/table";
 import BusinessUpdateStates from '../model/BusinessUpdateStatus';
 import { ScrollArea, ScrollBar } from '../ui/scroll-area';
+import { useNavigate } from 'react-router-dom';
 function Check() {
   const dispatch = useDispatch()
   return (
@@ -59,6 +60,7 @@ function Check() {
   )
 }
 const Business = () => {
+  const navigate = useNavigate()
   const dispatch = useDispatch()
   const [businessType, setBusinessType] = useState('');
   const deleteModal = useSelector((state) => state.ui.deleteModal);
@@ -68,6 +70,8 @@ const Business = () => {
   const { Business, loading, error } = useSelector((state) => state.business);
   const [selectedBusiness, setSelectedBusiness] = useState(null);
 
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 4;
   useEffect(() => {
     dispatch(fetchBusiness());
   }, []);
@@ -78,6 +82,9 @@ const Business = () => {
   const handleUpdateStatus = (supplier) => {
     setSelectedBusiness(supplier);
     dispatch(setSupplierUpdateStatus(true));
+  };
+  const handleDetailBusiness = (id) => {
+    navigate(`/detail/business/${id}`);
   };
 
   // filter business
@@ -96,6 +103,13 @@ const Business = () => {
     }
   };
   const filterBusiness = getFilteredBusiness();
+  const totalPages = Math.ceil(filterBusiness?.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const currentBusiness = filterBusiness?.slice(startIndex, endIndex);
+  const handlePageChange = (newPage) => {
+    setCurrentPage(newPage);
+  };
 
   return (
     <Card className="max-w-6xl mx-auto  h-full">
@@ -147,7 +161,7 @@ const Business = () => {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {filterBusiness.map((supplier, index) => (
+              {currentBusiness.map((supplier, index) => (
                 <TableRow key={index}>
                   <TableCell className="font-medium flex items-center">
                     <div className="flex items-center justify-center cursor-pointer">
@@ -180,7 +194,7 @@ const Business = () => {
                       <DropdownMenuContent align="end">
                         <DropdownMenuLabel>Actions</DropdownMenuLabel>
                         <DropdownMenuItem>
-                          <Button onClick={() => handleDetailSupplier(supplier.id)} variant="outline">view detail </Button>
+                          <Button onClick={() => handleDetailBusiness(supplier.user_hash)} variant="outline">view detail </Button>
                         </DropdownMenuItem>
                         <DropdownMenuItem>
                           <Button onClick={() => handleUpdateStatus(supplier)} variant="outline">update status  </Button>
@@ -199,9 +213,32 @@ const Business = () => {
           <ScrollBar orientation="horizontal" />
         </ScrollArea>
       </CardContent>
-      <CardFooter>
-        <div className="text-xs text-muted-foreground">
-          Showing <strong>1-10</strong> of <strong>32</strong> suppliers
+      <CardFooter className="flex items-center justify-between">
+        <div className="text-sm text-muted-foreground ">
+          Showing <strong>{startIndex + 1}-{Math?.min(endIndex, filterBusiness?.length)}</strong> of <strong>{filterBusiness?.length}</strong> products
+        </div>
+        <div className="flex items-center space-x-2">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => handlePageChange(currentPage - 1)}
+            disabled={currentPage === 1}
+          >
+            <ChevronLeft className="h-4 w-4" />
+            Previous
+          </Button>
+          <div className="text-sm font-medium whitespace-nowrap">
+            Page {currentPage} of {totalPages}
+          </div>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => handlePageChange(currentPage + 1)}
+            disabled={currentPage === totalPages}
+          >
+            Next
+            <ChevronRight className="h-4 w-4" />
+          </Button>
         </div>
       </CardFooter>
     </Card>

@@ -25,6 +25,8 @@ import ProductsReport from './components/reporting/products/ProductsReport';
 import UsersReport from './components/reporting/users/UsersReport';
 import { TooltipProvider } from "@/components/ui/tooltip";
 import AddCategory from './components/products/AddCategory';
+import BusinessDetail from './components/business/BusinessDetail';
+import Message from './components/Message';
 
 function App() {
   const dispatch = useDispatch();
@@ -58,6 +60,7 @@ function App() {
           {isAuthenticated && (
             <div className="">
               <Navbar />
+              <Message />
             </div>
           )}
           <main className="">
@@ -79,9 +82,10 @@ function App() {
               <Route path="/business" element={<PrivateRoute Component={Business} />} />
               <Route path="/personal" element={<PrivateRoute Component={Personal} />} />
               <Route path="/add-products" element={<PrivateRoute Component={AddProducts} />} />
-              <Route path="/detail/products/:productId" element={<PrivateRoute Component={DetailProduct} />} />
+              <Route path="/detail/product/:productId" element={<PrivateRoute Component={DetailProduct} />} />
               <Route path="/add-category" element={<PrivateRoute Component={AddCategory} />} />
               <Route path="/detail/supplier/:supplierId" element={<PrivateRoute Component={SupplierDetail} />} />
+              <Route path="/detail/business/:businessId" element={<PrivateRoute Component={BusinessDetail} />} />
             </Routes>
           </main>
         </div>

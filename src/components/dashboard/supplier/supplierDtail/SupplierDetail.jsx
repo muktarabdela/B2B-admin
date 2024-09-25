@@ -1,302 +1,189 @@
 import React, { useEffect, useState } from 'react'
-import PersonalInfo from './PersonalInfo'
-import CompanyInfo from './CompanyInfo'
-import CompanyDoc from './CompanyDoc'
-import Shipping from './Shipping'
-import Banks from './Banks'
-import { useDispatch } from 'react-redux'
-import { setDetailModal } from '../../../../store/uiSlice'
 import { useParams } from 'react-router-dom'
 import { singleSupplier } from '../../../../api/AdminSupplier'
+
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+import { Badge } from "@/components/ui/badge"
+import { CalendarIcon, GlobeIcon, PhoneIcon, MailIcon } from "lucide-react"
 
 const SupplierDetail = () => {
   const [supplierData, setSupplierData] = useState(null);
   const { supplierId } = useParams();
-  console.log(supplierId);
+
   useEffect(() => {
-    const fetchProduct = async () => {
+    const fetchSupplier = async () => {
       try {
         const response = await singleSupplier({ contact_id: supplierId });
-        console.log(response.data.data)
         setSupplierData(response.data.data);
       } catch (error) {
-        console.error("Error fetching product:", error);
+        console.error("Error fetching supplier data:", error);
       }
     };
-    fetchProduct();
+    fetchSupplier();
   }, [supplierId]);
-  const dispatch = useDispatch()
-  const [activeComponent, setActiveComponent] = useState('Personal_info')
 
-  if (supplierId === 0) {
-    return <div>
-      the product owner is admin
-    </div>
+  const formatDate = (dateString) => {
+    return new Date(dateString).toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    });
   }
 
-  const renderActiveComponent = () => {
-    switch (activeComponent) {
-      case 'Personal_info':
-        return <PersonalInfo Data={supplierData} />
-      case 'company_Info':
-        return <CompanyInfo Data={supplierData} />
-      case 'company_documentation':
-        return <CompanyDoc Data={supplierData} />
-      case 'shipping':
-        return <Shipping Data={supplierData} />
-      case 'bank_information':
-        return <Banks Data={supplierData} />
-      default:
-        return <PersonalInfo Data={supplierData} />
-    }
-  }
   return (
-    <div>
-      <div
-        className="mt-[8em] "
-      >
-        <div className="max-w-6xl mx-auto mr-0">
-          <div className="">
-
-            Supplier user information Detail
-
-            <div className='border-2 rounded mt-20 p-6 shadow-lg mb-20'>
-
-              <div className='flex relative bottom-[4.3em] gap-10 overflow-x-auto'>
-                <div
-                  className={`${activeComponent === 'Personal_info'
-                    ? 'text-black font-semibold border-blue-600 border-b-[3px] pb-2 whitespace-nowrap'
-                    : ''
-                    } cursor-pointer hover:border-b-[2px] pb-2 border-blue-500 text-gray-500 flex gap-2 items-center whitespace-nowrap`}
-                  onClick={() => setActiveComponent('Personal_info')}
-                >
-                  {activeComponent === 'Personal_info' ? (
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width={20} // Use a consistent size for both icons
-                      height={20}
-                      viewBox="0 0 24 24"
-                      style={{ fill: 'rgba(5, 5, 5, 1)', transform: '', msfilter: '' }}
-                    >
-                      <path d="M21 2H6a2 2 0 0 0-2 2v3H2v2h2v2H2v2h2v2H2v2h2v3a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1V3a1 1 0 0 0-1-1zm-8 2.999c1.648 0 3 1.351 3 3A3.012 3.012 0 0 1 13 11c-1.647 0-3-1.353-3-3.001 0-1.649 1.353-3 3-3zM19 18H7v-.75c0-2.219 2.705-4.5 6-4.5s6 2.281 6 4.5V18z" />
-                    </svg>
-                  ) : (
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width={20}
-                      height={20}
-                      viewBox="0 0 24 24"
-                      style={{ fill: 'rgba(107, 114, 128, 1)', transform: '', msfilter: '' }}
-                    >
-                      <path d="M21 2H6a2 2 0 0 0-2 2v3H2v2h2v2H2v2h2v2H2v2h2v3a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1V3a1 1 0 0 0-1-1zm-8 2.999c1.648 0 3 1.351 3 3A3.012 3.012 0 0 1 13 11c-1.647 0-3-1.353-3-3.001 0-1.649 1.353-3 3-3zM19 18H7v-.75c0-2.219 2.705-4.5 6-4.5s6 2.281 6 4.5V18z" />
-                    </svg>
-
-
-                  )}
-                  Personal Information
-                </div>
-                <div
-                  className={`${activeComponent === 'company_Info'
-                    ? 'text-black font-semibold border-blue-600 border-b-[3px] pb-2 whitespace-nowrap'
-                    : ''
-                    } cursor-pointer hover:border-b-[2px] pb-2 border-blue-500 text-gray-500 flex gap-2 items-center whitespace-nowrap`}
-                  onClick={() => setActiveComponent('company_Info')}
-                >
-                  {activeComponent === 'company_Info' ? (
-                    <svg
-                      width={22}
-                      height={22}
-                      fill="none"
-                      stroke="#000000"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="1.5"
-                      viewBox="0 0 24 24"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path d="M12 2a9 3 0 1 0 0 6 9 3 0 1 0 0-6z" />
-                      <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3" />
-                      <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5" />
-                    </svg>
-
-                  ) : (
-                    <svg
-                      width={22}
-                      height={22}
-                      fill="none"
-                      stroke="#787878"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="1.5"
-                      viewBox="0 0 24 24"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path d="M12 2a9 3 0 1 0 0 6 9 3 0 1 0 0-6z" />
-                      <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3" />
-                      <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5" />
-                    </svg>
-                  )}
-                  company Information
-                </div>
-                <div
-                  className={`${activeComponent === 'company_documentation'
-                    ? 'text-black font-semibold border-blue-600 border-b-[3px] pb-2 whitespace-nowrap'
-                    : ''
-                    } cursor-pointer hover:border-b-[2px] pb-2 border-blue-500 text-gray-500 flex gap-2 items-center whitespace-nowrap`}
-                  onClick={() => setActiveComponent('company_documentation')}
-                >
-                  {activeComponent === 'company_documentation' ? (
-                    <svg
-                      width={22}
-                      height={22}
-                      fill="none"
-                      stroke="#000000"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="1.5"
-                      viewBox="0 0 24 24"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z" />
-                      <path d="M13 2v7h7" />
-                    </svg>
-
-
-                  ) : (
-                    <svg
-                      width={22}
-                      height={22}
-                      fill="none"
-                      stroke="#a8a8a8"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="1.5"
-                      viewBox="0 0 24 24"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z" />
-                      <path d="M13 2v7h7" />
-                    </svg>
-
-
-
-                  )}
-                  company Documentation
-                </div>
-                <div
-                  className={`${activeComponent === 'shipping'
-                    ? 'text-black font-semibold border-blue-600 border-b-[3px] pb-2 whitespace-nowrap'
-                    : ''
-                    } cursor-pointer hover:border-b-[2px] pb-2 border-blue-500 text-gray-500 flex gap-2 items-center whitespace-nowrap`}
-                  onClick={() => setActiveComponent('shipping')}
-                >
-                  {activeComponent === 'shipping' ? (
-                    <svg
-                      width={22}
-                      height={22}
-                      fill="none"
-                      stroke="#000000"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="1.5"
-                      viewBox="0 0 24 24"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path d="M12 2a9 3 0 1 0 0 6 9 3 0 1 0 0-6z" />
-                      <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3" />
-                      <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5" />
-                    </svg>
-
-                  ) : (
-                    <svg
-                      width={22}
-                      height={22}
-                      fill="none"
-                      stroke="#787878"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="1.5"
-                      viewBox="0 0 24 24"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path d="M12 2a9 3 0 1 0 0 6 9 3 0 1 0 0-6z" />
-                      <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3" />
-                      <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5" />
-                    </svg>
-                  )}
-                  Shipping Info
-                </div>
-                <div
-                  className={`${activeComponent === 'bank_information'
-                    ? 'text-black font-semibold border-blue-600 border-b-[3px] pb-2 whitespace-nowrap'
-                    : ''
-                    } cursor-pointer hover:border-b-[2px] pb-2 border-blue-500 text-gray-500 flex gap-2 items-center whitespace-nowrap`}
-                  onClick={() => setActiveComponent('bank_information')}
-                >
-                  {activeComponent === 'bank_information' ? (
-                    <svg
-                      width={22}
-                      height={22}
-                      fill="#000000"
-                      viewBox="0 0 24 24"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        fillRule="evenodd"
-                        d="M11.415 2.395a1.99 1.99 0 0 1 1.17 0l2.986.918a16.722 16.722 0 0 1 4.39 2.089c1.054.705.555 2.348-.713 2.348H4.752c-1.268 0-1.767-1.643-.714-2.348a16.721 16.721 0 0 1 4.391-2.09l2.986-.917Zm.73 1.434a.49.49 0 0 0-.29 0l-2.985.918A15.22 15.22 0 0 0 5.5 6.25h13a15.22 15.22 0 0 0-3.37-1.503l-2.986-.918Z"
-                        clipRule="evenodd"
-                      />
-                      <path d="M4.25 21a.75.75 0 0 1 .75-.75h14a.75.75 0 0 1 0 1.5H5a.75.75 0 0 1-.75-.75Z" />
-                      <path d="M6.25 17a.75.75 0 0 0 1.5 0v-6a.75.75 0 0 0-1.5 0v6Z" />
-                      <path d="M12 17.75a.75.75 0 0 1-.75-.75v-6a.75.75 0 0 1 1.5 0v6a.75.75 0 0 1-.75.75Z" />
-                      <path d="M16.25 17a.75.75 0 0 0 1.5 0v-6a.75.75 0 0 0-1.5 0v6Z" />
-                    </svg>
-
-
-
-                  ) : (
-                    <svg
-                      width={22}
-                      height={22}
-                      fill="#a7a0a0"
-                      viewBox="0 0 24 24"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        fillRule="evenodd"
-                        d="M11.415 2.395a1.99 1.99 0 0 1 1.17 0l2.986.918a16.722 16.722 0 0 1 4.39 2.089c1.054.705.555 2.348-.713 2.348H4.752c-1.268 0-1.767-1.643-.714-2.348a16.721 16.721 0 0 1 4.391-2.09l2.986-.917Zm.73 1.434a.49.49 0 0 0-.29 0l-2.985.918A15.22 15.22 0 0 0 5.5 6.25h13a15.22 15.22 0 0 0-3.37-1.503l-2.986-.918Z"
-                        clipRule="evenodd"
-                      />
-                      <path d="M4.25 21a.75.75 0 0 1 .75-.75h14a.75.75 0 0 1 0 1.5H5a.75.75 0 0 1-.75-.75Z" />
-                      <path d="M6.25 17a.75.75 0 0 0 1.5 0v-6a.75.75 0 0 0-1.5 0v6Z" />
-                      <path d="M12 17.75a.75.75 0 0 1-.75-.75v-6a.75.75 0 0 1 1.5 0v6a.75.75 0 0 1-.75.75Z" />
-                      <path d="M16.25 17a.75.75 0 0 0 1.5 0v-6a.75.75 0 0 0-1.5 0v6Z" />
-                    </svg>
-
-
-
-
-                  )}
-                  Bank Information
-                </div>
-              </div>
-
-              <div className='flex gap-5'>
-                {renderActiveComponent()}
-              </div>
-
-              <button
-                onClick={() => dispatch(setDetailModal(false))}
-                className="  ml-3 mt-10 border-2 border-gray-200 rounded-lg px-6 py-2"
-              >
-                Cancel
-              </button>
-            </div>
-
+    <div className="container mx-auto space-y-8 p-4 md:p-8">
+      {/* Supplier Info */}
+      <Card className="shadow-md">
+        <CardHeader className="bg-blue-600 text-white rounded-t-md">
+          <CardTitle>Supplier Information</CardTitle>
+        </CardHeader>
+        <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <h3 className="font-semibold">Name</h3>
+            <p>{`${supplierData?.first_name} ${supplierData?.last_name}`}</p>
           </div>
-        </div>
-      </div>
+          <div>
+            <h3 className="font-semibold">Email</h3>
+            <p className="flex items-center gap-2">
+              <MailIcon className="h-4 w-4 text-blue-600" />
+              {supplierData?.email}
+            </p>
+          </div>
+          <div>
+            <h3 className="font-semibold">Phone</h3>
+            <p className="flex items-center gap-2">
+              <PhoneIcon className="h-4 w-4 text-blue-600" />
+              {supplierData?.phone_number}
+            </p>
+          </div>
+          <div>
+            <h3 className="font-semibold">Status</h3>
+            <Badge variant={supplierData?.status === 'pending' ? 'warning' : 'success'}>
+              {supplierData?.status}
+            </Badge>
+          </div>
+          <div>
+            <h3 className="font-semibold">Company</h3>
+            <p>{supplierData?.company_name}</p>
+          </div>
+          <div>
+            <h3 className="font-semibold">Title/Position</h3>
+            <p>{supplierData?.title_or_position}</p>
+          </div>
+          <div>
+            <h3 className="font-semibold">Website</h3>
+            <a href={supplierData?.website_url} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline flex items-center gap-2">
+              <GlobeIcon className="h-4 w-4" />
+              {supplierData?.website_url}
+            </a>
+          </div>
+          <div>
+            <h3 className="font-semibold">Created At</h3>
+            <p className="flex items-center gap-2">
+              <CalendarIcon className="h-4 w-4 text-blue-600" />
+              {formatDate(supplierData?.created_at)}
+            </p>
+          </div>
+        </CardContent>
+      </Card>
 
+      {/* Documents Section */}
+      <Card className="shadow-md">
+        <CardHeader className="bg-blue-600 text-white rounded-t-md">
+          <CardTitle>Documents</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <Table className="min-w-full table-auto">
+            <TableHeader>
+              <TableRow>
+                <TableHead>Document Type</TableHead>
+                <TableHead>Link</TableHead>
+                <TableHead>Expiry Date</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              <TableRow>
+                <TableCell>Tax Registration</TableCell>
+                <TableCell>
+                  <a href={supplierData?.tax_registration_document} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">
+                    View Document
+                  </a>
+                </TableCell>
+                <TableCell>N/A</TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell>Business Registration License</TableCell>
+                <TableCell>
+                  <a href={supplierData?.business_registration_license_document} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">
+                    View Document
+                  </a>
+                </TableCell>
+                <TableCell>{formatDate(supplierData?.business_registration_license_expire_date)}</TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell>Business Permits</TableCell>
+                <TableCell>
+                  <a href={supplierData?.business_permits_document} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">
+                    View Document
+                  </a>
+                </TableCell>
+                <TableCell>{formatDate(supplierData?.business_permits_expire_date)}</TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell>Other Legal Document</TableCell>
+                <TableCell>
+                  <a href={supplierData?.other_legal_document} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">
+                    View Document
+                  </a>
+                </TableCell>
+                <TableCell>N/A</TableCell>
+              </TableRow>
+            </TableBody>
+          </Table>
+        </CardContent>
+      </Card>
+
+      {/* Shipping Information */}
+      <Card className="shadow-md">
+        <CardHeader className="bg-blue-600 text-white rounded-t-md">
+          <CardTitle>Shipping Information</CardTitle>
+        </CardHeader>
+        <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <h3 className="font-semibold">Region</h3>
+            <p>{supplierData?.shipping_region}</p>
+          </div>
+          <div>
+            <h3 className="font-semibold">City</h3>
+            <p>{supplierData?.shipping_city}</p>
+          </div>
+          <div>
+            <h3 className="font-semibold">Woreda</h3>
+            <p>{supplierData?.shipping_woreda}</p>
+          </div>
+          <div>
+            <h3 className="font-semibold">Kebele</h3>
+            <p>{supplierData?.shipping_keble}</p>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Banking Details */}
+      <Card className="shadow-md">
+        <CardHeader className="bg-blue-600 text-white rounded-t-md">
+          <CardTitle>Banking Details</CardTitle>
+        </CardHeader>
+        <CardContent>
+          {supplierData?.banking_details.map((bank, index) => (
+            <div key={index} className="mb-4 last:mb-0">
+              <h3 className="font-semibold">{bank.bank_name}</h3>
+              <p>Account Name: {bank.account_name}</p>
+              <p>Account Number: {bank.account_number}</p>
+            </div>
+          ))}
+        </CardContent>
+      </Card>
     </div>
   )
 }

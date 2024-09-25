@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { Bell, CheckCircle, XCircle } from 'lucide-react';
 import { Button, Drawer } from 'antd';
-import supplierService from '@/services/supplier.service';
 import { useDispatch, useSelector } from 'react-redux';
 import { setNotification } from '@/store/uiSlice';
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '../ui/dialog';
-import businessService from '@/services/business.services';
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { getAllAdminNotifications } from '@/api/Admin';
 
 const Notification = () => {
     const dispatch = useDispatch();
@@ -15,7 +14,6 @@ const Notification = () => {
     const [isOpenNotification, setIsOpenNotification] = useState(false);
     const [selectedNotification, setSelectedNotification] = useState(null);
     const notificationCount = useSelector((state) => state.ui.notification);
-    const role = useSelector((state) => state.ui.role);
     const detailNotification = (notification) => {
         return (
             <Dialog open={isOpenNotification} onOpenChange={setIsOpenNotification}>
@@ -48,15 +46,9 @@ const Notification = () => {
 
     const getAllNotifications = async () => {
         try {
-            if (role === 2) {
-                const response = await supplierService.getAllSupplierNotifications();
-                setNotifications(response);
-                dispatch(setNotification(response.length));
-            } else if (role === 3) {
-                const response = await businessService.getAllBusinessNotifications();
-                setNotifications(response);
-                dispatch(setNotification(response.length));
-            }
+            const response = await getAllAdminNotifications();
+            setNotifications(response);
+            dispatch(setNotification(response.length));
         } catch (error) {
             console.log(error);
         } finally {
@@ -69,7 +61,7 @@ const Notification = () => {
 
         const interval = setInterval(() => {
             getAllNotifications();
-        }, 60000); // Refresh notifications every 60 seconds
+        }, 10000); // Refresh notifications every 60 seconds
 
         return () => clearInterval(interval);
     }, []);
@@ -107,8 +99,8 @@ const Notification = () => {
         <>
             <div onClick={openDrawer}>
                 {notificationCount > 0 && (
-                    <span className="absolute -top-1 right-[-0.6em] border-2 border-orange-700 rounded-full bg-orange-700 p-2">
-                        <p className="absolute bottom-[-2px] left-1 text-[14px]">
+                    <span className="absolute ml-3 top-4 border-2 border-orange-700 rounded-full bg-orange-700 p-2">
+                        <p className="absolute bottom-[-2px] left-1 text-[14px] text-white">
                             {notificationCount}
                         </p>
                     </span>

@@ -7,7 +7,6 @@ import { productById } from '../../../../api/adminProduct';
 const DetailProduct = () => {
     const { productId } = useParams();
     const [product, setProduct] = useState(null);
-
     useEffect(() => {
         const fetchProduct = async () => {
             try {
@@ -25,7 +24,7 @@ const DetailProduct = () => {
     }
 
     return (
-        <section className="py-12 sm:py-16 mt-20 lg:ml-80">
+        <section className="w-full">
             <div className="container mx-auto px-4">
                 <div className="lg:col-gap-12 xl:col-gap-16 mt-8 grid grid-cols-1 gap-12 lg:mt-12 lg:grid-cols-5 lg:gap-16 max-w-7xl mx-auto">
                     <ProductImages data={product} />

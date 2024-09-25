@@ -1,6 +1,6 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { setIsSidebarOpen, setOpenSetting } from '../../store/uiSlice';
+import { setIsSidebarOpen, setOpenSetting, setDrawerOpenNotification } from '../../store/uiSlice';
 import { Avatar, AvatarFallback } from '../ui/avatar';
 import {
     DropdownMenu,
@@ -16,6 +16,7 @@ import { SearchOutlined } from '@ant-design/icons';
 import MobileSidebar from './MobileSidebar';
 import { Link } from 'react-router-dom';
 import { Bell, ChevronDown, LogOut, UserRound } from 'lucide-react';
+import Notification from '../Notification';
 
 const Navbar = () => {
     const dispatch = useDispatch();
@@ -48,12 +49,14 @@ const Navbar = () => {
                         className='lg:hidden flex items-center'>
                         <MobileSidebar />
                     </div>
-        
-            </div>
+
+                </div>
 
                 <div className="flex items-center gap-6">
                     <div className="cursor-pointer">
-                        <Bell />
+                        <div className="cursor-pointer" onclick={() => { dispatch(setDrawerOpenNotification(true)) }}>
+                            <Notification />
+                        </div>
                     </div>
                     <DropdownMenu>
                         <DropdownMenuTrigger>

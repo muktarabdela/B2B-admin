@@ -30,7 +30,10 @@ const initialState = {
     supplierUpdateStatus: false,
     orderStatus: false,
 
-    categoryId: null
+    categoryId: null,
+
+    notification: null,
+    isDrawerOpenNotification: false,
 };
 
 const uiSlice = createSlice({
@@ -86,6 +89,12 @@ const uiSlice = createSlice({
         setCategoryId: (state, action) => {
             state.categoryId = action.payload;
         },
+        setNotification: (state, action) => {
+            state.notification = action.payload;
+        },
+        setDrawerOpenNotification: (state, action) => {
+            state.isDrawerOpenNotification = action.payload;
+        },
         logout: (state) => {
             state.isAuthenticated = false;
             state.role = null;
@@ -99,6 +108,6 @@ const uiSlice = createSlice({
     },
 });
 
-export const { selectLink, setIsSidebarOpen, setOpenSetting, setDeleteModal, setIsOpenCategory, setCategory, setDetailModal, setUpdateProductModal, setProductDetailModal, setProductDeleteModal, setSupplierUpdateStatus, setOrderStatus, setIsAuthenticated, logout, setCategoryId } = uiSlice.actions;
+export const { selectLink, setIsSidebarOpen, setOpenSetting, setDeleteModal, setIsOpenCategory, setCategory, setDetailModal, setUpdateProductModal, setProductDetailModal, setProductDeleteModal, setSupplierUpdateStatus, setOrderStatus, setIsAuthenticated, logout, setCategoryId, setNotification, setDrawerOpenNotification } = uiSlice.actions;
 
 export default uiSlice.reducer;

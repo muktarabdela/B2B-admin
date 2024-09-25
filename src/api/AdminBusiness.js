@@ -43,3 +43,23 @@ export async function updateBusinessStatus(data) {
         throw error;
     }
 }
+
+//service to get all suppliers
+export async function businessDetails(data) {
+    console.log("data from api endpoint", data);
+    const token = getToken();
+    try {
+        const response = await axiosInstance.get(`/admin/single-buyer/${data.contact_id}`
+            , {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            }
+        )
+        return response;
+    } catch (error) {
+        console.error("Error fetching specific user:", error);
+        throw error;
+    }
+
+}

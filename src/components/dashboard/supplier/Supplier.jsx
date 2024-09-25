@@ -5,7 +5,7 @@ import { setDeleteModal, setDetailModal, setSupplierUpdateStatus } from '../../.
 import { useNavigate } from 'react-router-dom';
 
 
-import { MoreHorizontal } from "lucide-react";
+import { ChevronLeft, ChevronRight, MoreHorizontal } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -60,7 +60,8 @@ const Supplier = () => {
   const supplierUpdateStatus = useSelector((state) => state.ui.supplierUpdateStatus);
 
   const [selectedSupplier, setSelectedSupplier] = useState(null);
-
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 4;
   useEffect(() => {
     dispatch(fetchSuppliers());
   }, []);
@@ -93,6 +94,14 @@ const Supplier = () => {
     }
   };
   const filterSuppliers = getFilteredSuppliers();
+  const totalPages = Math.ceil(filterSuppliers?.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const currentSuppliers = filterSuppliers?.slice(startIndex, endIndex);
+
+  const handlePageChange = (newPage) => {
+    setCurrentPage(newPage);
+  };
 
   return (
     <Card className="max-w-7xl">
@@ -144,7 +153,7 @@ const Supplier = () => {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {filterSuppliers.map((supplier, index) => (
+              {currentSuppliers.map((supplier, index) => (
                 <TableRow key={index}>
                   <TableCell className="font-medium flex items-center">
                     <div className="flex items-center justify-center cursor-pointer text-center">
@@ -174,7 +183,7 @@ const Supplier = () => {
                       <DropdownMenuContent align="end">
                         <DropdownMenuLabel>Actions</DropdownMenuLabel>
                         <DropdownMenuItem>
-                          <Button onClick={() => handleDetailSupplier(supplier)} variant="outline">view detail </Button>
+                          <Button onClick={() => handleDetailSupplier(supplier.user_hash)} variant="outline">view detail </Button>
                         </DropdownMenuItem>
                         <DropdownMenuItem>
                           <Button onClick={() => handleUpdateStatus(supplier)} variant="outline">update status  </Button>
@@ -194,9 +203,32 @@ const Supplier = () => {
         </ScrollArea>
 
       </CardContent>
-      <CardFooter>
-        <div className="text-xs text-muted-foreground">
-          Showing <strong>1-10</strong> of <strong>32</strong> suppliers
+      <CardFooter className="flex items-center justify-between">
+        <div className="text-sm text-muted-foreground ">
+          Showing <strong>{startIndex + 1}-{Math?.min(endIndex, filterSuppliers?.length)}</strong> of <strong>{filterSuppliers?.length}</strong> products
+        </div>
+        <div className="flex items-center space-x-2">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => handlePageChange(currentPage - 1)}
+            disabled={currentPage === 1}
+          >
+            <ChevronLeft className="h-4 w-4" />
+            Previous
+          </Button>
+          <div className="text-sm font-medium whitespace-nowrap">
+            Page {currentPage} of {totalPages}
+          </div>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => handlePageChange(currentPage + 1)}
+            disabled={currentPage === totalPages}
+          >
+            Next
+            <ChevronRight className="h-4 w-4" />
+          </Button>
         </div>
       </CardFooter>
     </Card>
